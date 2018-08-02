@@ -1,0 +1,805 @@
+深入 AngularUI Router
+
+原文地址：http://www.ng-newsletter.com/posts/angular-ui-router.html
+
+ui-router: https://angular-ui.github.io/ui-router/site/#/api/ui.router 
+
+ui-router 是 AngularUI 库提供的特别有用的一个部分，是一个通过提供状态机机制，而不是简单的 URL 来组织我们的界面的路由框架。
+
+这个库提供了针对视图的众多的额外控制，我们可以创建嵌套的视图，在单个页面使用多个视图，多个视图来控制单个视图，还有更多特性。对于更加精细的控制和更为复杂的应用，ui-router 是非常棒的工具。
+
+ui-router 从状态着手来管理路由，它将应用视为多个状态的组合，通过状态的切换进行路由。
+
+一个状态可以对应一个页面地址，通过特定的地址到达应用的特定状态。
+通过状态的 controller、template 和 views 来管理特定状态的 UI 和行为
+通过嵌套视图来解决页面中重复出现的内容。
+ 
+
+Installation
+安装 ui-router，既可以直接下载发布版本，也可以通过 bower 来获取。
+
+$ bower install angular-ui-router --save
+ 
+
+然后，需要在页面中进入这个库，当然要先加载 angular 库。
+
+<script type="text/javascript" src="angular-ui-router.js"></script>
+ 
+
+在 angular 中注入 ui.router.
+
+angular.module('myApp', ['ui.router'])
+ 
+
+不像 angular 内置的 ngRoute, ui-router 可以嵌套视图，它是基于状态，而不 URL 的。
+
+也不像 ngRoute 使用 ng-view 指令，在 ui-router 中，我们使用 ui-view 指令。
+
+当在 ui-router 中考虑路由和状态的关系时，我们主要关注应用的什么状态对应应用的什么路由。
+
+<div ng-controller="DemoController">
+  <div ui-view></div>
+</div>
+ 
+
+类似 ngRoute, 对于给定的状态，模板中的内容将会填充到 <div ui-view></div> 元素，每个模板还可以包含自己的 ui-view ，这就是我们可以支持嵌套路径的原因。
+
+定义路径的时候，我们使用 .config 方法，像通常一样，但是使用 $stateProvider 来替换 $routeProvider。
+
+.config(function($stateProvider, $urlRouterProvider) {
+  $stateProvider
+    .state('start', {
+      url: '/start',
+      templateUrl: 'partials/start.html'
+    })
+});
+
+
+这样，我们；定义了名为 start 的状态，传递的对象定义了状态配置信息，或者称为 stateConfig，类似于路由配置对象，我们通过它配置状态信息。
+
+template, templateUrl, templateProvider
+可以使用下面三种之一的方式来定义视图使用的模板：
+
+template, 字符串方式的模板内容，或者是一个返回 HTML 的函数
+templateUrl, 模板的路径，或者返回模板路径的函数
+templateProvider, 返回 HTML 内容的函数
+例如
+
+$stateProvider.state('home', {
+  template: '<h1>Hello {{ name }}</h1>'
+});
+ 
+
+ 
+
+Controller
+类似于 ngRoute，我们既可以通过控制器的名字来关联一个预定义的控制器，也可以直接创建一个控制器函数来处理。
+
+如果没有对应的模板定义，控制器对象就不会被创建。
+
+Resolve
+使用 resolve 功能，我们可以准备一组用来注入到控制器中的依赖对象。在 ngRoute 中，resolve 可以在路由实际渲染之前解决掉 promise
+
+resolve 选项提供一个对象，对象中的 key 就是准备注入 controller 的依赖名称，值则是创建对象的工厂。
+
+如果是一个串，就试图用这个串来匹配当前已经注册的服务名称，如果是一个函数，执行这个函数，返回的值就是依赖。如果函数返回一个 promise，在控制器被实例化之前，将会被 resolved，返回的值被注入到 controller 中。
+
+复制代码
+$stateProvider.state('home', {
+  resolve: {
+    // This will return immediately as the 
+    // result is not a promise
+    person: function() {
+      return {
+        name: "Ari",
+        email: "ari@fullstack.io"
+      }
+    },
+    // This function returns a promise, therefore
+    // it will be resolved before the controller
+    // is instantiated
+    currentDetails: function($http) {
+      return $http({
+        method: 'JSONP',
+        url: '/current_details'
+      });
+    },
+    // We can use the resulting promise in another
+    // resolution
+    facebookId: function($http, currentDetails) {
+      $http({
+        method: 'GET',
+        url: 'http://facebook.com/api/current_user',
+        params: {
+          email: currentDetails.data.emails[0]
+        }
+      })
+    }
+  },
+  controller: function($scope, person, 
+                currentDetails, facebookId) {
+      $scope.person = person;
+  }
+})
+复制代码
+ 
+
+ 
+
+URL
+url 用来设置应用对应的一个特定状态. 也就是说，我们可以通过 url 来到达某个特定的状态，所以这里的 url 不是简单的 url 地址，而是某个可到达状态的标志。
+
+这个特性类似于 ngRoute 中的 URL, 但是，可以被看作一个重大的升级，后面我们就会看到。
+
+简单的路由类似下面所示。
+
+$stateProvider
+  .state('inbox', {
+    url: '/inbox',
+    template: '<h1>Welcome to your inbox</h1>'
+  });
+ 
+
+当我们导航到 /index 的时候，应用将会过渡到 inbox 状态，使用这里提供的内容模板填充 ui-view 的内容。
+
+URL 中可以包含多种内容，令人难以置信的强大，可以像在 ngRoute 中设置简单的参数。
+
+复制代码
+$stateProvider
+  .state('inbox', {
+    url: '/inbox/:inboxId',
+    template: '<h1>Welcome to your inbox</h1>',
+    controller: function($scope, $stateParams) {
+      $scope.inboxId = $stateParams.inboxId;
+    }
+  });
+复制代码
+ 
+
+这里，我们创建了 :inboxId 参数来捕获 url 中的第二部分，例如，如果应用访问 /inbox/1，那么，$stateParameter.inboxId 就成为 1, 实际上， $stateParams 的值将为 { inboxId: 1 }
+
+也可以使用另外一种语法。
+
+url: '/inbox/{inboxId}'
+ 
+
+路径必须完全匹配，不像 ngRoute, 如果用户访问 /inbox/，这个路径配置将会工作，但是，如果访问 /inbox，这个状态就不会被激活。
+
+还可以使用正则表达式来表示参数，这样可以通过正则表达式来设置匹配规则，例如。
+
+复制代码
+// Match only inbox ids that contain
+// 6 hexidecimal digits
+url: '/inbox/{inboxId:[0-9a-fA-F]{6}}',
+// Or
+// match every url at the end of `/inbox`
+// to `inboxId` (a catch-all)
+url: '/inbox/{inboxId:.*}'
+复制代码
+ 
+
+注意，不能在路由中使用捕获组
+
+甚至可以在路径中使用查询参数。
+
+// will match a route such as
+// /inbox?sort=ascending
+url: '/inbox?sort'
+ 
+
+ 绝对路由
+如果你使用绝对 url 方式，需要在 url 字符串的开发加上特殊字符 ^
+
+复制代码
+$stateProvider
+  .state('contacts', {
+     url: '/contacts',
+     ...
+  })
+  .state('contacts.list', {
+     url: '^/list',
+     ...
+  });
+复制代码
+ 
+
+'contacts'状态将匹配"/contacts"
+'contacts.list'状态将匹配"/list"。子状态的url没有附在父状态的url之后的，因为使用了^。
+ 
+
+嵌套路由
+我们可以使用 url 参数添加到路由中来实现嵌套路由。这样可以提供多个 ui-views 在我们的页面中，例如，我们可以在 /inbox 之上，提供嵌套的独立路由。这里使用了子状态。
+
+复制代码
+$stateProvider
+  .state('inbox', {
+    url: '/inbox/:inboxId',
+    template: '<div><h1>Welcome to your inbox</h1>\
+            <a ui-sref="inbox.priority">Show priority</a>\
+            <div ui-view></div>\
+            </div>',
+    controller: function($scope, $stateParams) {
+      $scope.inboxId = $stateParams.inboxId;
+    }
+  })
+  .state('inbox.priority', {
+    url: '/priority',
+    template: '<h2>Your priority inbox</h2>'
+  });
+复制代码
+ 第一个路由与前面一样，现在还有第二个路由，一个匹配 inbox 之下的子路由，语法 (.) 表示这是一个子路由。
+
+/inbox/1 匹配第一个状态，/inbox/1/priority 则匹配第二个状态。使用这种语法，我们可以在父路由中支持嵌套的 url。在父视图中的 ui-view 指令将会处理 priority。
+
+Params
+params 选项是参数名称或者正则的数组。它不能合并 url 选项，当状态激活的时候，应用会使用这些参数填充 $stateParams 服务。
+
+Views
+我们可以在 state 中提供命名的视图。这是强大的特性，在单个视图中，我们可以定义多个视图，甚至使用单个模板。
+
+如果我们使用了 views 参数，那么，templateUrl, template 和 templateProvider 就会忽略。如果我们希望包含父模板，我们需要创建一个抽象模板。
+
+假如我们有如下模板。
+
+<div>
+  <div ui-view="filters"></div>
+  <div ui-view="mailbox"></div>
+  <div ui-view="priority"></div>
+</div>
+ 主要注意的是，顶级的状态自然对应母版页中的视图，一般这个视图是 noname 的，所以，需要一个 noname 的视图来匹配这个 placeholder。其它的视图需要匹配父状态中的视图 placeholder，这些 placeholder 可以是命名的，也可以是 naname的，自然，noname 的只能有一个，否则无法进行区分，我们在 provider 中进行配置的时候，就需要描述清楚这些 view 和 placeholder 之间的对应关系。
+
+使用 @ 可以定义绝对命名的视图名称，@ 的前面是 placeholder 的名称，后面是状态的名称。@ 前面为空表示未命名的 ui-view，@ 后面为空表示相对于根模板，通常是 index.html
+
+我们可以创建命名的视图，然后填充对应的模板。每个子视图都可以有特有的模板，控制器和数据。
+
+复制代码
+$stateProvider
+  .state('inbox', {
+    views: {
+      'filters': {
+        template: '<h4>Filter inbox</h4>',
+        controller: function($scope) {}
+      },
+      'mailbox': {
+        templateUrl: 'partials/mailbox.html'
+      },
+      'priority': {
+        template: '<h4>Priority inbox</h4>',
+        resolve: {
+          facebook: function() {
+            return FB.messages();
+          }
+        }
+      }
+    }
+  });
+复制代码
+ 
+
+在这个例子中，我们有两个命名的视图嵌套在抽象视图中。
+
+Abstract
+我们永远不能直接激活抽象模板，但是，可以通过派生模板来激活。
+
+抽象模板提供封装命名视图的模板，可以传递 $scope 对象给派生子模板。可以通过它解决依赖问题，或者特定数据处理，或者简单地同样的 url 来嵌套多个路由，例如，所有路由都在 /admin 下面。
+
+复制代码
+$stateProvider
+  .state('admin', {
+    abstract: true,
+    url: '/admin',
+    template: '<div ui-view></div>'
+  })
+  .state('admin.index', {
+    url: '/index',
+    template: '<h3>Admin index</h3>'
+  })
+  .state('admin.users', {
+    url: '/users',
+    template: '<ul>...</ul>'
+  });
+复制代码
+ 
+
+onEnter, onExit
+在应用进入或者退出视图的时候，会调用这些回调函数。它们都可以设置回调函数；函数可以访问获取的数据。
+
+这些回调函数可以提供我们一些能力，在访问新视图，或者改变当前状态的时候。这里是很好的执行 "Are you sure?" 对话框，或者请求用户在进入之前登陆的地方。
+
+两个函数都不提供参数，需要的信息需要自己提供。
+
+Data
+我们可以附加任意的数到我们的状态配置对象 configObject 上，data 属性类似于 resolve 属性，除了不会注入到控制器，也不会 resolve promise。
+
+当需要从父状态向子状态传递数据的时候，附加数据是方便的途径。
+
+Evnets
+类似 ngRoute 服务，angular-route 服务在状态生命周期的不同时间点会触发多种事件。我们可以通过在 $scope 中监听来处理这些事件。
+
+所有的下面的事件都会在 $rootScope 中触发，所以，我们可以在任何 $scope 对象中监听这些事件。
+
+State change events
+可以如下监听
+
+$scope.$on('$stateChangeStart', 
+function(evt, toState, toParams, fromState, fromParams), {
+  // We can prevent this state from completing
+  evt.preventDefault();
+});
+ 
+
+ 
+
+$stateChangeStart
+当从一个状态开始向另外一个状态过度的时候触发。
+
+$stateChangeSuccess
+当状态过渡完成之后触发。
+
+$stateChangeError
+在状态过渡中出现错误。常见的错误例如，不能获取模板，或者 promise 不能成功 resolve 等等
+
+视图加载事件
+ui-router 也提供了视图加载阶段的事件。
+
+$viewContentLoading
+视图开始加载，但是，在 DOM 渲染之前。
+
+可以如下监听。
+
+$scope.$on('$viewContentLoading', 
+function(event, viewConfig){ 
+    // Access to all the view config properties.
+    // and one special property 'targetView'
+    // viewConfig.targetView 
+});
+ 
+
+ 
+
+$viewContentLoad
+视图已经加载，渲染完成。
+
+$stateParams
+在前面的内容中，我们使用 $stateParams 来从 url 参数中获取 params ，这个服务，与 url 不同。
+
+例如，如果我们 inbox 状态的 url 如下。
+
+url: '/inbox/:inboxId/messages/{sorted}?from&to'
+ 
+
+用户使用下面的 url 访问
+
+/inbox/123/messages/ascending?from=10&to=20
+ 
+
+我们的 $stateParams 对象将获取如下数据。
+
+{inboxId: '123', sorted: 'ascending', from: 10, to: 20}
+ 
+
+ 
+
+$urlRouterProvider
+类似 ngRoute, 可以创建当特定的 url 访问时处理的规则。
+
+可以通过不同的 url 激活不同的状态，所以在管理激活和加载状态的时候， $urlRouterProvider 并不是必须的。在状态管理之外的时候才会需要，比如重定向，或者验证的时候。
+
+when()
+when 函数需要两个参数，我们希望匹配的路径，另外就是我们希望重新定向的目标。也可以是一个函数。
+
+例如，如果希望任何空的路由到我们的 /inbox 路由中。
+
+.config(function($urlRouterProvider) {
+  $urlRouterProvider.when('', '/inbox');
+});
+ 
+
+如果提供一个函数处理，路由匹配的时候，这个函数就会被调用，它可以返回下列三种之一的结果。
+
+false，这个回应告诉 $urlRouter 规则并不匹配，应该查找其它匹配的状态，在我们希望验证用户是否访问正确地址的时候很有用。
+字符串，$urlRouter 将其作为重定向目标。
+true 或者 undefined，函数已经处理了这个 url 
+otherwise()
+与 ngRoute 中的 oterwise() 方法类似，oterwiese() 在没有其它路由匹配的情况下重定向。这是创建默认 url 的好方法。
+
+otherwise() 函数只需要一个参数，一个字符串或者一个函数。
+
+如果提供了一个字符串，就会被看做一个默认地址，在任何错误的或者不能匹配任何路由的时候，就会被重定向到这个地址。
+
+如果是一个函数，在没有其它路由匹配的时候，就会被执行
+
+复制代码
+.config(function($urlRouterProvider) {
+  $urlRouterProvider.otherwise('/');
+  // or
+  $urlRouterProvider.otherwise(
+    function($injector, $location) {
+      $location.path('/');
+    });
+});
+复制代码
+ 
+
+ 
+
+rule()
+如果我们希望处理任何路由，或者在其它路由之前进行一些处理，可以使用 rule() 函数。
+
+我们必须返回一个验证的路径串
+
+app.config(function($urlRouterProvider){
+  $urlRouterProvider.rule(
+    function($injector, $location) {
+      return '/index';
+    });
+})
+ 
+
+ 激活状态
+有三种方式来激活特定的状态
+
+使用 $state.go() 方法
+使用 ui-sref 绑定的连接
+直接导航到与状态关联的 url
+ 
+
+创建报名向导
+为什么不使用一下它呢？
+
+我们创建一个报名的向导来演练一下 ui-router 的使用。
+
+使用 ui-router ，我们创建一个简单的报名服务，使用一个控制器来处理报名。
+
+首先，我们创建应用的视图。
+
+<div ng-controller="WizardSignupController">
+  <h2>Signup wizard</h2>
+  <div ui-view></div>
+</div>
+ 
+
+在这个视图中，我们定义了报名视图。下一步，在报名向导中，需要三步
+
+start，在这一步，我们获取用户名称，提供欢迎信息
+email, 这里，我们获取用户的 email 信息
+finish, 这里，用户完成报名，我们简单地显示完成页面
+报名处理依赖 wizardapp.controllers 模块，
+
+angular.module('wizardApp', [
+  'ui.router',
+  'wizardapp.controllers'
+  ]);
+ 
+
+我们的 wizardSignupController 控制器，使用 $scope.user 对象在整个过程中收集信息。
+
+angular.module('wizardapp.controllers', [])
+.controller('WizardSignupController', 
+  ['$scope', '$state', function($scope, $state) {
+    $scope.user = {};
+    $scope.signup = function() {}
+}]);
+ 
+
+现在，向导处理逻辑处理主要工作，配置 config() 
+
+复制代码
+angular.module('wizardApp', [
+  'ui.router', 'wizardapp.controllers'
+  ])
+.config(['$stateProvider', '$urlRouterProvider',
+function($stateProvider, $urlRouterProvider) {
+  $stateProvider
+    .state('start', {
+      url: '/step_1',
+      templateUrl: 'partials/wizard/step_1.html'
+    })
+    .state('email', {
+      url: '/step_2',
+      templateUrl: 'partials/wizard/step_2.html'
+    })
+    .state('finish', {
+      url: '/finish',
+      templateUrl: 'partials/wizard/step_3.html'
+    });
+}]);
+复制代码
+ 
+
+这样，我们基本的流程就已经有了。现在，如果用户导航到 /step_1，就会看到开始页面，尽管现在地址是 /step_1, 而我们希望是 /wizard/step_1
+
+为了这个效果，我们创建 abstract 状态来寄宿各个步骤。
+
+复制代码
+.config(['$stateProvider', '$urlRouterProvider',
+function($stateProvider, $urlRouterProvider) {
+  $stateProvider
+    .state('wizard', {
+      abstract: true,
+      url: '/wizard',
+      template: '<div><div ui-view></div></div>'
+    })
+    .state('wizard.start', {
+      url: '/step_1',
+      templateUrl: 'partials/wizard/step_1.html'
+    })
+    .state('wizard.email', {
+      url: '/step_2',
+      templateUrl: 'partials/wizard/step_2.html'
+    })
+    .state('wizard.finish', {
+      url: '/finish',
+      templateUrl: 'partials/wizard/step_3.html'
+    });
+}]);
+复制代码
+ 
+
+这样，它们都安全地嵌套到 /wizard 之下了。
+
+在状态之间进行导航，我们使用 ui-router 提供的指令 ui-sref 来生成链接，这个指令用来生成导航链接。
+
+例如，step_1.html 如下。
+
+<!-- step_1.html -->
+<h3>Step 1</h3>
+<form ng-submit="">
+  <input type="text" ng-model="user.name" placeholder="Your name" />
+  <input type="submit" class="button" value="Next" ui-sref="wizard.email"/>
+</form>
+ 
+
+我们还希望在报名流程完成之后，执行特定的动作，来调用定义在父控制器上的 signup 函数，我们可以在最后的步骤中添加一个控制器来调用 $scope.signup() 函数。由于整个向导封装在 WizardSignupControoler 中，我们可以像通常一样访问嵌套的 scope 对象。
+
+复制代码
+.state('wizard.finish', {
+  url: '/finish',
+  templateUrl: 'partials/wizard/step_3.html',
+  controller: function($scope) {
+    $scope.signup();
+  }
+});
+复制代码
+ 
+
+ 
+
+总结
+在这里，我们深入讨论了 ui-router 几乎全部的特性，我们发现这个库非常有用，希望也能帮到你。
+
+angularJs模块ui-router之路由控制
+2016年12月06日 14:49:05
+阅读数：1519
+原文地址：http://bubkoo.com/2014/01/02/angular/ui-router/guide/url-routing/
+
+在你的应用中大多数状态都有与其相关联的 url，路由控制不是设计完成 state 之后的事后想法，而是开始开发时就应该考虑的问题。
+
+这里是如何设置一个基本url。
+
+复制代码
+$stateProvider
+    .state('contacts', {
+        url: "/contacts",
+        templateUrl: 'contacts.html'
+    })
+复制代码
+
+当我们访问index.html/contacts时， 'contacts'状态将被激活，同时index.html中的ui-view将被'contacts.html'填充。或者，通过transitionTo('contacts')方法将状态转变到'contacts'状态，同时 url 将更新为index.html/contacts。
+
+URL参数
+基本参数
+通常，url动态部分被称为参数，有几个选项用于指定参数。基本参数如下：
+
+复制代码
+$stateProvider
+    .state('contacts.detail', {
+        // 这里设置了url参数
+        url: "/contacts/:contactId",
+        templateUrl: 'contacts.detail.html',
+        controller: function ($stateParams) {
+            // If we got here from a url of /contacts/42
+            expect($stateParams).toBe({contactId: 42});
+        }
+    })
+复制代码
+
+或者，你也可以使用花括号的方式来指定参数：
+
+// 与前面的设置方法等效
+url: "/contacts/{contactId}"
+
+示例：
+
+'/hello/' - 只匹配'/hello/'路径，没有对斜杠进行特殊处理，这种模式将匹配整个路径，而不仅仅是一个前缀。
+'/user/:id' - 匹配'/user/bob'、'/user/1234!!!'，甚至还匹配 '/user/'，但是不匹配'/user'和'/user/bob/details'。第二个路径段将被捕获作为参数"id"。
+'/user/{id}' - 与前面的示例相同,但使用花括号语法。
+含正则表达式的参数
+使用花括号的方式可以设置一个正则表达式规则的参数：
+
+// 只会匹配 contactId 为1到8位的数字
+url: "/contacts/{contactId:[0-9]{1,8}}"
+
+
+示例：
+'/user/{id:[^/]*}' - 与'/user/{id}'相同
+
+'/user/{id:[0-9a-fA-F]{1,8}}' - 与前面的示例相似，但只匹配1到8为的数字和字符
+'/files/{path:.*}' - 匹配任何以'/files/'开始的URL路径，并且捕获剩余路径到参数'path'中。
+'/files/*path' - 与前面相同，捕获所有特殊的语法。
+警告：不要把捕获圆括号写进正则表达式，ui-router 的 UrlMatcher 将为整个正则表达式添加捕获。
+
+Query Parameters
+可以通过?来指定参数作为查询参数
+
+url: "/contacts?myParam"
+// 匹配 "/contacts?myParam=value"
+如果你需要不止一个查询参数，请用&分隔：
+url: "/contacts?myParam1&myParam2"
+
+// 匹配 "/contacts?myParam1=value1&myParam2=wowcool"
+嵌套状态的路由控制
+
+附加的方式（默认）
+在嵌套状态的路由控制中，默认方式是子状态的 url 附加到父状态的 url 之后。
+
+复制代码
+$stateProvider
+  .state('contacts', {
+     url: '/contacts',
+     ...
+  })
+  .state('contacts.list', {
+     url: '/list',
+     ...
+  });
+复制代码
+路由将成为：
+
+'contacts'状态将匹配"/contacts"
+'contacts.list'状态将匹配"/contacts/list"。子状态的url是附在父状态的url之后的。
+绝对路由（^）
+如果你使用绝对 url 匹配的方式，那么你需要给你的url字符串加上特殊符号"^"。
+
+复制代码
+$stateProvider
+  .state('contacts', {
+     url: '/contacts',
+     ...
+  })
+  .state('contacts.list', {
+     url: '^/list',
+     ...
+  });
+复制代码
+
+
+路由将成为：
+
+'contacts'状态将匹配"/contacts"
+'contacts.list'状态将匹配"/list"。子状态的url没有附在父状态的url之后的，因为使用了^。
+$stateParams 服务
+之前看到的$stateParams服务是一个对象，包含 url 中每个参数的键/值。$stateParams可以为控制器或者服务提供 url 的各个部分。
+注意：$stateParams服务必须与一个控制器相关，并且$stateParams中的“键/值”也必须事先在那个控制器的url属性中有定义。
+
+复制代码
+// 如果状态中 url 属性是：
+url: '/users/:id/details/{type}/{repeat:[0-9]+}?from&to'
+
+// 当浏览
+'/users/123/details//0'
+
+// $stateParams 对象将是
+{ id:'123', type:'', repeat:'0' }
+
+// 当浏览
+'/users/123/details/default/0?from=there&to=here'
+
+// $stateParams 对象将是
+{ id:'123', type:'default', repeat:'0', from:'there', to:'here' }
+复制代码
+
+
+只有当状态被激活并且状态的所有依赖项都被注入时，$stateParams对象才存在。这代表你不能再状态的resolve函数中使用$stateParams对象，可以使用$state.current.params来代替。使用$stateParams的两个陷阱
+复制代码
+$stateProvider.state('contacts.detail', {
+   resolve: {
+      someResolve: function($state){
+         //*** 不能在这里使用 $stateParams , the service is not ready ***//
+         //*** 使用 $state.current.params 来代替 ***//
+         return $state.current.params.contactId + "!"
+      };
+   },
+   // ...
+})
+复制代码
+在状态控制器中，$stateParams对象只包含那些在状态中定义的参数，因此你不能访问在其他状态或者祖先状态中定义的参数。
+复制代码
+$stateProvider.state('contacts.detail', {
+   url: '/contacts/:contactId',
+   controller: function($stateParams){
+      $stateParams.contactId  //*** Exists! ***//
+   }
+}).state('contacts.detail.subitem', {
+   url: '/item/:itemId',
+   controller: function($stateParams){
+      $stateParams.contactId //*** 注意! DOESN'T EXIST!! ***//
+      $stateParams.itemId //*** Exists! ***//
+   }
+})
+复制代码
+$urlRouterProvider
+$urlRouterProvider负责处理在状态配置中指定的url路由方式之外的 url 请求的路由方式。$urlRouterProvider负责监视$location，当$location改变后，$urlRouterProvider将从一个列表，一个接一个查找匹配项，直到找到。所有 url 都编译成一个UrlMatcher对象。
+$urlRouterProvider有一些实用的方法，可以在module.config中直接使用。
+
+when() for redirection 重定向
+
+参数：
+
+what String | RegExp | UrlMatcher，你想重定向的传入路径
+handler String | Function 将要重定向到的路径
+handler 作为 String
+如果handler是字符串，它被视为一个重定向，并且根据匹配语法决定重定向的地址。
+
+复制代码
+app.config(function($urlRouterProvider){
+    // when there is an empty route, redirect to /index
+    $urlRouterProvider.when('', '/index');
+
+    // You can also use regex for the match parameter
+    $urlRouterProvider.when('/aspx/i', '/index');
+})
+复制代码
+
+
+函数可以返回：handler 作为 Function
+如果handler是一个函数，这个函数是注入一些服务的。如果$location匹配成功，函数将被调用。你可以选择性注入$match。
+
+falsy 表明规则不匹配，$urlRouter将试图寻找另一个匹配
+String 该字符串作为重定向地址并且作为参数传递给$location.url()
+nothing或者任何为真的值，告诉$urlRouterurl 已经被处理
+示例：
+
+复制代码
+$urlRouterProvider.when(state.url, ['$match', '$stateParams', function ($match, $stateParams) {
+    if ($state.$current.navigable != state || !equalForKeys($match, $stateParams)) {
+        $state.transitionTo(state, $match, false);
+    }
+}]);
+复制代码
+参数：otherwise() 无效路由
+
+path String | Function 你想重定向url路径或者一个函数返回url路径。函数可以包含$injector和$location两个参数。
+复制代码
+app.config(function($urlRouterProvider){
+    // 在配置（状态配置和when()方法）中没有找到url的任何匹配
+    // otherwise will take care of routing the user to the specified url
+    $urlRouterProvider.otherwise('/index');
+
+    // Example of using function rule as param
+    $urlRouterProvider.otherwise(function($injector, $location){
+        ... some advanced code...
+    });
+})
+复制代码
+参数：rule() 自定义url处理
+
+handler Function 一个函数，包含$injector和$location两个服务作为参数，函数负责返回一个有效的路径的字符串。
+复制代码
+app.config(function($urlRouterProvider){
+    // Here's an example of how you might allow case insensitive urls
+    $urlRouterProvider.rule(function ($injector, $location) {
+        var path = $location.path(), normalized = path.toLowerCase();
+        if (path != normalized) return normalized;
+    });
+})
+复制代码
+
+
+$urlMatcherFactory 和 UrlMatchers
+
+定义了url模式和参数占位符的语法。$urlMatcherFactory是在幕后被$urlRouterProvider调用，来缓存编译后的UrlMatcher对象，而不必在每次 location 改变后重新解析url。大多数用户不需要直接使用$urlMatcherFactory方法，但是在状态配置中非常实用，可以使用$urlMatcherFactory方法来生成一个UrlMatcher对象，并在状态配置中使用该对象。
+var urlMatcher = $urlMatcherFactory.compile("/home/:id?param1");
+$stateProvider.state('myState', {
+    url: urlMatcher
+});

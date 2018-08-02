@@ -1,0 +1,29 @@
+<div class="menu-page">
+    <style>
+        .menu-page>.left{
+            float:left;
+            width:100px;
+            background:#ccc;
+            height:300px;
+        }
+        .menu-page>.left>a{
+            display: block;
+        }
+        .menu-page>.right{
+            padding-left:120px;
+            background:#666;
+
+        }
+    </style>
+    <div class="left">
+        <a ui-sref="main.index" ui-sref-active="true">item 1</a>
+        <a ui-sref="main">item 2</a>
+    </div>
+    <div class="right">
+        <h1>menu.html {{title}}-1</h1>
+        <div ui-view></div>
+        <p ng-repeat="a in numList">item{{a}}</p>
+
+    </div>
+
+</div>

@@ -1,0 +1,115 @@
+.mc-xqxx {
+    padding-top: 166px;
+    position: relative;
+}
+
+.look-land-step {
+    height: 200px;
+    background: url("/static/images/look_land_step.png") no-repeat center;
+    position: absolute;
+    margin-top: -240px;
+    width: 100%;
+}
+
+.mc-xqxx-form {
+    background-image: url("/static/images/xqxx.png");
+    background-position: 5px 5px;
+    background-repeat: no-repeat;
+    padding-left: 430px;
+    height: 330px;
+    border-radius: 8px;
+    margin-bottom: 40px;
+    overflow: hidden;
+}
+
+.mc-xqxx-form > form {
+    height: 254px;
+    padding: 40px 54px 36px 40px;
+}
+
+.mc-xqxx-form .caption {
+    background: url("/static/images/doforyou.png") no-repeat left top;
+    padding-left: 220px;
+
+}
+
+.mc-xqxx-form .caption > span {
+    width: 100%;
+    line-height: 27px;
+}
+
+.mc-xqxx-form .input-row {
+    margin-top: 20px;
+}
+
+.mc-xqxx-form .btn-submit {
+    height: 40px;
+    line-height: 40px;
+    border-radius: 20px;
+    width: 228px;
+    margin-left: 20px;
+    position: relative;
+}
+
+.land-news{
+    padding:40px 36px;
+}
+.w370{
+    width:370px;
+}
+.land-news .module-caption{
+    padding:0 5px 0 0;
+}
+.ln-img-news{
+    background:url("/static/images/doforyou.png") no-repeat left top;
+    height:252px;
+    position:relative;
+    display: block;
+}
+.ln-img-news > p{
+    position:absolute;
+    width: 296px;
+    height:44px;
+    line-height: 44px;
+    left:0;
+    bottom:26px;
+    padding:0 14px;
+}
+.ln-img-news >p>span{
+    padding-right:10px;
+    margin-right:10px;
+    border-right-width:2px;
+    vertical-align: middle;
+}
+.ln-middle{
+    margin:0 400px;
+    padding:26px 22px;
+}
+.ln-middle-inner{
+    height: 114px;
+    padding-top: 280px;
+    padding-left: 25px;
+    line-height: 1.5;
+    padding-right:84px;
+}
+.ln-list{
+    padding-left:20px;
+}
+.ln-list>li{
+    margin-top:20px;
+    list-style-type: disc;
+}
+.ln-list a{
+    margin-left:-5px;
+    padding-right:60px;
+    display: inline-block;
+    width:100%;
+    box-sizing:border-box;
+    position:relative;
+}
+.ln-list a>span{
+    display: inline-block;
+    position:absolute;
+    right:0;
+    top:0;
+}

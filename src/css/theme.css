@@ -1,0 +1,204 @@
+/*==========颜色外观===========*/
+a{
+    color:#333;
+}
+a:hover {
+    color: #393;
+}
+
+/*a:visited {*/
+/*color: #393;*/
+/*}*/
+a.active{
+    color:#393;
+}
+
+/*兼容IE8 placeholder*/
+.placeholder, .placeholder + i {
+    color: #999;
+}
+
+.placeholder + i {
+    position: absolute;
+    font-style: normal;
+}
+
+::-webkit-input-placeholder {
+    color: #999;
+}
+
+::-moz-placeholder {
+    color: #999;
+}
+
+/* firefox 19+ */
+:-ms-input-placeholder {
+    color: #999;
+}
+
+/* ie */
+input:-moz-placeholder {
+    color: #999;
+}
+
+.se-border{
+    border:1px solid #ccc;
+}
+.se-border.deeper{
+    border-color:#393;
+}
+
+.se-main,
+.se-main a{
+    color:#333;
+}
+.se-shallow,
+.se-shallow a{
+    color:#666;
+}
+.se-thinner,
+.se-thinner a{
+    color:#999;
+}
+.se-contrast,
+.se-contrast a{
+    color:#fff;
+}
+.se-main a:hover,
+.se-shallow a:hover,
+.se-thinner a:hover,
+.se-contrast a:hover,
+a:hover>.se-main,
+a:hover>.se-shallow,
+a:hover>.se-thinner,
+a:hover>.se-contrast,
+a.active>.se-main,
+a.active>.se-shallow,
+a.active>.se-thinner,
+a.active>.se-contrast,
+.se-deeper,
+.se-deeper a{
+    color:#393;
+}
+
+.se-bg-shallow>input,
+.se-bg-shallow>textarea,
+.se-bg-shallow{
+    background-color: #f7f7f7;
+}
+.se-bg-main>input,
+.se-bg-main>textarea,
+.se-bg-main{
+    background-color: #fff;
+}
+.se-bg-deeper>input,
+.se-bg-deeper>textarea,
+.se-bg-deeper{
+    background-color:#393;
+}
+
+.bar{
+    background:#ccc;
+}
+.bb-bar{
+    border-bottom:1px solid #dcdcdc;
+}
+.br-bar{
+    border-right:1px solid #dcdcdc;
+}
+
+/*按钮*/
+.btn.btn-deeper{
+    background-color:#393;
+    color:#fff;
+    border:1px solid #393;
+    box-shadow:1px 1px 10px #393;
+}
+.btn.btn-deeper:hover{
+    background-color:#fff;
+    color:#393;
+}
+.btn.btn-main{
+    background-color:#fff;
+    color:#393;
+    border:1px solid #393;
+    box-shadow:-2px 2px 14px -3px rgba(46,165,53,0.5);
+}
+.btn.btn-main:hover{
+    background-color:#393;
+    color:#fff;
+}
+.btn.btn-main.look-land-btn{
+    border-color:transparent;
+}
+
+
+/*箭头*/
+.arrow-d{
+    border:6px solid transparent;
+    border-top-color: #393;
+}
+
+
+/*badge数字角标*/
+.badge{
+    color:#fff;
+    background:#f00;
+}
+
+
+
+/*输入框*/
+.njw-input{
+    border: 1px solid #dcdcdc;
+}
+.njw-selector:hover>.njw-input,
+.njw-input:hover{
+    border-color:#393;
+}
+.njw-input>.word-tips{
+    border-left:1px solid #ccc;
+    color:#999;
+}
+
+.njw-selector li.active,
+.njw-selector li:hover {
+    background-color: #393;
+    color:#fff;
+}
+
+
+
+
+/*首页*/
+.look-land-step{
+    box-shadow:0 8px 18px -9px rgba(46,165,53,0.5);
+}
+
+.mc-xqxx-form>form{
+    box-shadow: -14px 0 20px -12px #dcdcdc;
+}
+
+.module-list-item:hover{
+    background: #fff;
+    box-shadow: 0 15px 10px 0 #dcdcdc;
+}
+
+.module-list-5 .module-list-item:hover .module-title{
+    border-color:#393;
+}
+.module-list-5 .module-list-item:hover .module-title>i{
+    color: #393;
+}
+.module-list-5 .module-list-item:hover .hover-bar{
+    background:#393;
+}
+
+.module-flags > span{
+    background: url("/static/images/flag_bg.png") no-repeat center;
+    background-size:100% 100%;
+}
+.ln-middle-inner {
+    border: 1px solid #9c9;
+    background: #6c6 url("/static/images/ico_syh.png") no-repeat 25px 40px;
+}

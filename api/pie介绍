@@ -1,0 +1,64 @@
+PIE.htc 使用CSS的behavior行为，可以调用此文件，然后让IE也能实现一些常见的CSS3效果，如圆角(border-radius)，盒阴影(box-shadow)，背景渐变(gradient)，多图片背景(multiple background images)
+
+1. border-radius圆角
+<div class="pie_radius"></div>
+.pie_radius{
+    width:360px;
+    height:200px;
+    background-color:#34538b;
+    -moz-border-radius:8px;
+    -webkit-border-radius:8px;
+    border-radius:8px;
+    position:relative;
+    behavior:url(PIE.htc);
+}
+
+
+2. box-shadow 盒阴影
+<div class="pie_box_shadow"></div>
+.pie_box_shadow{
+    width:360px;
+    height:200px;
+    background-color:#34538b;
+    -moz-box-shadow:1px 3px 3px #666;
+    -webkit-box-shadow:1px 3px 3px #666;
+    box-shadow:1px 3px 3px #666;
+    position:relative;
+    behavior:url(PIE.htc);
+}
+
+
+3. gradient渐变
+<div class="pie_gradient"></div>
+如果使用PIE实现IE饿渐变背景，该如何呢？需要用到一个自定义的CSS属性，-pie-background，后面的写法与火狐浏览器类似。CSS部分代码如下：
+.pie_gradient{
+    width:360px;
+    height:200px;
+    background-color:#9F9;
+    background:-webkit-gradient(linear, 0 0, 0 bottom, from(#9F9), to(#393));
+    background:-moz-linear-gradient(#9F9, #393);
+    -pie-background:linear-gradient(#9F9, #393);
+    position:relative;
+    behavior:url(PIE.htc);
+}
+
+已知的一些问题
+此方法并不是万能的，也有一些局限性和需要注意的地方。
+
+1. z-index相关问题
+IE下这些CSS3效果实现是借助于VML，由VML绘制圆角或是投影效果的容器元素，然后这个容器元素作为目标元素的后兄弟节点插入，如果目标元素position:absolute 或是 position:relative，则这个css3-container元素将会设置与之一样的z-index值，在DOM tree中，同级的元素总是后面的覆盖前面的，所以这样就实现了覆盖，又避免了可能有其他元素正好插入其中。
+
+所以，问题来了，如果目前元素的position属性为static，也就是默认属性，则z-index属性是没有用的，无覆盖可言，所以此时IE浏览器下CSS3的渲染是不会成功的。要解决也很简单，设置目标元素position:relative或是设置祖先元素position:relative并赋予一个z-index值（不可为-1）。
+
+2. 相当路径的问题
+IE浏览器的behavior 属性是相对于HTML文档而言的，与CSS其他的属性不一样，不是相对于CSS文档而言的。这使得使用pie.htc文件不怎么方面。如果绝对路径于根目录，则CSS文件不方便移动；如果相对路径与HTML文档，则pie.htc文件在不同HTML页面见的重用性大大降低。同时，诸如border-image后面的URL属性路径也不好处理。
+
+3. 缩写的问题
+使用PIE实现IE下的CSS3渲染（其他方法也是一样），只能使用缩写的形式，例如圆角效果，我们可以设置border-top-left-radius表示左上圆角，但是PIE确实不支持这种写法的，只能是老老实实的缩写。
+
+4. 提供正确的Content-Type
+要想让IE浏览器支持htc文件，需要一个有着”text/x-component” 字样的content-type 头部，否则，会忽视behavior。绝大数web服务器提供了正确的content-type，但是还有一部分则有问题。例如的我的空间域名商就没有”text/x-component” 字样的content-type，可能是出于安全的考虑。
+
+如果您发现在您的机子上PIE方法无效，也就是htc文件这里指pie.htc文件无效，检查您的服务器配置，可能其需要更新到最新的content-type。例如对于Apache，您可以在.htaccess文件中左如下处理：
+
+AddType text/x-component .htc

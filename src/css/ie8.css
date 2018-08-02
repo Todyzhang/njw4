@@ -1,0 +1,18 @@
+/*slider*/
+.slider-dot{background:transparent url("/static/images/dot.png") no-repeat center;width:9px;height:9px;}
+.slider-dot.active{background:transparent url("/static/images/dot_on.png") no-repeat center;border:none;width:15px;height:16px}
+
+
+.release-land-btn,
+.njw-input,
+.btn-submit,
+.njw-textarea,
+.badge
+{
+    behavior: url("/PIE.htc");
+}
+
+/*.module-flags > span{*/
+    /*background: none;*/
+    /*filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/static/images/flag_bg.png", sizingMethod=scale);*/
+/*}*/

@@ -1,0 +1,15 @@
+<div class="module-list-wrap module-list-5 se-bg-main">
+    <div class="w1200">
+        <div module-caption mc-title="{{mcTitle}}" mc-more-url="{{mcMoreUrl}}" ></div>
+        <div class="module-list tc clearfix">
+            <a class="module-list-item" ng-repeat="item in landService" ng-class="{'ml-0':$index===0}" ng-href="{{item.url}}">
+                <div class="module-img" ng-class="'item'+$index"></div>
+                <div class="module-info">
+                    <p class="fs-18"><span class="module-title">{{item.title}}<i>&gt;</i></span></p>
+                    <p class="se-thinner line-3">{{item.info}}</p>
+                </div>
+                <span class="hover-bar"></span>
+            </a>
+        </div>
+    </div>
+</div>

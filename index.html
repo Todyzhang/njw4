@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:ng="http://angularjs.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9"/>
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <title>农加网</title>
+    <style>
+        .ng-cloak, [ng-cloak] {display: none}
+    </style>
+    <script src="static/js/requirejs/require.min.js" data-main="/src/main"></script>
+
+</head>
+<body ng-cloak>
+<div class="page-container fs-14">
+    <div class="page-header" ng-controller="pageHeaderCtrl">
+        <div class="ph-login-msg se-bg-shallow">
+            <div class="w1200 se-shallow fs-12">
+                <p class="fr" ng-if="!loginMsg.login"><a>登录</a> | <a>注册</a></p>
+                <p class="fr" ng-if="loginMsg.login"><a class="btn login-msg-btn"><span class="badge">{{loginMsg.msgNum}}</span></a>|<a class="btn person-btn">{{loginMsg.name | njwNumSer}}</a><a class="btn exit-btn" ng-click="exit()">退出</a></p>
+                <p>欢迎来到农家网，服务热线：{{serverTel}}</p>
+            </div>
+        </div>
+        <div class="ph-menu w1200 fs-18">
+            <div class="dis-ib ph-logo">
+                <img class="dis-ib" src="static/images/logo.png"/>
+                <span class="bar dis-ib"></span>
+                <a class="dis-ib city-select">广州<span class="arrow-d"></span></a>
+            </div>
+            <div class="dis-ib ph-nav">
+                <a ng-repeat="menu in menuList"
+                   ng-class="{'active':menuActive===$index}"
+                   ng-click="menuClick($index)"
+                   ui-sref="{{menu.url}}">{{menu.title}}<span class="se-shallow fs-36">.</span></a>
+            </div>
+            <a class="btn btn-deeper release-land-btn fs-14">免费发布土地</a>
+        </div>
+    </div>
+    <div ui-view></div>
+    <div class="placeholder-footer"></div><!--占页脚的高度-->
+</div>
+<div class="page-footer">
+    <div class="w1200 se-contrast fs-14">
+        <div class="pf-menu">
+            <img class="dis-ib" src="static/images/logo_white.png"/>
+            <div class="dis-ib pf-nav fs-16">
+                <a ng-repeat="menu in menuList" ui-sref="{{menu.url}}">{{menu.title}}</a>
+            </div>
+            <p class="pf-nav-links">
+                <a href="http://sengnon.cn/about_us.html" target="_blank">关于我们</a><span>/</span>
+                <a href="http://sengnon.cn/contact_us.html" target="_blank">联系我们</a><span>/</span>
+                <a target="_blank" href="/help">帮助中心</a><span>/</span>
+                <a href="http://vip.nongj.com/nonjia/new/account/regAgreement.action" target="_blank">用户协议</a>
+            </p>
+        </div>
+        <p class="pf-copyright fs-14 tr">
+            Copyright &copy;广州神农网络科技有限公司主办<span>|</span><a href="http://www.miitbeian.gov.cn/" target="_blank">粤ICP备12071480-4号</a>
+        </p>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,34 @@
+{
+  "name": "njw4",
+  "version": "1.0.0",
+  "private": true,
+  "description": "广州神农 农加网4.0 兼容IE8",
+  "keywords": [],
+  "author": "Tody",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production --progerss --display-modules --display-reasons"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.24.5",
+    "gulp": "^3.9.1",
+    "gulp-asset-rev": "0.0.15",
+    "gulp-concat": "^2.6.1",
+    "gulp-htmlmin": "^4.0.0",
+    "gulp-imagemin": "^4.1.0",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-remove-logging": "^1.2.0",
+    "gulp-rename": "^1.3.0",
+    "gulp-requirejs-optimize": "^1.3.0",
+    "gulp-rev": "^8.1.1",
+    "gulp-rev-collector": "^1.3.1",
+    "gulp-string-replace": "^1.1.1",
+    "gulp-uglify": "^3.0.0",
+    "imagemin-pngquant": "^6.0.0",
+    "requirejs": "^2.3.5",
+    "run-sequence": "^2.2.1"
+  },
+  "dependencies": {}
+}

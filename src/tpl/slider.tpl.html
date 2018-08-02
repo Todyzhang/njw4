@@ -1,0 +1,17 @@
+<div class="slider-warp">
+    <div class="slider-function w1200 se-contrast" ng-if="sliderSize>1">
+        <div class="slider-dots-warp">
+            <div class="slider-dots">
+                <p class="slider-dot" ng-repeat="dot in sList" ng-class="{'active':$index===current}"></p>
+            </div>
+        </div>
+        <a class="next-btn" ng-click="prevClick()"></a>
+        <a class="prev-btn" ng-click="nextClick()"></a>
+    </div>
+
+    <div class="slider" id="{{sliderId}}" style="margin-top:-400px">
+        <a class="slider-item" ng-style="{'background-image':'url('+lastItem.img+')'}" ng-href="{{lastItem.url}}"></a>
+        <a class="slider-item" ng-repeat="img in sList" ng-style="{'background-image':'url('+img.img+')'}" ng-href="{{img.url}}"></a>
+        <a class="slider-item" ng-style="{'background-image':'url('+firstItem.img+')'}" ng-href="{{firstItem.url}}"></a>
+    </div>
+</div>

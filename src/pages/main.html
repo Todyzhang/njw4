@@ -1,0 +1,99 @@
+<div class="main-content">
+    <div njw-slider s-list="sliderList" s-auto="{{false}}"></div>
+    <div class="main-bg se-bg-shallow">
+
+        <!--需求信息-->
+        <div class="mc-xqxx w1200">
+
+            <!--我要找地step-->
+            <div class="look-land-step">
+                <a class="btn btn-main look-land-btn fr">我要找地</a>
+            </div>
+
+            <!--提交需求-->
+            <div class="mc-xqxx-form se-bg-main">
+                <form class="se-bg-main">
+                    <p class="caption">
+                        <span class="dis-ib tr se-thinner bb-bar">热线：{{serverTel}}</span>
+                    </p>
+                    <div class="input-row">
+                        <div njw-selector placeholder="目标地区" options="typeList"
+                             option-name="typeName" option-value="type"
+                             result="supplierType"></div>
+                        <label class="njw-input mlr-3">
+                            <input placeholder="需求规模" ng-model="as"/><span class="word-tips">亩</span>
+                        </label>
+                        <div njw-selector placeholder="经营类型" options="typeList"
+                             option-name="typeName" option-value="type"
+                             result="supplierType"></div>
+                    </div>
+                    <div class="input-row">
+                        <label class="njw-textarea se-bg-shallow">
+                            <textarea placeholder="更多需求" ng-model="some"></textarea>
+                        </label>
+                    </div>
+                    <div class="input-row">
+                        <label class="njw-input se-bg-shallow" style="width:368px">
+                            <input placeholder="您的手机号" ng-model="s1ome"/>
+                        </label>
+
+                        <a class="btn btn-deeper btn-submit fs-14">提交需求</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!--优质土地资源-->
+        <div class="module-list-wrap w1200 se-bg-shallow">
+            <div module-caption mc-title="优质土地资源" mc-more-url="#some"></div>
+            <div module-list ml-list="landRentList" ml-row-size="4"></div>
+        </div>
+
+        <!--找地案例-->
+        <div class="module-list-wrap w1200 se-bg-shallow">
+            <div module-caption mc-title="找地案例" mc-more-url="#some"></div>
+            <div module-list ml-list="landLookList" ml-row-size="4" ml-type="look"></div>
+        </div>
+
+        <!--土地服务-->
+        <div land-service mc-title="土地服务" mc-more-url="#some"></div>
+
+        <!--土地资讯-->
+        <div class="module-list-wrap w1200 se-bg-shallow">
+            <div module-caption mc-title="土地资讯" mc-more-url="#some"></div>
+            <div class="land-news se-bg-main">
+                <div class="fl w370">
+                    <a class="ln-img-news mb-14" style="background-image:url(/static/images/370x252.jpg)">
+                        <p class="se-bg-main ell"><span class="fs-18 br-bar">农业部</span>开展2017年度金融支农服务创新试点</p>
+                    </a>
+                    <div module-caption mc-title="土地流转" mc-more-url="#some" mc-type="more"></div>
+                    <ul class="ln-list se-shallow">
+                        <li><a class="ell">农业部：开展2017年度金融支农服务创新试点开展2017年度金融<span>18/04/05</span></a></li>
+                        <li><a class="ell">农业部：开展2017年度金融支农服务创新试点开展2017年度金融<span>18/04/05</span></a></li>
+                        <li><a class="ell">农业部：开展2017年度金融支农服务创新试点开展2017年度金融<span>18/04/05</span></a></li>
+                        <li><a class="ell">农业部：开展2017年度金融支农服务创新试点开展2017年度金融<span>18/04/05</span></a></li>
+                    </ul>
+                </div>
+                <div class="fr w370">
+                    <a class="ln-img-news mb-14" style="background-image:url(/static/images/370x252.jpg)">
+                        <p class="se-bg-main ell"><span class="fs-18 br-bar">农业部</span>开展2017年度金融支农服务创新试点</p>
+                    </a>
+                    <div module-caption mc-title="国家政策" mc-more-url="#some" mc-type="more"></div>
+                    <ul class="ln-list se-shallow">
+                        <li><a class="ell">农业部：开展2017年度金融支农服务创新试点开展2017年度金融<span>18/04/05</span></a></li>
+                        <li><a class="ell">农业部：开展2017年度金融支农服务创新试点开展2017年度金融<span>18/04/05</span></a></li>
+                        <li><a class="ell">农业部：开展2017年度金融支农服务创新试点开展2017年度金融<span>18/04/05</span></a></li>
+                        <li><a class="ell">农业部：开展2017年度金融支农服务创新试点开展2017年度金融<span>18/04/05</span></a></li>
+                    </ul>
+                </div>
+                <div class="ln-middle se-bg-deeper">
+                    <div class="se-contrast ln-middle-inner">
+                        <p>ANNA WRITE</p>
+                        <p class="fs-12">Up unpacked friendly ecstatic humoured do. Ample end one set spoke her.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

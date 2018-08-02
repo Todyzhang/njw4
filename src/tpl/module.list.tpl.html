@@ -1,0 +1,17 @@
+<div class="module-list clearfix" name="{{mlType}}">
+    <a class="module-list-item" ng-repeat="item in mlList" ng-class="{'ml-0':$index%mlRowSize===0}" ng-href="{{item.url}}">
+        <div class="module-img">
+            <img ng-src="{{item.icon}}" />
+            <p class="module-flags fs-12 se-contrast"><span ng-repeat="flag in item.flags">{{flag}}</span></p>
+        </div>
+        <div class="module-info" ng-if="mlType==='rent'">
+            <p class="fs-18 se-main ell-2">{{item.title}}</p>
+            <p class="fs-18 se-deeper tr"><span class="fs-12 se-thinner fl mt-3">{{item.area}}</span>{{item.price}}</p>
+            <p class="fs-16 address-icon se-shallow ell">{{item.address}}</p>
+        </div>
+        <div class="module-info" ng-if="mlType==='look'">
+            <p class="fs-18 se-main ell">{{item.title}}</p>
+            <p class="se-shallow ell">{{item.info}}</p>
+        </div>
+    </a>
+</div>

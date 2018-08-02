@@ -1,0 +1,317 @@
+指令，我将其理解为AngularJS操作HTML element的一种途径。
+由于学习AngularJS的第一步就是写内置指令ng-app以指出该节点是应用的根节点，所以指令早已不陌生。
+
+这篇日志简单记录了一些内置指令，先使用起来，再谈一些有趣的东西。
+
+内置指令
+
+所有的内置指令的前缀都为ng，不建议自定义指令使用该前缀，以免冲突。
+首先从一些常见的内置指令开始。
+先列出一些关键的内置指令，顺便简单说说作用域的问题。
+
+ng-model
+
+将表单控件和当前作用域的属性进行绑定，这么解释似乎也不太正确。
+但先不要管咬文嚼字，用起来倒是易懂，例如:
+
+复制代码 代码如下:
+
+<input type="text" ng-model="someModel.someProperty" /><br>
+{{someModel.someProperty}}
+
+ng-init
+
+该指令被调用时会初始化内部作用域。
+这个指令一般会出现在比较小的应用中，比如给个demo什么的...
+
+复制代码 代码如下:
+
+<div ng-init="job='fighter'">
+    I'm a/an {{job}}
+</div>
+
+除了ng-init，我们还有更多更好的选择。
+
+ng-app
+
+每一次用AngularJS都离不开这个指令，顺便说下$rootScope。
+声明了ng-app的元素会成为$rootScope的起点，而$rootScope是作用域链的根，通常声明在<html>你懂的。
+也就是说根下的作用域都可以访问它。
+但是，不建议过度使用$rootScope，免得全局变量满天飞，效率又差又难管。
+下面是一个例子:
+
+复制代码 代码如下:
+
+<html ng-app="myApp">
+<body>
+    {{ someProperty }}
+</body>
+<script>
+var myApp = angular.module('myApp', [])
+.run(function($rootScope) {
+    $rootScope.someProperty = 'hello computer';
+});
+</script>
+</html>
+
+ng-controller
+
+我们用这个指令在一个DOM元素上装上controller。
+一个控制器? 确实，从字面意思上这样理解倒是不错，那我们为什么需要控制器?
+记得AngularJS 1.2.x时还可以这样定义controller来着...
+
+复制代码 代码如下:
+
+function ohMyController($scope) {
+    //...
+}
+
+AngularJS 1.3.x中禁止了这种方式，因为这种方式会让controller满天飞，分不清层次，所有东西都挂在$rootScope上...
+ng-controller必须有一个表达式作为参数，另外通过$scope来继承上级$scope的方法和属性什么的，$rootScope也包括在内。
+下面只是一个简单的例子，ancestor无法访问child的作用域。
+
+复制代码 代码如下:
+
+<div ng-controller="AncestorController">
+    {{ ancestorName }}
+    {{ childName }}
+    <div ng-controller="ChildController">
+        {{ ancestorName }}
+        {{ childName }}
+    </div>
+</div>
+<script>
+var myApp = angular.module('myApp', [])
+.controller('ChildController', function($scope) {
+    $scope.childName = 'child';
+})
+.controller('AncestorController', function($scope) {
+    $scope.ancestorName = 'ancestor';
+});
+</script>
+
+作用域的问题远不止如此，暂且搁下，继续看看其他内置指令。
+
+ng-form
+
+起初不明白为什么会有个表单指令，<form>标签感觉也够用啊。
+以表单验证为例，在上一篇中有这么一段代码:
+
+复制代码 代码如下:
+
+<input type="submit" ng-disabled="mainForm.$invalid" />
+
+也就是表单的状态为$invalid时禁用提交按钮。
+如果场景再稍微复杂一点点，比如一个父表单中有多个子表单，子表单中有3个验证通过时父表单便可以提交。
+但是，<form>是不可以嵌套的。
+考虑到这种场景，我们便使用ng-form指令来解决这一问题。
+例如:
+
+复制代码 代码如下:
+
+<form name="mainForm" novalidate>
+    <div ng-form="form1">
+        姓名:<input type="text" ng-required="true" ng-model="name"/><br>
+        证件号码:<input type="number" ng-minLength="15" ng-maxLength="18" ng-required="true" ng-model="idnum"/>
+    </div>
+    <br>
+    <div ng-form="form2">
+        监护人姓名:<input type="text" ng-required="true" ng-model="gname"/><br>
+        监护人证件号码:<input type="number" ng-minLength="15" ng-maxLength="18" ng-required="true" ng-model="gidnum"/>
+    </div>
+    <button ng-disabled="form1.$invalid && form2.$invalid">submit all</button>
+</form>
+
+ng-disabled
+
+像这种只要出现则生效的属性，我们可以在AngularJS中通过表达式返回值true/false令其生效。
+禁用表单输入字段。
+
+复制代码 代码如下:
+
+<textarea ng-disabled="1+1==2">1+1=?</textarea>
+
+ng-readonly
+
+通过表达式返回值true/false将表单输入字段设为只读。
+弄个例子，3秒后变成只读.
+
+复制代码 代码如下:
+
+<input type="text" ng-readonly="stopTheWorld" value="stop the world after 3s"/>
+.run(function($rootScope,$timeout){
+    $rootScope.stopTheWorld=false;
+    $timeout(function(){
+        $rootScope.stopTheWorld = true;
+    },3000)
+})
+
+ng-checked
+
+这个是给<input type="checkbox" />用的，比如...
+
+复制代码 代码如下:
+
+<input type="checkbox" ng-checked="someProperty" ng-init="someProperty = true" ng-model="someProperty">
+
+ng-selected
+
+给<select>里面的<option>用的，例子:
+
+复制代码 代码如下:
+
+<label>
+    <input type="checkbox" ng-model="isFullStack">
+    I'm Full Stack Engineer
+</label>
+<select>
+    <option>Front-End</option>
+    <option>Back-End</option>
+    <option ng-selected="isFullStack">Full Stack !!!</option>
+</select>
+
+
+ng-show/ng-hide
+
+根据表达式显示/隐藏HTML元素，注意是隐藏，不是从DOM移除，例如:
+
+复制代码 代码如下:
+
+<div ng-show="1+1 == 2">
+    1+1=2
+</div>
+<div ng-hide="1+1 == 3">
+    you can't see me.
+</div>
+
+ng-change
+
+不是HTML那套onXXX之类的，而是ng-XXX。
+结合ng-model使用，以ng-change为例:
+
+复制代码 代码如下:
+
+<input type="text" ng-model="calc.arg"  ng-change="calc.result = calc.arg*2" />
+    <code>{{ calc.result }}</code>
+
+或者比如ng-options
+
+{{}}
+
+其实这个也是一个指令，也许觉得和ng-bind差不多，但页面渲染略慢时可能会被看到。
+另外，{{}}的performance远不如ng-bind，只是用起来很方便。
+
+ng-bind
+
+ng-bind的行为和{{}}差不多，只是我们可以用这个指令来避免FOUC(Flash Of Unrendered Content)，也就是未渲染导致的闪烁。
+
+ng-cloak
+
+ng-cloak也可以为我们解决FOUC。 ng-cloak会将内部元素隐藏，直到路由调用对应的页面。
+
+ng-if
+
+如果ng-if中的表达式为false，则对应的元素整个会从DOM中移除而非隐藏，但审查元素时你可以看到表达式变成注释了。
+如果相进行隐藏，可以使用ng-hide。
+
+复制代码 代码如下:
+
+<div ng-if="1+1===3">
+    无法审查到该元素
+</div>
+<div ng-hide="1+1==2">
+    可审查
+</div>
+
+ng-switch
+
+单独使用没什么意思，下面是例子:
+
+复制代码 代码如下:
+
+<div ng-switch on="1+1">
+    <p ng-switch-default>0</p>
+    <p ng-switch-when="1">1</p>
+    <p ng-switch-when="2">2</p>
+    <p ng-switch-when="3">3</p>
+</div>
+
+ng-repeat
+
+不明白为毛不叫iterate，总之是遍历集合，给每个元素生成模板实例，每个实例的作用域中可以用一些特殊属性，如下:
+
+复制代码 代码如下:
+
+$index
+$first
+$last
+$middle
+$even
+$odd
+
+不用特地解释，这些都很容易看出来是干什么的，下面是一个例子:
+
+复制代码 代码如下:
+
+<ul>
+    <li ng-repeat="char in
+    [{'alphabet': 'K'},
+    {'alphabet': 'A'},
+    {'alphabet': 'V'},
+    {'alphabet': 'L'},
+    {'alphabet': 'E'},
+    {'alphabet': 'Z'}] " ng-show="$even">{{char.alphabet}}</li>
+</ul>
+
+ng-href
+
+起初我在一个文本域中弄了个ng-model，然后像这样<a href="{{myUrl}}">在href里面写了进去。
+其实这样href和ng-href看不出什么区别，所以我们可以试试这样:
+
+复制代码 代码如下:
+
+<ul ng-init="myHref=''">
+    <li><a ng-href="{{ myHref }}">{{linkText}}</a></li>
+    <li><a href="{{ myHref }}">可以点击，但不一定是正确的地址</a></li>
+</ul>
+.run(function($rootScope, $timeout) {
+    $rootScope.linkText = '尚未加载，您无法点击';
+    $timeout(function() {
+        $rootScope.linkText = '请点击'
+        $rootScope.myHref = 'http://google.com';
+    }, 2000);
+})
+
+ng-src
+
+大同小异，即表达式生效前不要加载该资源。
+例子(ps: 图片不错! ):
+
+复制代码 代码如下:
+
+<img ng-src="{{imgSrc}}"/>
+.run(function($rootScope, $timeout) {
+    $timeout(function() {
+        $rootScope.imgSrc = 'https://octodex.github.com/images/daftpunktocat-guy.gif';
+    }, 2000);
+})
+
+ng-class
+
+用作用域中的对象动态改变类样式，例如:
+
+复制代码 代码如下:
+
+<style>
+    .red {background-color: red;}
+    .blue {background-color: blue;}
+</style>
+<div ng-controller="CurTimeController">
+    <button ng-click="getCurrentSecond()" >Get Time!</button>
+    <p ng-class="{red: x%2==0,blue: x%2!=0}" >Number is: {{ x }}</p>
+</div>
+.controller('CurTimeController', function($scope) {
+    $scope.getCurrentSecond = function() {
+        $scope.x = new Date().getSeconds();
+    };
+})
