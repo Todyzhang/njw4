@@ -1,0 +1,13 @@
+
+<div class="njy-pager">
+  <div class="inner">
+    <ul class="items" ng-click="itemClick($event)">
+        <li class="item prev" ng-class="currentPage===1?'disabled':'normal'" item-click="prev"></li><li class="item"
+          ng-repeat="item in items"
+          ng-class="[item.click,currentPage===item.name?'active':'']" >
+          <a item-click="{{item.click}}">{{item.name}}</a>
+        </li><li class="item next" ng-class="currentPage===total?'disabled':'normal'" item-click="next"></li>
+    </ul>
+  </div>
+</div>
+

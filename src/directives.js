@@ -375,6 +375,7 @@ define(['app', "angular"], function (app, angular) {
      * mc-title:标题
      * mc-more-url:更多按钮链接，不传则不显示“查看更多”，同时标题居中显示
      * mc-type: look-查看更多(不传默认)；more-更多>>
+     * mc-more-text:更多的文本
      * e.g.
      * <div module-caption mc-title="找地案例" mc-more-url="#some" ></div>
      */
@@ -385,13 +386,14 @@ define(['app', "angular"], function (app, angular) {
           mcTitle: "@",
           mcMoreUrl: "@"
         },
-        template: '<div class="module-caption" ng-class="{\'tc\':!hasMore}"><p class="dis-ib fs-18" ng-class="{\'caption-bar\':mcType===\'look\'}">{{mcTitle}}</p><a class="se-thinner fr" ng-if="hasMore" ng-class="{\'look-more\':mcType===\'look\'}" ng-href="{{mcMoreUrl}}">{{moreText}}</a></div>',
+        // templateUrl:'/src/tpl/module.caption.tpl.html',
+        template: '<div class="module-caption" ng-class="{\'tc\':!hasMore}"><p class="dis-ib fs-16" ng-class="{\'caption-bar\':mcType===\'look\'}">{{mcTitle}}</p><a class="se-thinner fr" ng-if="hasMore" ng-class="{\'look-more\':mcType===\'look\'}" ng-href="{{mcMoreUrl}}">{{moreText}}</a></div>',
         replace: true,
         link: function ($scope, iElm, iAttrs) {
           $scope.hasMore = !!$scope.mcMoreUrl;
           if (iAttrs.mcType === undefined || iAttrs.mcType !== "more") {
             $scope.mcType = "look";
-            $scope.moreText ="查看更多";
+            $scope.moreText =iAttrs.mcMoreText||"查看更多";
           } else {
             $scope.mcType = "more";
             $scope.moreText ="更多 >>";
@@ -466,5 +468,132 @@ define(['app', "angular"], function (app, angular) {
           $scope.landService=publicVal.landService;
         }
       }
+    }])
+    /**
+     * 资讯列表
+     * nl-list:列表
+     *
+     * e.g.
+     * <div news-list nl-list="gjzcList"></div>
+     * $scope.gjzcList=[
+     *  {title:"开展2017年度金融支农服务创新试点开展2017年度金融",from:"农业部",date:"18/04/05"},
+     *  ...
+     * ]
+     */
+    .directive("newsList", function () {
+      return {
+        restrict: "EA",
+        scope: {
+          nlList: "="
+        },
+        // templateUrl: '/src/tpl/news.list.tpl.html',
+        template:'<ul class="news-list se-shallow" data-date="{{hasDate}}" ng-class="{\'has-news-date\':hasDate}"><li ng-repeat="item in nlList"><a class="ell" ng-href="{{item.url}}">{{item.from}}：{{item.title}}<span ng-if="hasDate">{{item.date | YDM_Date}}</span></a></li></ul>',
+        replace: true,
+        link: function ($scope, iElm, iAttrs) {
+          if(!angular.isArray($scope.nlList)) throw new Error("place send the 'nlList' type to 'Array'");
+          $scope.hasDate=!!$scope.nlList[0].date;
+        }
+      }
+    })
+    /**
+     * 图片资讯
+     * ni-img:图片资讯数据
+     * ni-bottom:标题是否在底部
+     * e.g.
+     * <div news-img class="mb-14" ni-img="imgData"></div>
+     * imgData:{
+     *     img: "/static/images/370x252.jpg",
+     *     title: "开展2017年度金融支农服务创新试点开展2017年度金融",
+     *     from: "农业部",
+     *     url: "#some"
+     *   }
+     */
+    .directive("newsImg", function () {
+      return {
+        restrict: "EA",
+        scope: {
+          niImg: "="
+        },
+        templateUrl: '/src/tpl/news.img.tpl.html',
+        // template:'',
+        replace: true,
+        link: function ($scope, iElm, iAttrs) {
+          // if (iAttrs.uiType === undefined) {
+          //   $scope.uiType = 3;
+          // } else {
+          // }
+          $scope.niBottom = !!iAttrs.niBottom;
+        }
+      }
+    })
+    /**
+     * 分页指令，参数不能为空
+     * current-page:当前页
+     * total-page:总页数
+     * total-record:总共记录数
+     * unit:记录的单位，可不传（默认为"条记录"）
+     * pager-renew:根据此值的不同来刷新指令
+     * get-list:更新列表的函数方法，函数名可改，必须带上一个page参数（表示选中页）
+     * e.g.
+     * <div njy-pager current-page="1" total-page="1" pager-renew="newPager" get-list="getListByPage(page)"></div>
+     */
+    .directive("njyPager", ["createItems", function (createItems) {
+      return {
+        restrict: "EA",
+        templateUrl: "/src/tpl/pager.tpl.html",
+        replace: true,
+        scope: {
+          total: "@totalPage",
+          currentPage: "@",
+          // getList: "&",
+          refresh: "=pagerRenew"
+        },
+        link: function ($scope, iElm, iAttrs) {
+          $scope.items = [];
+          $scope.pageNum = 1;
+          if (!$scope.total || parseInt($scope.total) == 0) {
+            $scope.total = 1;
+            $scope.currentPage = 1;
+          }
+          if ($scope.total && $scope.currentPage > $scope.total) {
+            throw new Error("当前页数不能大于总页数");
+          }
+          $scope.$watch("refresh", function (n, o) {
+            $scope.currentPage = 1;
+            $scope.pageNum = 1;
+            $scope.items =createItems($scope.currentPage,$scope.total);
+          });
+          $scope.$watch("total",function (n,o) {
+            $scope.items =createItems($scope.currentPage,$scope.total);
+          });
+
+          $scope.items =createItems($scope.currentPage,$scope.total);
+
+          $scope.itemClick = function (e) {
+            var target = e.target || e.srcElement;
+            var itemType = target.getAttribute("item-click");
+            var total = +$scope.total;
+            $scope.currentPage = +$scope.currentPage;
+            if (itemType === "prev" && $scope.currentPage > 1) {
+              $scope.currentPage--;
+            } else if (itemType === "next" && $scope.currentPage < total) {
+              $scope.currentPage++;
+            } else if (itemType === "num") {
+              $scope.currentPage = parseInt(target.innerHTML);
+            } else {
+              return;
+            }
+            $scope.pageNum = $scope.currentPage;
+            if (itemType) {
+              // $scope.getList({
+              //   page: $scope.currentPage
+              // });
+              $scope.items =createItems($scope.currentPage,$scope.total);
+              //回滚到顶部
+              // jq("html,body").animate({"scrollTop": 0});
+            }
+          };
+        }
+      };
     }])
 });

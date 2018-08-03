@@ -11,8 +11,24 @@
 {
     behavior: url("/PIE.htc");
 }
-
-/*.module-flags > span{*/
-    /*background: none;*/
-    /*filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/static/images/flag_bg.png", sizingMethod=scale);*/
-/*}*/
+.module-tab-item.active,
+.caption-bar{
+    background-image:url("/static/images/caption_bar_ie8.png");
+}
+.module-tab-item{
+    min-width: 42px;
+}
+.module-list-item {
+    width: 280px;
+    border: 1px solid transparent;
+}
+.module-list-5 .module-list-item{
+    width:222px;
+}
+.module-list-item:hover{
+    border-color:#dcdcdc;
+}
+.module-flags > span{
+    background: none;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/static/images/flag_bg.png", sizingMethod=scale);
+}

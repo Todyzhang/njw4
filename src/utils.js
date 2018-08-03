@@ -275,6 +275,90 @@ define(['app'], function (app) {
         }
       };
     }])
+    //组建页码item
+    .factory("createItems", function () {
+      return function (currentPage,total) {
+        var preI = 5,
+          nextI = 3,
+          i = 0,
+          items = [],
+          c = currentPage,
+          t = total;
+
+        if (t < 6) {
+          for (i = 1; i <= t; i++) {
+            items.push({
+              name: i,
+              click: "num"
+            });
+          }
+          return items;
+        }
+
+        if (c < 5) {
+          for (i = 1; i < 6; i++) {
+            items.push({
+              name: i,
+              click: "num"
+            });
+          }
+          items.push({
+            name: "...",
+            click: "dot"
+          });
+          return items;
+        }
+
+        //组建当前页的后3个
+        items.push({
+          name: c,
+          click: "num"
+        });
+        for (i = c + 1; i <= t; i++) {
+          if (--nextI > -1) {
+            items.push({
+              name: i,
+              click: "num"
+            });
+            if (nextI == 0 && t > i) {
+              items.splice(items.length - 1, 1, {
+                name: "...",
+                click: "dot"
+              });
+            }
+          } else {
+            break;
+          }
+        }
+        //组建当前页的前5个
+        for (i = c - 1; i > 0; i--) {
+          if (--preI > -1) {
+            items.splice(0, 0, {
+              name: i,
+              click: "num"
+            });
+            if (preI == 2) {
+              if (i > 3) {
+                items.splice(0, 1, {
+                  name: 1,
+                  click: "num"
+                }, {
+                  name: 2,
+                  click: "num"
+                }, {
+                  name: "...",
+                  click: "dot"
+                });
+                break;
+              }
+            }
+          } else {
+            break;
+          }
+        }
+        return items;
+      };
+    })
 
 
 });

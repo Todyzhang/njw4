@@ -1,5 +1,5 @@
 <div class="find-land-content main-bg se-bg-shallow">
-    <div class="module-list-wrap w1200">
+    <div class="w1200 mt-40">
         <div class="find-land-select se-bg-main">
             <div class="fls-item">
                 <p class="fl fls-item-title bold fs-18">区域</p>
@@ -17,7 +17,6 @@
                     <a class="active">不限</a><a>耕地</a><a>园地</a><a>林地</a><a>草地</a><a>养殖用地</a><a>商业住宅用地</a><a>工矿仓储用地</a><a>水域</a><a>其他土地</a>
                 </div>
             </div>
-
             <div class="fls-item">
                 <p class="fl fls-item-title bold fs-18">标签</p>
                 <div class="fls-item-list fs-16">
@@ -49,7 +48,26 @@
 
     </div>
 
-    <div class="module-list-wrap w1200 se-bg-main">
+    <div class="module-list-wrap se-bg-main mt-40 pt-30">
+        <div class="w1200 pb-40">
+            <div class="fr w282 ">
+                <div class="bb-bar" module-caption mc-title="涉农服务" mc-more-text="更多" mc-more-url="#some"></div>
+                <div news-img class="mb-20" ng-repeat="img in snNewsImg" ni-img="img" ni-bottom="bottom"></div>
+                <div class="bb-bar mt-40" module-caption mc-title="{{gjzcNews.caption.title}}" mc-more-url="{{gjzcNews.caption.url}}" mc-more-text="更多"></div>
+                <div news-img class="mb-14" ni-img="gjzcNews.img" ni-bottom="bottom"></div>
+                <div news-list nl-list="gjzcNews.list"></div>
+            </div>
+            <div class="find-land-list">
+                <!--<div class="bb-bar" module-caption mc-title="优质土地资源" mc-more-url="#some"></div>-->
+                <div class="module-tabs bb-bar">
+                    <a class="module-tab-item active">默认排序</a><span>/</span>
+                    <a class="module-tab-item">面积</a><span>/</span>
+                    <a class="module-tab-item">可流转年限</a>
+                </div>
+                <div module-list ml-list="landRentList"></div>
 
+                <div njy-pager current-page="1" total-page="100" pager-renew="newPager" get-list="getListByPage(page)"></div>
+            </div>
+        </div>
     </div>
 </div>

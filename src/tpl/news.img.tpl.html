@@ -1,0 +1,9 @@
+<a class="news-img" ng-class="{'bottom-title':niBottom}">
+    <img ng-src="{{niImg.img}}" />
+    <p class="se-bg-shallow ell fs-18" ni-if="!niBottom">
+        <span class="br-bar">{{niImg.from}}</span><span class="fs-14">{{niImg.title}}</span>
+    </p>
+    <p class="se-bg-shallow ell" ng-class="niImg.from?'fs-16':'fs-18'" ni-if="niBottom">
+        {{niImg.from?niImg.from+":":""}}{{niImg.title}}
+    </p>
+</a>

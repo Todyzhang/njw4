@@ -1,6 +1,6 @@
 <div class="main-content">
     <div njw-slider s-list="sliderList" s-auto="{{false}}"></div>
-    <div class="main-bg se-bg-shallow">
+    <div class="main-bg se-bg-shallow pb-40">
 
         <!--需求信息-->
         <div class="mc-xqxx w1200">
@@ -44,7 +44,7 @@
         </div>
 
         <!--优质土地资源-->
-        <div class="module-list-wrap w1200 se-bg-shallow">
+        <div class="module-list-wrap w1200 se-bg-shallow mt-40">
             <div module-caption mc-title="优质土地资源" mc-more-url="#some"></div>
             <div module-list ml-list="landRentList" ml-row-size="4"></div>
         </div>
@@ -59,32 +59,13 @@
         <div land-service mc-title="土地服务" mc-more-url="#some"></div>
 
         <!--土地资讯-->
-        <div class="module-list-wrap w1200 se-bg-shallow">
+        <div class="module-list-wrap w1200 se-bg-shallow mt-40">
             <div module-caption mc-title="土地资讯" mc-more-url="#some"></div>
             <div class="land-news se-bg-main">
-                <div class="fl w370">
-                    <a class="ln-img-news mb-14" style="background-image:url(/static/images/370x252.jpg)">
-                        <p class="se-bg-main ell"><span class="fs-18 br-bar">农业部</span>开展2017年度金融支农服务创新试点</p>
-                    </a>
-                    <div module-caption mc-title="土地流转" mc-more-url="#some" mc-type="more"></div>
-                    <ul class="ln-list se-shallow">
-                        <li><a class="ell">农业部：开展2017年度金融支农服务创新试点开展2017年度金融<span>18/04/05</span></a></li>
-                        <li><a class="ell">农业部：开展2017年度金融支农服务创新试点开展2017年度金融<span>18/04/05</span></a></li>
-                        <li><a class="ell">农业部：开展2017年度金融支农服务创新试点开展2017年度金融<span>18/04/05</span></a></li>
-                        <li><a class="ell">农业部：开展2017年度金融支农服务创新试点开展2017年度金融<span>18/04/05</span></a></li>
-                    </ul>
-                </div>
-                <div class="fr w370">
-                    <a class="ln-img-news mb-14" style="background-image:url(/static/images/370x252.jpg)">
-                        <p class="se-bg-main ell"><span class="fs-18 br-bar">农业部</span>开展2017年度金融支农服务创新试点</p>
-                    </a>
-                    <div module-caption mc-title="国家政策" mc-more-url="#some" mc-type="more"></div>
-                    <ul class="ln-list se-shallow">
-                        <li><a class="ell">农业部：开展2017年度金融支农服务创新试点开展2017年度金融<span>18/04/05</span></a></li>
-                        <li><a class="ell">农业部：开展2017年度金融支农服务创新试点开展2017年度金融<span>18/04/05</span></a></li>
-                        <li><a class="ell">农业部：开展2017年度金融支农服务创新试点开展2017年度金融<span>18/04/05</span></a></li>
-                        <li><a class="ell">农业部：开展2017年度金融支农服务创新试点开展2017年度金融<span>18/04/05</span></a></li>
-                    </ul>
+                <div class="w370" ng-repeat="item in landNews" ng-class="{'fl':$first,'fr':$last}">
+                    <div news-img class="mb-14" ni-img="item.img"></div>
+                    <div module-caption mc-title="{{item.caption.title}}" mc-more-url="{{item.caption.url}}" mc-type="more"></div>
+                    <div news-list nl-list="item.list"></div>
                 </div>
                 <div class="ln-middle se-bg-deeper">
                     <div class="se-contrast ln-middle-inner">

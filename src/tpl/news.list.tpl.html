@@ -1,0 +1,5 @@
+<ul class="news-list se-shallow" data-date="{{hasDate}}" ng-class="{'has-news-date':hasDate}">
+    <li ng-repeat="item in nlList">
+        <a class="ell" ng-href="{{item.url}}">{{item.from}}：{{item.title}}<span ng-if="hasDate">{{item.date | YDM_Date}}</span></a>
+    </li>
+</ul>

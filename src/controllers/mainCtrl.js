@@ -1,12 +1,12 @@
-define(['app','css!/src/css/main'], function (app) {
+define(['app', 'css!/src/css/main'], function (app) {
   'use strict';
-  app.ctrl('mainCtrl', ["$scope",function ($scope,$state) {
+  app.ctrl('mainCtrl', ["$scope", function ($scope, $state) {
     // console.log(require.pathFromUrl('../css/main.css'))
     //$state.transitionTo("main.index")
-    $scope.sliderList=[
-      {img:"static/images/banner0.jpg",url:"#some"},
-      {img:"static/images/banner1.jpg",url:"#some"},
-      {img:"static/images/banner2.jpg",url:"#some"}
+    $scope.sliderList = [
+      {img: "static/images/banner0.jpg", url: "#some"},
+      {img: "static/images/banner1.jpg", url: "#some"},
+      {img: "static/images/banner2.jpg", url: "#some"}
     ]
     $scope.typeList = [
       {"type": 0, "typeName": "合作社"},
@@ -28,77 +28,105 @@ define(['app','css!/src/css/main'], function (app) {
       {"type": 16, "typeName": "仓储/冷库"},
       {"type": 17, "typeName": "其他"}
     ];
-    $scope.supplierType=0;
-    /*
-    <div class="module-img">
-          <img src="/static/images/282x210.jpg" />
-          <p class="module-flags fs-12 se-contrast"><span>出租仓库用地</span><span>出租</span></p>
-      </div>
-      <div class="module-info">
-          <p class="module-title fs-18 se-main ell-2">清新区石潭镇185亩超优质连片水田出租</p>
-          <p class="fs-18 se-deeper tr"><span class="fs-12 se-thinner fl mt-3">96亩</span>900元/亩/年</p>
-          <p class="fs-16 address-icon se-shallow">清远市清新区</p>
-      </div>
-     */
-    $scope.landRentList=[
+    $scope.supplierType = 0;
+    $scope.landRentList = [
       {
-        title:"清新区石潭镇185亩超优质连片水田出租",
-        url:"#some",
-        icon:"/static/images/282x210.jpg",
-        flags:["出租仓库用地","出租"],
-        area:"96亩",
-        price:"900元/亩/年",
-        address:"清远市清新区"
+        title: "清新区石潭镇185亩超优质连片水田出租",
+        url: "#some",
+        icon: "/static/images/282x210.jpg",
+        flags: ["出租仓库用地", "出租"],
+        area: "96亩",
+        price: "900元/亩/年",
+        address: "清远市清新区"
       },
       {
-        title:"清新区石潭镇185亩超优质连片水田出租",
-        url:"#some",
-        icon:"/static/images/282x210.jpg",
-        area:"96亩",
-        price:"900元/亩/年",
-        address:"清远市清新区"
+        title: "清新区石潭镇185亩超优质连片水田出租",
+        url: "#some",
+        icon: "/static/images/282x210.jpg",
+        area: "96亩",
+        price: "900元/亩/年",
+        address: "清远市清新区"
       },
       {
-        title:"超优质连片水田出租",
-        url:"#some",
-        icon:"/static/images/282x210.jpg",
-        area:"96亩",
-        price:"900元/亩/年",
-        address:"清远市清新区"
+        title: "超优质连片水田出租",
+        url: "#some",
+        icon: "/static/images/282x210.jpg",
+        area: "96亩",
+        price: "900元/亩/年",
+        address: "清远市清新区"
       },
       {
-        title:"清新区石潭镇185亩超优质连片水田出租清新区石潭镇185亩超优质连片水田出租",
-        url:"#some",
-        icon:"/static/images/282x210.jpg",
-        area:"96亩",
-        price:"900元/亩/年",
-        address:"清远市清新区"
+        title: "清新区石潭镇185亩超优质连片水田出租清新区石潭镇185亩超优质连片水田出租",
+        url: "#some",
+        icon: "/static/images/282x210.jpg",
+        area: "96亩",
+        price: "900元/亩/年",
+        address: "清远市清新区"
       }
     ];
-    $scope.landLookList=[
+    $scope.landLookList = [
       {
-        title:"按需找地",
-        url:"#some",
-        icon:"/static/images/282x210.jpg",
-        info:"青龙养鸡场项目"
+        title: "按需找地",
+        url: "#some",
+        icon: "/static/images/282x210.jpg",
+        info: "青龙养鸡场项目"
       },
       {
-        title:"按需找地",
-        url:"#some",
-        icon:"/static/images/282x210.jpg",
-        info:"青龙养鸡场项目"
-      },{
-        title:"按需找地",
-        url:"#some",
-        icon:"/static/images/282x210.jpg",
-        info:"青龙养鸡场项目"
-      },{
-        title:"按需找地",
-        url:"#some",
-        icon:"/static/images/282x210.jpg",
-        info:"青龙养鸡场项目"
+        title: "按需找地",
+        url: "#some",
+        icon: "/static/images/282x210.jpg",
+        info: "青龙养鸡场项目"
+      }, {
+        title: "按需找地",
+        url: "#some",
+        icon: "/static/images/282x210.jpg",
+        info: "青龙养鸡场项目"
+      }, {
+        title: "按需找地",
+        url: "#some",
+        icon: "/static/images/282x210.jpg",
+        info: "青龙养鸡场项目"
       }
     ];
+    $scope.landNews = [
+      {
+        list: [
+          {title: "开展2017年度金融支农服务创新试点开展2017年度金融", from: "农业部", date: "2018/04/05", url: "#some"},
+          {title: "开展2017年度金融支农服务创新试点开展2017年度金融", from: "农业部", date: "2018/04/05", url: "#some"},
+          {title: "开展2017年度金融支农服务创新试点开展2017年度金融", from: "农业部", date: "2018/04/05", url: "#some"},
+          {title: "开展2017年度金融支农服务创新试点开展2017年度金融", from: "农业部", date: "2018/04/05", url: "#some"}
+        ],
+        img:{
+          img: "/static/images/370x252.jpg",
+          title: "开展2017年度金融支农服务创新试点开展2017年度金融",
+          from: "农业部",
+          url: "#some"
+        },
+        caption:{
+          title:"土地流转",
+          url:"#some"
+        }
+
+      },
+      {
+        list: [
+          {title: "开展2017年度金融支农服务创新试点开展2017年度金融", from: "农业部", date: "2018/04/05", url: "#some"},
+          {title: "开展2017年度金融支农服务创新试点开展2017年度金融", from: "农业部", date: "2018/04/05", url: "#some"},
+          {title: "开展2017年度金融支农服务创新试点开展2017年度金融", from: "农业部", date: "2018/04/05", url: "#some"},
+          {title: "开展2017年度金融支农服务创新试点开展2017年度金融", from: "农业部", date: "2018/04/05", url: "#some"}
+        ],
+        img:{
+          img: "/static/images/370x252.jpg",
+          title: "开展2017年度金融支农服务创新试点开展2017年度金融",
+          from: "农业部",
+          url: "#some"
+        },
+        caption:{
+          title:"国家政策",
+          url:"#some"
+        }
+      }
+    ]
 
   }]);
 
