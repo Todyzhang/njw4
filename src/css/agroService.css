@@ -1,0 +1,23 @@
+.partners-wrap{
+    background-image: url("/static/images/map_bg.png");
+    background-repeat:no-repeat;
+    background-position:center 78px;
+    padding-bottom: 220px;
+}
+.partners-inner{
+    margin: 100px 101px 0 101px;
+    overflow:hidden;
+}
+.partners-inner-list{
+    font-size:0;
+    width:998px;
+    margin-bottom: -2px;
+    margin-left: -2px;
+}
+.partners-inner-list .partner{
+    background-repeat: no-repeat;
+    background-position:center;
+    width:248px;
+    height:150px;
+    display: inline-block;
+}

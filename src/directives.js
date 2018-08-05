@@ -243,7 +243,7 @@ define(['app', "angular"], function (app, angular) {
           sDelay: "@"
         },
         replace: true,
-        templateUrl: '/src/tpl/slider.tpl.html',
+        templateUrl: app.fileUrlHash('/src/tpl/slider.tpl.html'),
         link: function ($scope, iElm, iAttrs) {
           $scope.current = 0;
           $scope.sliderId = 'slider' + (+new Date);
@@ -284,7 +284,7 @@ define(['app', "angular"], function (app, angular) {
     .directive("njwSelector", [function () {
       return {
         restrict: "EA",
-        templateUrl: "/src/tpl/selector.tpl.html",
+        templateUrl: app.fileUrlHash("/src/tpl/selector.tpl.html"),
         replace: true,
         scope: {
           placeholder: "@",
@@ -386,7 +386,7 @@ define(['app', "angular"], function (app, angular) {
           mcTitle: "@",
           mcMoreUrl: "@"
         },
-        // templateUrl:'/src/tpl/module.caption.tpl.html',
+        // templateUrl:app.fileUrlHash('/src/tpl/module.caption.tpl.html'),
         template: '<div class="module-caption" ng-class="{\'tc\':!hasMore}"><p class="dis-ib fs-16" ng-class="{\'caption-bar\':mcType===\'look\'}">{{mcTitle}}</p><a class="se-thinner fr" ng-if="hasMore" ng-class="{\'look-more\':mcType===\'look\'}" ng-href="{{mcMoreUrl}}">{{moreText}}</a></div>',
         replace: true,
         link: function ($scope, iElm, iAttrs) {
@@ -432,7 +432,7 @@ define(['app', "angular"], function (app, angular) {
         scope: {
           mlList: "="
         },
-        templateUrl: '/src/tpl/module.list.tpl.html',
+        templateUrl: app.fileUrlHash('/src/tpl/module.list.tpl.html'),
         replace: true,
         link: function ($scope, iElm, iAttrs) {
           if (iAttrs.mlType === undefined || iAttrs.mlType !== "look") {
@@ -462,7 +462,7 @@ define(['app', "angular"], function (app, angular) {
           mcTitle: "@",
           mcMoreUrl: "@"
         },
-        templateUrl: '/src/tpl/land.service.tpl.html',
+        templateUrl: app.fileUrlHash('/src/tpl/land.service.tpl.html'),
         replace: true,
         link: function ($scope, iElm, iAttrs) {
           $scope.landService=publicVal.landService;
@@ -486,7 +486,7 @@ define(['app', "angular"], function (app, angular) {
         scope: {
           nlList: "="
         },
-        // templateUrl: '/src/tpl/news.list.tpl.html',
+        // templateUrl: app.fileUrlHash('/src/tpl/news.list.tpl.html'),
         template:'<ul class="news-list se-shallow" data-date="{{hasDate}}" ng-class="{\'has-news-date\':hasDate}"><li ng-repeat="item in nlList"><a class="ell" ng-href="{{item.url}}">{{item.from}}：{{item.title}}<span ng-if="hasDate">{{item.date | YDM_Date}}</span></a></li></ul>',
         replace: true,
         link: function ($scope, iElm, iAttrs) {
@@ -514,7 +514,7 @@ define(['app', "angular"], function (app, angular) {
         scope: {
           niImg: "="
         },
-        templateUrl: '/src/tpl/news.img.tpl.html',
+        templateUrl: app.fileUrlHash('/src/tpl/news.img.tpl.html'),
         // template:'',
         replace: true,
         link: function ($scope, iElm, iAttrs) {
@@ -527,7 +527,7 @@ define(['app', "angular"], function (app, angular) {
       }
     })
     /**
-     * 分页指令，参数不能为空
+     * 分页指令，参数不能为空只有一页不显示组件
      * current-page:当前页
      * total-page:总页数
      * total-record:总共记录数
@@ -535,17 +535,17 @@ define(['app', "angular"], function (app, angular) {
      * pager-renew:根据此值的不同来刷新指令
      * get-list:更新列表的函数方法，函数名可改，必须带上一个page参数（表示选中页）
      * e.g.
-     * <div njy-pager current-page="1" total-page="1" pager-renew="newPager" get-list="getListByPage(page)"></div>
+     * <div njw-pager current-page="1" total-page="1" pager-renew="newPager" get-list="getListByPage(page)"></div>
      */
-    .directive("njyPager", ["createItems", function (createItems) {
+    .directive("njwPager", ["createItems", function (createItems) {
       return {
         restrict: "EA",
-        templateUrl: "/src/tpl/pager.tpl.html",
+        templateUrl: app.fileUrlHash("/src/tpl/pager.tpl.html"),
         replace: true,
         scope: {
           total: "@totalPage",
           currentPage: "@",
-          // getList: "&",
+          getList: "&",
           refresh: "=pagerRenew"
         },
         link: function ($scope, iElm, iAttrs) {
@@ -585,9 +585,9 @@ define(['app', "angular"], function (app, angular) {
             }
             $scope.pageNum = $scope.currentPage;
             if (itemType) {
-              // $scope.getList({
-              //   page: $scope.currentPage
-              // });
+              $scope.getList({
+                page: $scope.currentPage
+              });
               $scope.items =createItems($scope.currentPage,$scope.total);
               //回滚到顶部
               // jq("html,body").animate({"scrollTop": 0});

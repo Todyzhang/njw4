@@ -1,5 +1,5 @@
 <div class="njw-selector">
-    <label class="njw-input">
+    <label class="njw-input se-border thinner">
         <input ng-class="{'placeholder':isPlaceholder}"
                readonly
                unselectable="on"
@@ -8,7 +8,7 @@
                ng-disabled="isDisable"
         /><span class="arrow-d"></span>
     </label>
-    <ul class="njw-selector-list" style="display:none" ng-mouseover="activeOption=undefined" ng-class="{'scroll':options.length>15}">
+    <ul class="njw-selector-list se-border thinner" style="display:none" ng-mouseover="activeOption=undefined" ng-class="{'scroll':options.length>15}">
         <li ng-repeat="option in options"
             data-value="{{option[loopValue]||option[loopName]||option}}"
             ng-click="optionClick($index,option)"

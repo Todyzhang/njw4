@@ -47,7 +47,18 @@ input:-moz-placeholder {
 .se-border.deeper{
     border-color:#393;
 }
-
+.se-border.thinner{
+    border-color: #dcdcdc;
+}
+.bb-bar{
+    border-bottom:1px solid #dcdcdc;
+}
+.br-bar{
+    border-right:1px solid #dcdcdc;
+}
+.bl-bar{
+    border-left:1px solid #dcdcdc;
+}
 .se-main,
 .se-main a{
     color:#333;
@@ -100,12 +111,7 @@ a.active>.se-contrast,
 .bar{
     background:#ccc;
 }
-.bb-bar{
-    border-bottom:1px solid #dcdcdc;
-}
-.br-bar{
-    border-right:1px solid #dcdcdc;
-}
+
 
 /*按钮*/
 .btn.btn-deeper{
@@ -146,11 +152,25 @@ a.active>.se-contrast,
     background:#f00;
 }
 
+/*轮播图*/
+.slider-dot {
+    background: #ccc;
+}
+.slider-dot.active {
+    border: 1px solid #fff;
+}
+
+/*页码组件*/
+.njw-pager .item.active>a{color:#fff;}
+.njw-pager .item.active > a {
+    color: #fff;
+    background: url(/static/images/pager_item_bg.png) no-repeat center;
+}
 
 
 /*输入框*/
-.njw-input{
-    border: 1px solid #dcdcdc;
+.njw-selector > ul {
+    background-color: #fff;
 }
 .njw-selector:hover>.njw-input,
 .njw-input:hover{

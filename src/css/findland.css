@@ -1,3 +1,4 @@
+/*我要找地*/
 .find-land-content{
     padding-top:1px;
 }
@@ -40,4 +41,35 @@
 
 .find-land-list{
     padding-right:306px;
+}
+
+.find-land-btn{
+    width: 20%;
+    max-width: 360px;
+    height:120px;
+    background: url("/static/images/find_land_btn.png") no-repeat 90% center;
+    margin: 90px 0 0 1000px;
+    z-index:100;
+}
+/*地块详情*/
+
+.fl-info-header{
+    padding-right:30px;
+}
+
+.arrows-btn{
+    width:100px;
+    height:36px;
+    background:url("/static/images/arrows.png");
+}
+.arrows-btn>.arrows-left,
+.arrows-btn>.arrows-right{
+    width:50px;
+    height:36px;
+}
+.arrows-btn>.arrows-left:hover{
+    background:url("/static/images/arrows_l_on.png") no-repeat left center;
+}
+.arrows-btn>.arrows-right:hover{
+    background:url("/static/images/arrows_r_on.png") no-repeat right center;
 }

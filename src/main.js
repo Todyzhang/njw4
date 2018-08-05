@@ -56,6 +56,7 @@ var REQUIRE_CONFIG = {
     'app': './app',
     'text': '../static/js/requirejs/text',
     'css': '../static/js/requirejs/css.min',
+    'masterRouter':'./masterRouter',
 
     // css
     'common': './css/common',
@@ -91,8 +92,8 @@ var REQUIRE_CONFIG = {
 require.config(REQUIRE_CONFIG);
 
 // 有返回值的写在前面，方便填写注入的参数
-require(['app', 'angular', 'css!normalize', 'jquery', 'jquery-form', 'ui-router', 'css!common','css!/src/css/theme', 'utils', 'services','directives.html.tpl', 'directives', 'filters'],
-  function (app,angular) {
+require(['app', 'angular','masterRouter', 'css!normalize', 'jquery', 'jquery-form', 'ui-router', 'css!common','css!/src/css/theme', 'utils', 'services','directives.html.tpl', 'directives', 'filters'],
+  function (app,angular,masterRouter) {
     var isIE = function(ver){
       var b = document.createElement('b')
       b.innerHTML = '<!--[if IE ' + ver + ']><i></i><![endif]-->'
@@ -101,7 +102,7 @@ require(['app', 'angular', 'css!normalize', 'jquery', 'jquery-form', 'ui-router'
     if(isIE(8)){
       require(['css!ie8']);
     }
-    // app.config(masterRouter);
+    app.config(masterRouter);
     angular.bootstrap(document, ['App']);
     console.log('系统已启动...');
   }

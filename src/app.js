@@ -121,13 +121,6 @@ define(["require", "angular"], function (require, angular) {
           controller: "findLandCtrl",
           resolve: app.loadJs("./src/controllers/findLandCtrl.js")
         })
-        // .state("main.index", {
-        //   url: "/index",
-        //   templateUrl: app.fileUrlHash("./src/pages/main.index.html"),
-        //   controller: "mainIndexCtrl",
-        //   resolve: app.loadJs("./src/controllers/mainIndexCtrl.js")
-        // })
-
       // 默认页
       $urlRouterProvider.otherwise("/main");
       $urlRouterProvider.when("","/main");

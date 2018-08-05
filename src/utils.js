@@ -1,4 +1,4 @@
-define(['app'], function (app) {
+define(['app','angular'], function (app,angular) {
   'use strict';
 
   app
@@ -6,7 +6,7 @@ define(['app'], function (app) {
       menus: [
         {title: "首页", url: "main"},
         {title: "我要找地", url: "findland"},
-        {title: "金融服务", url: "main"},
+        {title: "金融服务", url: "agroService"},
         {title: "涉农服务", url: "main"},
         {title: "土地资讯", url: "main"}
       ],
@@ -195,28 +195,31 @@ define(['app'], function (app) {
         autoSlider: true,
         timer: null,
         height: 400,
+        width:570,
+        direct:'upDown',//'upDown'(default) or 'leftRight'
         current: 0,
         speed: 200,
         slider: function (direction, cb) {
-          var distance = 0, that = this;
-          if (direction === "down") {
+          var distance = 0, that = this,param={};
+          if (direction === "down"||direction === "left") {
             this.current--;
             if (this.current < 0) {
               this.current = this.last - 1;
             }
-            distance = this.distance - this.height;
+            distance = this.distance - this.sliderData.distance;
           } else {
             this.current++;
             if (this.current >= this.last) {
               this.current = 0;
             }
-            distance = this.distance + this.height;
+            distance = this.distance + this.sliderData.distance;
           }
           that.$scope.current = that.current;
 
           //轮播动画中暂不进行处理
           that.isAnimated = false;
-          this.dom.animate({"margin-top": "-" + distance + "px"}, this.speed, "linear", function () {
+          param[that.sliderData.sliderParam]="-" + distance + "px";
+          this.dom.animate(param, this.speed, "linear", function () {
             var dis = 0;
             if (distance === 0) {
               dis = that.lastDistance - that.height;
@@ -224,7 +227,7 @@ define(['app'], function (app) {
               dis = that.height;
             }
             if (dis > 0) {
-              that.dom.css({"margin-top": "-" + dis + "px"});
+              that.dom.css(that.sliderData.sliderParam, "-" + dis + "px");
               that.distance = dis;
             } else {
               that.distance = distance;
@@ -242,16 +245,16 @@ define(['app'], function (app) {
         },
         next: function () {
           this.cancelTimer();
-          this.move("up");
+          this.move(this.sliderData.nextDirect);
         },
         prev: function () {
           this.cancelTimer();
-          this.move("down");
+          this.move(this.sliderData.prevDirect);
         },
         start: function () {
           var that = this;
           that.timer = $timeout(function () {
-            that.move("up");
+            that.move(that.sliderData.nextDirect);
           }, that.delay);
         },
         cancelTimer: function () {
@@ -260,102 +263,114 @@ define(['app'], function (app) {
         reset: function () {
           this.size = this.list.length;
           this.last = this.size;
-          this.lastDistance = (this.size + 1) * this.height;
-          this.distance = this.height;
+          this.lastDistance = (this.size + 1) * this.sliderData.distance;
+          this.distance = this.sliderData.distance;
           this.isAnimated = true;
         },
-        init: function (id, list, $scope, delay, auto) {
+        init: function (id, list, $scope, delay, auto,direct) {
           this.dom = jQuery("#" + id);
           this.list = list;
           this.$scope = $scope;
           typeof delay === 'number' && (this.delay = delay * 1000);
           typeof auto === 'boolean' && (this.autoSlider = auto);
+          if(typeof direct === 'string' && direct!=="upDown"){
+            this.direct = 'leftRight';
+            this.sliderData={
+              distance:this.width,
+              sliderParam:"margin-left",
+              nextDirect:"right",
+              prevDirect:"left"
+            }
+          }else{
+            this.direct="upDown";
+            this.sliderData={
+              distance:this.height,
+              sliderParam:"margin-top",
+              nextDirect:"up",
+              prevDirect:"down"
+            }
+          }
           this.reset();
           this.autoSlider && this.start();
         }
       };
     }])
-    //组建页码item
+    /*
+     * 组建页码item list
+     * 样式：
+     * 总数11以内
+     * 1 2 3 4 5 6 7 8 9 10 11
+     * 总数11以后，当前数为7
+     * <- 1 2 ... 5 6 7 8 9 ... 99 100 ->
+     */
     .factory("createItems", function () {
       return function (currentPage,total) {
-        var preI = 5,
-          nextI = 3,
-          i = 0,
+        var i = 0,
           items = [],
-          c = currentPage,
-          t = total;
-
-        if (t < 6) {
-          for (i = 1; i <= t; i++) {
-            items.push({
-              name: i,
-              click: "num"
-            });
+          c = +currentPage,
+          l_c=c,
+          r_c=c,
+          t = +total,
+        getItem=function (name) {
+          return {
+            name: name,
+            click: typeof(name)==="number"?"num":"dot"
+          }
+        };
+        //============总数少于9个全组上，返回
+        if(t<9){
+          for(i=1;i<=t;i++){
+            items.push(getItem(i))
           }
           return items;
         }
 
-        if (c < 5) {
-          for (i = 1; i < 6; i++) {
-            items.push({
-              name: i,
-              click: "num"
-            });
+        //============总数多于9个组建页码
+        items.push(getItem(c));
+        //====前面数字
+        if(c-6>0){
+          //多于6个，直接组1 2 ... c-2 c-1
+          items.splice(0, 0,getItem(1),getItem(2),getItem("..."),getItem(c-2),getItem(c-1));
+          l_c=c-2;
+        }else{
+          //少于6个，1-c全组上
+          for (i = c-1; i > 0; i--) {
+            items.splice(0,0,getItem(i));
           }
-          items.push({
-            name: "...",
-            click: "dot"
-          });
-          return items;
+        }
+        //=====后面数字
+
+        if(c+6>t){
+          if(t-c<2){
+            //当c为最后1或2时，保证c附近有4个页码数字
+            for(i=c-t;i>-2;i--){
+              items.splice(3,0,getItem(--l_c));
+            }
+
+          }
+          //全组上后面数字页码
+          for (i = c+1; i <= t; i++) {
+            items.push(getItem(i));
+          }
+        }else{
+          //先组上后2个
+          items.push(getItem(c+1),getItem(c+2));
+          // 当c=1和2，以下保证c附近有4个页码数字
+          r_c=c+2;
+          if(c-2<=0){
+            for(i=c-2;i<=0;i++){
+              items.push(getItem(++r_c));
+            }
+          }
+          if(r_c+4>t){
+            for (i = r_c+1; i <= t; i++) {
+              items.push(getItem(i));
+            }
+          }else{
+            items.push(getItem("..."),getItem(t-1),getItem(t));
+          }
         }
 
-        //组建当前页的后3个
-        items.push({
-          name: c,
-          click: "num"
-        });
-        for (i = c + 1; i <= t; i++) {
-          if (--nextI > -1) {
-            items.push({
-              name: i,
-              click: "num"
-            });
-            if (nextI == 0 && t > i) {
-              items.splice(items.length - 1, 1, {
-                name: "...",
-                click: "dot"
-              });
-            }
-          } else {
-            break;
-          }
-        }
-        //组建当前页的前5个
-        for (i = c - 1; i > 0; i--) {
-          if (--preI > -1) {
-            items.splice(0, 0, {
-              name: i,
-              click: "num"
-            });
-            if (preI == 2) {
-              if (i > 3) {
-                items.splice(0, 1, {
-                  name: 1,
-                  click: "num"
-                }, {
-                  name: 2,
-                  click: "num"
-                }, {
-                  name: "...",
-                  click: "dot"
-                });
-                break;
-              }
-            }
-          } else {
-            break;
-          }
-        }
         return items;
       };
     })
