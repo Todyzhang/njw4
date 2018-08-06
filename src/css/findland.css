@@ -186,3 +186,10 @@
     top:50%;
     margin-top:-278px;
 }
+.dialog-close{
+    width:40px;
+    height:40px;
+    background:url("/static/images/btn_delete.png") no-repeat center;
+    right:-40px;
+    top:-40px;
+}

@@ -7,13 +7,19 @@ define(['app'], function (app) {
         url: '/agro-service',
         templateUrl: '/src/pages/agroService.html',
         controller: 'agroServiceCtrl',
-        resolve: app.loadJs('/src/controllers/agroServiceCtrl.js')
+        resolve: app.loadJs('/src/controllers/agroServiceCtrl.js'),
+        data:{
+          menu:2
+        }
       })
       .state("landInfo", {
         url: "/landInfo",
         templateUrl: app.fileUrlHash("/src/pages/findland.info.html"),
         controller: "findLandInfoCtrl",
-        resolve: app.loadJs("/src/controllers/findLandInfoCtrl.js")
+        resolve: app.loadJs("/src/controllers/findLandInfoCtrl.js"),
+        data:{
+          menu:1
+        }
       })
   };
 });

@@ -5,7 +5,7 @@ define(["require", "angular"], function (require, angular) {
 
   window.jQuery && (jQuery.noConflict(), jQuery.support.cors = true)
 
-  app.factory("interceptor", function ($q) {
+  app.factory("interceptor", ["$q",function ($q) {
     return {
       request: function (config) {
         console.log(config.url);
@@ -22,7 +22,7 @@ define(["require", "angular"], function (require, angular) {
         return response || $q.when(response);
       }
     };
-  });
+  }]);
 
   // app.run(function($rootScope, $location,$state, permissions) {
   //   $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams) {
@@ -34,19 +34,20 @@ define(["require", "angular"], function (require, angular) {
   //   });
   // });
 
-  // app.run(function ($rootScope,$state) {
-  //   $rootScope.$on("$stateChangeStart",function(event){
-  //     // if(toState.name=="login")return;// 如果是进入登录界面则允许
-  //     // 如果用户不存在
-  //     if(ifLoginTrue==false){
-  //       console.log("没有登录")
-  //       event.preventDefault();// 取消默认跳转行为
-  //       $("#my-modal-loading").modal("open");//开启加载中loading
-  //
-  //       // $state.go("login",{from:fromState.name,w:"notLogin"});//跳转到登录界面
-  //     }
-  //   });
-  // });
+  app.run(function ($rootScope,$state) {
+    $rootScope.$on("$stateChangeStart",function(event, toState, toParams, fromState, fromParams){
+      // if(toState.name=="login")return;// 如果是进入登录界面则允许
+      // 如果用户不存在
+      // if(ifLoginTrue==false){
+      //   console.log("没有登录")
+      //   event.preventDefault();// 取消默认跳转行为
+      //   $("#my-modal-loading").modal("open");//开启加载中loading
+
+        // $state.go("login",{from:fromState.name,w:"notLogin"});//跳转到登录界面
+      // }
+      $rootScope.menuActive=toState.data.menu;
+    });
+  });
 
   app.config(["$controllerProvider", "$provide", "$stateProvider", "$urlRouterProvider", "$httpProvider", "$compileProvider", "$filterProvider",
     function ($controllerProvider, $provide, $stateProvider, $urlRouterProvider, $httpProvider, $compileProvider, $filterProvider) {
@@ -114,12 +115,18 @@ define(["require", "angular"], function (require, angular) {
           templateUrl: app.fileUrlHash("./src/pages/main.html"),
           controller: "mainCtrl",
           resolve: app.loadJs("./src/controllers/mainCtrl.js"),
+          data:{
+            menu:0
+          }
         })
         .state("findland", {
           url: "/findland",
           templateUrl: app.fileUrlHash("./src/pages/findland.html"),
           controller: "findLandCtrl",
-          resolve: app.loadJs("./src/controllers/findLandCtrl.js")
+          resolve: app.loadJs("./src/controllers/findLandCtrl.js"),
+          data:{
+            menu:1
+          }
         })
       // 默认页
       $urlRouterProvider.otherwise("/main");

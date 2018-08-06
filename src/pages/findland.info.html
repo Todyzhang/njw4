@@ -1,7 +1,9 @@
 <div class="find-land-content pt-40 pb-40 se-bg-shallow">
-    <div class="find-land-dialog-wrap se-bg-mask pos-fix">
+    <!--免费咨询 预约看地-->
+    <div class="find-land-dialog-wrap se-bg-mask pos-fix" ng-show="dialogMsg.show">
         <div class="se-bg-main look-land-dialog">
-            <p class="se-deeper tc fs-18 pb-40">免费咨询</p>
+            <a class="btn pos-ab dis-b dialog-close" ng-click="closeDialog()"></a>
+            <p class="se-deeper tc fs-18 pb-40">{{dialogMsg.txt}}</p>
             <form class="mt-40">
                 <p class="ell fs-18 se-main mb-40">清新区石潭镇2000亩超有机蔬菜种植基地优质连片招商</p>
                 <p class="fs-16 se-thinner mb-14"><span class="se-orange">*</span>手机号</p>
@@ -14,10 +16,11 @@
                     <a class="btn btn-deeper btn-submit fs-14 height-line-40 border-radius-20 w200 pos-re">提交</a>
                 </div>
             </form>
-
         </div>
     </div>
+
     <div class="fl-info-header w1200 clearfix pos-re mt-40 mb-40 se-bg-main">
+        <!--图片展示层-->
         <div class="arrows-btn pos-ab fs-0">
             <a class="arrows-left dis-ib" ng-class="descSlider.current!=0?'normal':'disabled'" ng-click="prevClick()"></a>
             <a class="arrows-right dis-ib" ng-class="descSlider.current!=descSlider.lastIndex?'normal':'disabled'" ng-click="nextClick()"></a>
@@ -34,6 +37,7 @@
                 <a class="dis-ib" ng-repeat="item in descSlider.imgs" ng-class="{'active':$index==descSlider.current}" ng-style="{'background-image':'url('+item.sImg+')'}" ng-mouseover="descItemClick($index)"></a>
             </div>
         </div>
+
         <div class="fl-info-msg">
             <p class="fs-18 ell">清新区石潭镇2000亩超有机蔬菜种植基地优质连片招商</p>
             <p class="mt-20"><span class="icon ico_review_pass"></span><span class="icon ico_ident ml-20"></span></p>
@@ -46,7 +50,7 @@
                 <label class="fs-16 ell mb-20"><span class="se-thinner">可流转年限：</span>10年</label>
                 <label class="fs-16 ell mb-20"><span class="se-thinner">流转价格：</span>800元/亩/年</label>
             </div>
-            <div class="tc mt-30"><a class="btn btn-main height-line-50 border-radius-30 w200 pos-re">免费咨询</a><a class="btn btn-deeper height-line-50 border-radius-30 w200 ml-30 pos-re">预约看地</a></div>
+            <div class="tc mt-30"><a class="btn btn-main height-line-50 border-radius-30 w200 pos-re" ng-click="showDialog('免费咨询')">免费咨询</a><a class="btn btn-deeper height-line-50 border-radius-30 w200 ml-30 pos-re" ng-click="showDialog('预约看地')">预约看地</a></div>
         </div>
     </div>
 
@@ -68,13 +72,16 @@
 
                     <div>
                         <p class="se-thinner dis-ib">地上设施：</p>
-                        <p class="dis-ib icon-well pt-50 plr-30">水井</p>
-                        <p class="dis-ib icon-greenhouse pt-50 plr-30">大棚</p>
-                        <p class="dis-ib icon-warehouse pt-50 plr-30">仓库</p>
-                        <p class="dis-ib icon-house pt-50 plr-30">农机房</p>
-                        <p class="dis-ib icon-sunburn pt-50 plr-30">晾晒场</p>
-                        <p class="dis-ib icon-grow-seedlings pt-50 plr-30">育种育苗场</p>
-                        <p class="dis-ib icon-living-room pt-50 plr-30">生活生产用房</p>
+                        <p class="fs-0 dis-ib">
+                            <span class="dis-ib icon-well pt-50 plr-30 fs-16">水井</span>
+                            <span class="dis-ib icon-greenhouse pt-50 plr-30 fs-16">大棚</span>
+                            <span class="dis-ib icon-warehouse pt-50 plr-30 fs-16">仓库</span>
+                            <span class="dis-ib icon-house pt-50 plr-30 fs-16">农机房</span>
+                            <span class="dis-ib icon-sunburn pt-50 plr-30 fs-16">晾晒场</span>
+                            <span class="dis-ib icon-grow-seedlings pt-50 plr-30 fs-16">育种育苗场</span>
+                            <span class="dis-ib icon-living-room pt-50 plr-30 fs-16">生活生产用房</span>
+                        </p>
+
                     </div>
                 </div>
             </div>

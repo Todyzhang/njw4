@@ -2,7 +2,7 @@ define(['app', 'css!/src/css/findland'], function (app) {
   'use strict';
   app.ctrl('findLandInfoCtrl', ["$scope", "$timeout", "Slider", function ($scope, $timeout, slider) {
     var descSlider = {
-      sliderId:'slider' + (+new Date),
+      sliderId: 'slider' + (+new Date),
       imgs: [
         {
           bImg: "/static/images/570x386.jpg",
@@ -73,19 +73,30 @@ define(['app', 'css!/src/css/findland'], function (app) {
     $scope.descSlider = descSlider;
 
     $timeout(function () {
-      slider.init(descSlider.sliderId, descSlider.imgs, descSlider, 1, false,"leftRight");
+      slider.init(descSlider.sliderId, descSlider.imgs, descSlider, 1, false, "leftRight");
     }, 0);
 
     $scope.nextClick = function () {
-      descSlider.current!==descSlider.lastIndex&&slider.next();
+      descSlider.current !== descSlider.lastIndex && slider.next();
     };
     $scope.prevClick = function () {
-      descSlider.current!==0&&slider.prev();
+      descSlider.current !== 0 && slider.prev();
     };
     $scope.descItemClick = function (index) {
       slider.moveTo(index);
-    }
+    };
+    $scope.dialogMsg = {
+      txt: '',
+      show: false
+    };
 
+    $scope.showDialog = function (txt) {
+      $scope.dialogMsg.txt = txt;
+      $scope.dialogMsg.show = true;
+    };
+    $scope.closeDialog = function () {
+      $scope.dialogMsg.show = false;
+    };
 
   }]);
 
