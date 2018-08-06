@@ -7,7 +7,7 @@ define(['app','angular'], function (app,angular) {
         {title: "首页", url: "main"},
         {title: "我要找地", url: "findland"},
         {title: "金融服务", url: "agroService"},
-        {title: "涉农服务", url: "main"},
+        {title: "涉农服务", url: "landInfo"},
         {title: "土地资讯", url: "main"}
       ],
       serverTel: "020-87595266",
@@ -199,20 +199,21 @@ define(['app','angular'], function (app,angular) {
         direct:'upDown',//'upDown'(default) or 'leftRight'
         current: 0,
         speed: 200,
-        slider: function (direction, cb) {
+        slide: function (direction, cb,size) {
           var distance = 0, that = this,param={};
+          size=size||1;
           if (direction === "down"||direction === "left") {
-            this.current--;
+            this.current-=size;
             if (this.current < 0) {
               this.current = this.last - 1;
             }
-            distance = this.distance - this.sliderData.distance;
+            distance = this.distance - this.sliderData.distance*size;
           } else {
-            this.current++;
+            this.current+=size;
             if (this.current >= this.last) {
               this.current = 0;
             }
-            distance = this.distance + this.sliderData.distance;
+            distance = this.distance + this.sliderData.distance*size;
           }
           that.$scope.current = that.current;
 
@@ -239,9 +240,24 @@ define(['app','angular'], function (app,angular) {
         },
         move: function (dir) {
           var that = this;
-          this.slider(dir, function () {
+          this.slide(dir, function () {
             that.autoSlider&&that.start();
           });
+        },
+        moveTo:function (index) {
+          var desc=index-this.current,
+            dir,
+            that=this;
+          if(desc>0){
+            dir="nextDirect";
+          }else if(desc<0){
+            dir="prevDirect"
+          }
+          if(dir){
+            this.slide(this.sliderData[dir], function () {
+              that.autoSlider&&that.start();
+            },Math.abs(desc));
+          }
         },
         next: function () {
           this.cancelTimer();

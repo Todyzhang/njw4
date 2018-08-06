@@ -4,7 +4,8 @@
 
 
 .release-land-btn,
-.njw-input,
+.border-radius-20,
+.border-radius-30,
 .btn-submit,
 .njw-textarea,
 .badge
@@ -31,4 +32,7 @@
 .module-flags > span{
     background: none;
     filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/static/images/flag_bg.png", sizingMethod=scale);
+}
+.se-bg-mask{
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#80333333,endColorstr=#80333333);
 }

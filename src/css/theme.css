@@ -56,6 +56,12 @@ input:-moz-placeholder {
 .br-bar{
     border-right:1px solid #dcdcdc;
 }
+.br-bar.c-shallow{
+    border-color:#666;
+}
+.br-bar.b-w2{
+    border-width:2px;
+}
 .bl-bar{
     border-left:1px solid #dcdcdc;
 }
@@ -91,7 +97,9 @@ a.active>.se-contrast,
 .se-deeper a{
     color:#393;
 }
-
+.se-orange{
+    color:#f78c61;
+}
 .se-bg-shallow>input,
 .se-bg-shallow>textarea,
 .se-bg-shallow{
@@ -107,7 +115,9 @@ a.active>.se-contrast,
 .se-bg-deeper{
     background-color:#393;
 }
-
+.se-bg-mask{
+    background:rgba(51,51,51,.5);
+}
 .bar{
     background:#ccc;
 }
@@ -222,3 +232,9 @@ a.active>.se-contrast,
     border: 1px solid #9c9;
     background: #6c6 url("/static/images/ico_syh.png") no-repeat 25px 40px;
 }
+
+/*地块详情*/
+.fl-info-small-imgs>a.active{
+    border-color:#393;
+}
+

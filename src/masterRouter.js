@@ -9,6 +9,11 @@ define(['app'], function (app) {
         controller: 'agroServiceCtrl',
         resolve: app.loadJs('/src/controllers/agroServiceCtrl.js')
       })
-
+      .state("landInfo", {
+        url: "/landInfo",
+        templateUrl: app.fileUrlHash("/src/pages/findland.info.html"),
+        controller: "findLandInfoCtrl",
+        resolve: app.loadJs("/src/controllers/findLandInfoCtrl.js")
+      })
   };
 });

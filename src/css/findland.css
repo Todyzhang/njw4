@@ -47,29 +47,142 @@
     width: 20%;
     max-width: 360px;
     height:120px;
-    background: url("/static/images/find_land_btn.png") no-repeat 90% center;
+    background: url("/static/images/btn_find_land.png") no-repeat 90% center;
     margin: 90px 0 0 1000px;
     z-index:100;
 }
 /*地块详情*/
 
 .fl-info-header{
-    padding-right:30px;
+
+}
+.fl-info-big-img-wrap{
+    width:570px;
+    overflow:hidden;
+}
+.fl-info-big-img{}
+.fl-info-big-img>div,
+.fl-info-small-imgs>a{
+    background-repeat: no-repeat;
+    background-position:center;
+    background-size:contain;
+    width:570px;
+    height:386px;
+}
+.fl-info-small-imgs{
+    padding:30px 20px 30px 0;
+}
+.fl-info-small-imgs>a{
+    width:90px;
+    height:62px;
+    margin-left:20px;
+    border:1px solid transparent;
 }
 
 .arrows-btn{
     width:100px;
     height:36px;
     background:url("/static/images/arrows.png");
+    top:340px;
+    left:520px;
+    z-index:100;
 }
 .arrows-btn>.arrows-left,
 .arrows-btn>.arrows-right{
     width:50px;
     height:36px;
 }
-.arrows-btn>.arrows-left:hover{
+.arrows-btn>.arrows-left.normal:hover{
     background:url("/static/images/arrows_l_on.png") no-repeat left center;
 }
-.arrows-btn>.arrows-right:hover{
+.arrows-btn>.arrows-right.normal:hover{
     background:url("/static/images/arrows_r_on.png") no-repeat right center;
+}
+.arrows-btn>a.disabled{
+    cursor:default;
+    pointer-events:none
+}
+
+.fl-info-msg{
+    margin-left:570px;
+    padding:50px 30px;
+}
+.ico_review_pass{
+    background:url("/static/images/ico_review_pass.png") no-repeat left center;
+    width:90px;
+    height:30px;
+}
+.ico_ident{
+    background:url("/static/images/ico_ident.png") no-repeat left center;
+    width:80px;
+    height:30px;
+}
+.icon-time{
+    background:url("/static/images/ico_time.png") no-repeat left center;
+}
+.icon-looked{
+    background:url("/static/images/ico_looked.png") no-repeat left center;
+}
+.fl-info-msg-list{
+    padding:40px 30px;
+    background: url("/static/images/bg_rectang.png") no-repeat top center;
+}
+.fl-info-msg-list > label{
+    display: inline-block;
+    width:50%;
+}
+.fl-info-msg-list > label > span{
+    display: inline-block;
+    width:6.5em;
+    text-align: right;
+}
+.icon-land-msg{
+    background: url("/static/images/ico_land_msg.png") no-repeat right center;
+}
+.icon-land-nature{
+    background: url("/static/images/ico_land_nature.png") no-repeat right center;
+}
+.icon-land-ambient{
+    background: url("/static/images/ico_land_ambient.png") no-repeat right center;
+}
+
+.icon-well{
+    background: url("/static/images/ico_well.png") no-repeat top center;
+}
+.icon-greenhouse{
+    background: url("/static/images/ico_greenhouse.png") no-repeat top center;
+}
+.icon-warehouse{
+    background: url("/static/images/ico_warehouse.png") no-repeat top center;
+}
+.icon-house{
+    background: url("/static/images/ico_house.png") no-repeat top center;
+}
+.icon-sunburn{
+    background: url("/static/images/ico_sunburn.png") no-repeat top center;
+}
+.icon-grow-seedlings{
+    background: url("/static/images/ico_grow_seedlings.png") no-repeat top center;
+}
+.icon-living-room{
+    background: url("/static/images/ico_living_room.png") no-repeat top center;
+}
+
+.find-land-dialog-wrap{
+    top:0;
+    left:0;
+    z-index:149;
+    width:100%;
+    height:100%;
+}
+.look-land-dialog{
+    background-image: url("/static/images/bg_look_land.png");
+    background-repeat:no-repeat;
+    background-position:top center;
+    width:312px;
+    padding:220px 60px 36px 60px;
+    margin:0 auto;
+    position:relative;
+    top:50%;
+    margin-top:-278px;
 }

@@ -228,14 +228,33 @@ body {
     margin: 0 10px;
 }
 
-.w370 {
-    width: 370px;
+.w128 {
+    width: 128px;
 }
-
+.w200 {
+    width: 200px;
+}
 .w282 {
     width: 282px;
 }
-
+.w370 {
+    width: 370px;
+}
+.col-2{
+    width:48%;
+}
+.col-3{
+    width:33%;
+}
+.col-4{
+    width:25%;
+}
+.col-5{
+    width:20%;
+}
+.col-10{
+    width:100%;
+}
 .mlr-3 {
     margin: 0 3px;
 }
@@ -247,11 +266,27 @@ body {
 .ml-0 {
     margin-left: 0 !important;
 }
+.ml-20 {
+    margin-left: 20px;
+}
+.ml-30 {
+    margin-left: 30px;
+}
 .mt-0 {
     margin-top: 0!important;
 }
 .mt-3 {
     margin-top: 3px;
+}
+.mt-20 {
+    margin-top: 20px;
+}
+.mt-30 {
+    margin-top: 30px;
+}
+
+.mt-40 {
+    margin-top: 40px;
 }
 .ml-0 {
     margin-left: 0!important;
@@ -267,25 +302,72 @@ body {
 .mb-24 {
     margin-bottom: 24px;
 }
-
-.mt-40 {
-    margin-top: 40px;
+.mb-30 {
+    margin-bottom: 30px;
 }
+.mb-40 {
+    margin-bottom: 40px;
+}
+
 
 .pt-0 {
     padding-top: 0 !important;
 }
-
+.pl-20{
+    padding-left:20px;
+}
+.pl-50{
+    padding-left:50px;
+}
+.pr-10{
+    padding-right:10px;
+}
+.pr-50{
+    padding-right:50px;
+}
 .pt-30 {
     padding-top: 30px;
 }
 .pt-40 {
     padding-top: 40px;
 }
+.pt-50 {
+    padding-top: 50px;
+}
+.pb-20 {
+    padding-bottom: 20px;
+}
 .pb-40 {
     padding-bottom: 40px;
 }
 
+.plr-20{
+    padding-left:20px;
+    padding-right:20px;
+}
+.plr-30{
+    padding-left:30px;
+    padding-right:30px;
+}
+.height-line-30{
+    height:30px;
+    line-height:30px;
+}
+.height-line-40{
+    height:40px;
+    line-height:40px;
+}
+.height-line-50{
+    height:50px;
+    line-height:50px;
+}
+
+.border-radius-20{
+    border-radius:20px;
+}
+.border-radius-30{
+    border-radius:30px;
+}
 .fl {
     float: left;
 }
@@ -344,6 +426,9 @@ body {
 /*正文那些都是14，小的就12，小标题就16
   大标题分两三类，18  20
   页面模块最大的灰色的就24 36*/
+.fs-0{
+    font-size:0!important;
+}
 .fs-12 {
     font-size: 12px;
 }
@@ -533,9 +618,6 @@ body {
     position: relative;
     display: inline-block;
     width: 168px;
-    height: 40px;
-    line-height: 40px;
-    border-radius: 20px;
     padding: 0 35px 0 15px;
 }
 
@@ -615,7 +697,12 @@ body {
     background-repeat: no-repeat;
     background-size: 100%;
 }
-
+/*地图背景*/
+.map-bg{
+    background-image: url("/static/images/bg_map.png");
+    background-repeat:no-repeat;
+    background-position:center;
+}
 /*icon图标*/
 .icon {
     display: inline-block;
