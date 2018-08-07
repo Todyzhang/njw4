@@ -2,20 +2,36 @@ define(['app','angular'], function (app,angular) {
   'use strict';
 
   app
-    .value("publicVal", {
-      menus: [
-        {title: "首页", url: "main"},
-        {title: "我要找地", url: "findland"},
-        {title: "金融服务", url: "agroService"},
-        {title: "涉农服务", url: "landInfo"},
-        {title: "土地资讯", url: "main"}
-      ],
-      serverTel: "020-87595266",
-      landService:[
+    .constant("MENUS",{
+      "main":{title: "首页", url: "#/main",index:0},
+      "findland":{title: "我要找地", url: "#/findland",index:1},
+      "financial":{title: "金融服务", url: "#/financial",index:2},
+      "agroService":{title: "涉农服务", url: "#/agro-service",index:3},
+      "news":{title: "土地资讯", url: "#/news",index:4}
+    })
+    .factory("publicVal", ["MENUS",function (MENUS) {
+      var val={
+        // menus: [
+        //   {title: "首页", url: "main"},
+        //   {title: "我要找地", url: "findland"},
+        //   {title: "金融服务", url: "financial"},
+        //   {title: "涉农服务", url: "agroService"},
+        //   {title: "土地资讯", url: "news"}
+        // ],
+        serverTel: "020-87595266"
+      };
+      val.menus=(function () {
+        var ary=[];
+        angular.forEach(MENUS,function(value, key){
+          ary[value.index]=value;
+        });
+        return ary;
+      })();
+      val.landService=[
         {
           title:"金融服务",
           info:"多家金融机构合作解决经营方仔细需求",
-          url:"#some"
+          url:val.menus.url
         },
         {
           title:"农业电商",
@@ -37,21 +53,21 @@ define(['app','angular'], function (app,angular) {
           info:"土地项目招商引资土地项目推介",
           url:"#some"
         }
-      ]
-    })
-    .factory("njyCookie", [function () {
+      ];
+      return val;
+    }])
+    .factory("njwCookie", [function () {
       function setCookie(name, value, domain, day) {
-        var Days = day || 0.5;
-        var exp = new Date();
-        exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
-        document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString() +
+        var days = day || 0.5,exp = new Date();
+        exp.setTime(exp.getTime() + days * 24 * 60 * 60 * 1000);
+        document.cookie = name + "=" + encodeURIComponent(value) + ";expires=" + exp.toGMTString() +
           (domain ? (";domain=" + domain) : "") + ";path=/";
       }
 
       function getCookie(name) {
         var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
         if (arr = document.cookie.match(reg)) {
-          return unescape(arr[2]);
+          return decodeURIComponent(arr[2]);
         } else {
           return "";
         }
@@ -68,7 +84,7 @@ define(['app','angular'], function (app,angular) {
         delCookie: delCookie
       };
     }])
-    .factory("njyUrlUtil", function () {
+    .factory("njwUrlUtil", function () {
       return {
         getFromURL: function (url, parameter) {
           var index = url.indexOf("?");
@@ -128,7 +144,7 @@ define(['app','angular'], function (app,angular) {
       };
 
     })
-    .factory("njyGetDateDiff", function () {
+    .factory("njwGetDateDiff", function () {
       return function (_dateTime) {
         if (!_dateTime) return "";
         var dateTimeStamp = new Date(Date.parse(_dateTime.replace(/-/g, "/"))).getTime();
@@ -161,7 +177,7 @@ define(['app','angular'], function (app,angular) {
         return result;
       }
     })
-    .factory("njyImage", ["$q", "$interval", function ($q, $interval) {
+    .factory("njwImage", ["$q", "$interval", function ($q, $interval) {
       //快速得到图片的宽高
       var getImgWH = function (url) {
         var deferred = $q.defer();
@@ -201,7 +217,6 @@ define(['app','angular'], function (app,angular) {
         speed: 200,
         slide: function (direction, cb,size) {
           var distance = 0, that = this,param={};
-          size=size||1;
           if (direction === "down"||direction === "left") {
             this.current-=size;
             if (this.current < 0) {
@@ -217,7 +232,6 @@ define(['app','angular'], function (app,angular) {
           }
           that.$scope.current = that.current;
 
-          //轮播动画中暂不进行处理
           that.isAnimated = false;
           param[that.sliderData.sliderParam]="-" + distance + "px";
           this.dom.animate(param, this.speed, "linear", function () {
@@ -238,33 +252,27 @@ define(['app','angular'], function (app,angular) {
             typeof(cb) === "function" && cb();
           });
         },
-        move: function (dir) {
+        move: function (dir,desc) {
           var that = this;
+          this.cancelTimer();
           this.slide(dir, function () {
             that.autoSlider&&that.start();
-          });
+          },desc||1);
         },
         moveTo:function (index) {
           var desc=index-this.current,
-            dir,
-            that=this;
+            dir;
           if(desc>0){
             dir="nextDirect";
           }else if(desc<0){
             dir="prevDirect"
           }
-          if(dir){
-            this.slide(this.sliderData[dir], function () {
-              that.autoSlider&&that.start();
-            },Math.abs(desc));
-          }
+          dir&&this.move(this.sliderData[dir],Math.abs(desc));
         },
         next: function () {
-          this.cancelTimer();
           this.move(this.sliderData.nextDirect);
         },
         prev: function () {
-          this.cancelTimer();
           this.move(this.sliderData.prevDirect);
         },
         start: function () {
@@ -273,8 +281,13 @@ define(['app','angular'], function (app,angular) {
             that.move(that.sliderData.nextDirect);
           }, that.delay);
         },
+        clearAnimate:function () {
+          //轮播动画中暂不进行处理
+          this.isAnimated&&this.dom.stop();
+        },
         cancelTimer: function () {
           $timeout.cancel(this.timer);
+          // this.clearAnimate();
         },
         reset: function () {
           this.size = this.list.length;
@@ -283,10 +296,16 @@ define(['app','angular'], function (app,angular) {
           this.distance = this.sliderData.distance;
           this.isAnimated = true;
         },
-        init: function (id, list, $scope, delay, auto,direct) {
+        //params:id, list, delay, auto,direct
+        init: function (param) {
+          var id=param.id,
+            list=param.list,
+            delay=param.delay,
+            auto=param.auto,
+            direct=param.direct;
           this.dom = jQuery("#" + id);
           this.list = list;
-          this.$scope = $scope;
+          this.$scope = param;//传地址过来方便改变当前项current
           typeof delay === 'number' && (this.delay = delay * 1000);
           typeof auto === 'boolean' && (this.autoSlider = auto);
           if(typeof direct === 'string' && direct!=="upDown"){

@@ -1,38 +1,15 @@
 define(['app', 'css!/src/css/findland'], function (app) {
   'use strict';
-  app.ctrl('findLandInfoCtrl', ["$scope", "$timeout", "Slider", function ($scope, $timeout, slider) {
-    var descSlider = {
-      sliderId: 'slider' + (+new Date),
-      imgs: [
-        {
-          bImg: "/static/images/570x386.jpg",
-          sImg: "/static/images/90x62.jpg"
-        },
-        {
-          bImg: "/static/images/570x386.jpg",
-          sImg: "/static/images/90x62.jpg"
-        },
-        {
-          bImg: "/static/images/570x386.jpg",
-          sImg: "/static/images/90x62.jpg"
-        },
-        {
-          bImg: "/static/images/570x386.jpg",
-          sImg: "/static/images/90x62.jpg"
-        },
-        {
-          bImg: "/static/images/570x386.jpg",
-          sImg: "/static/images/90x62.jpg"
-        }
-      ],
-      width: 570,
-      current: 0
+  app.ctrl('findLandInfoCtrl', ["$scope", "$timeout", "Slider","$state", function ($scope, $timeout, slider,$state) {
+    console.log("============================")
+    console.log($state)
+
+
+
+    $scope.dialogMsg = {
+      txt: '',
+      show: false
     };
-    descSlider.size = descSlider.imgs.length;
-    descSlider.lastIndex = descSlider.size - 1;
-    descSlider.firstItem = descSlider.imgs[0];
-    descSlider.lastItem = descSlider.imgs[descSlider.lastIndex];
-    descSlider.totalDis = (descSlider.size + 2) * descSlider.width;
 
     $scope.landRentList = [
       {
@@ -70,33 +47,41 @@ define(['app', 'css!/src/css/findland'], function (app) {
       }
     ];
 
-    $scope.descSlider = descSlider;
+    $scope.sliderList=[
+      {
+        bImg: "/static/images/570x386.jpg",
+        sImg: "/static/images/90x62.jpg"
+      },
+      {
+        bImg: "/static/images/570x386.jpg",
+        sImg: "/static/images/90x62.jpg"
+      },
+      {
+        bImg: "/static/images/570x386.jpg",
+        sImg: "/static/images/90x62.jpg"
+      },
+      {
+        bImg: "/static/images/570x386.jpg",
+        sImg: "/static/images/90x62.jpg"
+      },
+      {
+        bImg: "/static/images/570x386.jpg",
+        sImg: "/static/images/90x62.jpg"
+      }
+    ];
 
-    $timeout(function () {
-      slider.init(descSlider.sliderId, descSlider.imgs, descSlider, 1, false, "leftRight");
-    }, 0);
 
-    $scope.nextClick = function () {
-      descSlider.current !== descSlider.lastIndex && slider.next();
-    };
-    $scope.prevClick = function () {
-      descSlider.current !== 0 && slider.prev();
-    };
-    $scope.descItemClick = function (index) {
-      slider.moveTo(index);
-    };
-    $scope.dialogMsg = {
-      txt: '',
-      show: false
-    };
 
     $scope.showDialog = function (txt) {
-      $scope.dialogMsg.txt = txt;
-      $scope.dialogMsg.show = true;
+      $scope.dialogMsg={
+        txt : txt,
+        show : true
+      };
     };
     $scope.closeDialog = function () {
       $scope.dialogMsg.show = false;
     };
+
 
   }]);
 

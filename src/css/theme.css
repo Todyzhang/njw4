@@ -47,6 +47,9 @@ input:-moz-placeholder {
 .se-border.deeper{
     border-color:#393;
 }
+.se-border.main{
+    border-color:#333;
+}
 .se-border.thinner{
     border-color: #dcdcdc;
 }
@@ -169,6 +172,9 @@ a.active>.se-contrast,
 .slider-dot.active {
     border: 1px solid #fff;
 }
+.slider-lr-small-imgs>a.active{
+    border-color:#393;
+}
 
 /*页码组件*/
 .njw-pager .item.active>a{color:#fff;}
@@ -233,8 +239,9 @@ a.active>.se-contrast,
     background: #6c6 url("/static/images/ico_syh.png") no-repeat 25px 40px;
 }
 
-/*地块详情*/
-.fl-info-small-imgs>a.active{
-    border-color:#393;
+/*金融服务*/
+.fni-info-wrap{
+    box-shadow: 0 4px 20px 5px #dcdcdc;
 }
+
 

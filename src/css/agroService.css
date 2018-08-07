@@ -1,21 +1,37 @@
-.partners-wrap{
-    background-position:center 78px;
-    padding-bottom: 220px;
+.financial-news-img{
+    height:478px;
 }
-.partners-inner{
-    margin: 100px 101px 0 101px;
-    overflow:hidden;
-}
-.partners-inner-list{
-    font-size:0;
-    width:998px;
-    margin-bottom: -2px;
-    margin-left: -2px;
-}
-.partners-inner-list .partner{
-    background-repeat: no-repeat;
-    background-position:center;
-    width:248px;
-    height:150px;
+.financial-news-img>img{
     display: inline-block;
+}
+.fni-info-wrap{
+    width:516px;
+    line-height:1.5;
+    padding:110px 70px 108px 84px;
+    top:80px;
+    right:0;
+}
+.fni-info-wrap .fni-info{
+    padding:18px 14px 26px 34px
+}
+
+.icon-arrow{
+    background-repeat:no-repeat;
+    background-position:center;
+    width:96px;
+    height:96px;
+    top:60px;
+}
+
+.info-prev .fni-info-wrap{
+    right:auto;
+    left:0;
+}
+.info-next .icon-arrow{
+    background-image: url("/static/images/ico_arrow_next.png");
+    left: -40px;
+}
+.info-prev .icon-arrow{
+    background-image: url("/static/images/ico_arrow_prev.png");
+    right:-40px;
 }

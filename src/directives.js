@@ -195,7 +195,20 @@ define(['app', "angular"], function (app, angular) {
         }
       };
     })
-    .directive("menuItem", function () {
+    /**
+     * 上下banner轮播图
+     * s-list:图片列表，必传
+     * s-delay:轮播间隔，单位秒,不传默认5秒
+     * s-auto:是否自动轮播，不传默认true
+     * e.g.
+     * <div slider-longitudinal s-list="sliderList" s-delay="{{3.5}}" s-auto="{{false}}"></div>
+     *  $scope.sliderList=[
+     *    {img:"static/images/banner0.jpg",url:"#some"},
+     *    {img:"static/images/banner1.jpg",url:"#some"},
+     *    {img:"static/images/banner2.jpg",url:"#some"}
+     *  ]
+     */
+    .directive("sliderLongitudinal", ["$timeout", "Slider", function ($timeout, slider) {
       return {
         restrict: "EA",
         /*
@@ -210,49 +223,37 @@ define(['app', "angular"], function (app, angular) {
            }
          */
         scope: {
-          title: "@"
-        },
-        // require:"",
-        template: '<div><h1>{{title}}</h1><div ng-transclude></div></div>',
-        transclude: true,
-        replace: true,
-        link: function ($scope, iElm, iAttrs) {
-          // $scope.list="list"
-        }
-      }
-    })
-    /**
-     * 上下banner轮播图
-     * s-list:图片列表，必传
-     * s-delay:轮播间隔，单位秒,不传默认5秒
-     * s-auto:是否自动轮播，不传默认true
-     * e.g.
-     * <div njw-slider s-list="sliderList" s-auto="{{3.5}}" s-delay="{{false}}"></div>
-     *  $scope.sliderList=[
-     *    {img:"static/images/banner0.jpg",url:"#some"},
-     *    {img:"static/images/banner1.jpg",url:"#some"},
-     *    {img:"static/images/banner2.jpg",url:"#some"}
-     *  ]
-     */
-    .directive("njwSlider", ["$timeout", "Slider", function ($timeout, slider) {
-      return {
-        restrict: "EA",
-        scope: {
-          sList: "=",
-          sAuto: "@",
-          sDelay: "@"
+          sList: "="
         },
         replace: true,
-        templateUrl: app.fileUrlHash('/src/tpl/slider.tpl.html'),
+        templateUrl: app.fileUrlHash('/src/tpl/slider.longitudinal.tpl.html'),
         link: function ($scope, iElm, iAttrs) {
-          $scope.current = 0;
-          $scope.sliderId = 'slider' + (+new Date);
-          $scope.sliderSize = $scope.sList.length;
-          $scope.firstItem = $scope.sList[0];
-          $scope.lastItem = $scope.sList[$scope.sliderSize - 1];
-          if ($scope.sliderSize > 1) {
+          var descSlider={
+            current:0,
+            id:'slider' + (+new Date),
+            list:$scope.sList,
+            size : $scope.sList.length,
+            firstItem:$scope.sList[0]
+          };
+          descSlider.lastIndex=descSlider.size-1;
+          descSlider.lastItem=$scope.sList[descSlider.lastIndex];
+          if (iAttrs.sAuto === undefined || iAttrs.sAuto !== "false") {
+            descSlider.auto=true;
+          }else{
+            descSlider.auto=false;
+          }
+          if(/\d+/.test(iAttrs.sDelay)){
+            descSlider.sDelay=+iAttrs.sDelay;
+          }else{
+            descSlider.sDelay=5;
+          }
+          descSlider.direct="upDown";
+
+          $scope.descSlider=descSlider;
+
+          if (descSlider.sliderSize > 1) {
             $timeout(function () {
-              slider.init($scope.sliderId, $scope.sList, $scope, $scope.sDelay, $scope.sAuto);
+              slider.init(descSlider);
             }, 0);
             $scope.nextClick = function () {
               slider.next();
@@ -261,6 +262,69 @@ define(['app', "angular"], function (app, angular) {
               slider.prev();
             };
           }
+        }
+      }
+    }])
+    /**
+     * 左右banner轮播图，主要用于地块详情图片展示
+     * s-list:图片列表，必传
+     * s-delay:轮播间隔，单位秒,不传默认5秒
+     * s-auto:是否自动轮播，不传默认false
+     * e.g.
+     * <div slider-landscape s-list="sliderList" s-delay="{{3.5}}" s-auto="{{false}}"></div>
+     *  $scope.sliderList=[
+     *    {img:"static/images/banner0.jpg",url:"#some"},
+     *    {img:"static/images/banner1.jpg",url:"#some"},
+     *    {img:"static/images/banner2.jpg",url:"#some"}
+     *  ]
+     */
+    .directive("sliderLandscape", ["$timeout", "Slider", function ($timeout, slider) {
+      return {
+        restrict: "EA",
+        scope: {
+          sList: "="
+        },
+        replace: true,
+        templateUrl: app.fileUrlHash('/src/tpl/slider.landscape.tpl.html'),
+        link: function ($scope, iElm, iAttrs) {
+          var descSlider={
+            id: 'slider' + (+new Date),
+            list: $scope.sList,
+            width: 570,
+            direct:"leftRight",
+            current:0
+          };
+          descSlider.size=$scope.sList.length;
+          descSlider.firstItem=$scope.sList[0];
+          if (iAttrs.sAuto === undefined || iAttrs.sAuto !== "true") {
+            descSlider.auto=false;
+          }else{
+            descSlider.auto=true;
+          }
+          if(/\d+/.test(iAttrs.sDelay)){
+            descSlider.sDelay=+iAttrs.sDelay;
+          }else{
+            descSlider.sDelay=5;
+          }
+          descSlider.lastIndex = descSlider.size - 1;
+          descSlider.lastItem = descSlider.list[descSlider.lastIndex];
+          descSlider.totalDis = (descSlider.size + 2) * descSlider.width;
+          $scope.descSlider = descSlider;
+
+          $timeout(function () {
+            slider.init(descSlider);
+          }, 0);
+
+          $scope.nextClick = function () {
+            descSlider.current !== descSlider.lastIndex && slider.next();
+          };
+          $scope.prevClick = function () {
+            descSlider.current !== 0 && slider.prev();
+          };
+          $scope.descItemClick = function (index) {
+            slider.moveTo(index);
+          };
+
         }
       }
     }])
@@ -386,8 +450,8 @@ define(['app', "angular"], function (app, angular) {
           mcTitle: "@",
           mcMoreUrl: "@"
         },
-        // templateUrl:app.fileUrlHash('/src/tpl/module.caption.tpl.html'),
-        template: '<div class="module-caption" ng-class="{\'tc\':!hasMore}"><p class="dis-ib fs-16" ng-class="{\'caption-bar\':mcType===\'look\'}">{{mcTitle}}</p><a class="se-thinner fr" ng-if="hasMore" ng-class="{\'look-more\':mcType===\'look\'}" ng-href="{{mcMoreUrl}}">{{moreText}}</a></div>',
+        templateUrl:app.fileUrlHash('/src/tpl/module.caption.tpl.html'),
+        // template: '',
         replace: true,
         link: function ($scope, iElm, iAttrs) {
           $scope.hasMore = !!$scope.mcMoreUrl;
@@ -486,8 +550,8 @@ define(['app', "angular"], function (app, angular) {
         scope: {
           nlList: "="
         },
-        // templateUrl: app.fileUrlHash('/src/tpl/news.list.tpl.html'),
-        template:'<ul class="news-list se-shallow" data-date="{{hasDate}}" ng-class="{\'has-news-date\':hasDate}"><li ng-repeat="item in nlList"><a class="ell" ng-href="{{item.url}}">{{item.from}}：{{item.title}}<span ng-if="hasDate">{{item.date | YDM_Date}}</span></a></li></ul>',
+        templateUrl: app.fileUrlHash('/src/tpl/news.list.tpl.html'),
+        // template:'',
         replace: true,
         link: function ($scope, iElm, iAttrs) {
           if(!angular.isArray($scope.nlList)) throw new Error("place send the 'nlList' type to 'Array'");
@@ -596,4 +660,29 @@ define(['app', "angular"], function (app, angular) {
         }
       };
     }])
+    /**
+     * 合作伙伴模块
+     * p-list:伙伴数组
+     * mc-title:模块头名称
+     * e.g.
+     * <div partners p-list="partners" mc-title="合作机构"></div>
+     * $scope.partners=[
+     *  {img:"/static/images/partner.png",url:"#some"},
+     *  ...
+     * ]
+     */
+    .directive("partners", function () {
+      return {
+        restrict: "EA",
+        scope: {
+          pList:"="
+        },
+        templateUrl: app.fileUrlHash('/src/tpl/partners.tpl.html'),
+        replace: true,
+        link: function ($scope, iElm, iAttrs) {
+          if(!angular.isArray($scope.pList)) throw new Error("place send the 'nlList' type to 'Array'");
+          $scope.mcTitle=iAttrs.mcTitle;
+        }
+      }
+    })
 });

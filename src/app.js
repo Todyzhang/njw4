@@ -3,16 +3,16 @@
 define(["require", "angular"], function (require, angular) {
   var app = angular.module("App", ["ui.router"]);
 
-  window.jQuery && (jQuery.noConflict(), jQuery.support.cors = true)
+  window.jQuery && (jQuery.noConflict(), jQuery.support.cors = true);
 
   app.factory("interceptor", ["$q",function ($q) {
     return {
       request: function (config) {
-        console.log(config.url);
+        //console.log(config.url);
         if (config.url.indexOf("/login/") === -1) {
           config.headers["token"] = "1234";
         }
-        console.log(config.headers);
+        //console.log(config.headers);
         return config || $q.when(config);
       },
       response: function (response) {
@@ -34,7 +34,7 @@ define(["require", "angular"], function (require, angular) {
   //   });
   // });
 
-  app.run(function ($rootScope,$state) {
+  app.run(["$rootScope","$location","$state","$window",function($rootScope,$location,$state,$window) {
     $rootScope.$on("$stateChangeStart",function(event, toState, toParams, fromState, fromParams){
       // if(toState.name=="login")return;// 如果是进入登录界面则允许
       // 如果用户不存在
@@ -45,12 +45,18 @@ define(["require", "angular"], function (require, angular) {
 
         // $state.go("login",{from:fromState.name,w:"notLogin"});//跳转到登录界面
       // }
+      // console.log(event);
+      // console.log(toState);
+      // console.log(toParams);
+      // console.log(fromState);
+      // console.log(fromParams);
       $rootScope.menuActive=toState.data.menu;
+      $window.scrollTo(0,0);//到顶部
     });
-  });
+  }]);
 
-  app.config(["$controllerProvider", "$provide", "$stateProvider", "$urlRouterProvider", "$httpProvider", "$compileProvider", "$filterProvider",
-    function ($controllerProvider, $provide, $stateProvider, $urlRouterProvider, $httpProvider, $compileProvider, $filterProvider) {
+  app.config(["$controllerProvider", "$provide", "$stateProvider", "$urlRouterProvider", "$httpProvider", "$compileProvider", "$filterProvider","MENUS",
+    function ($controllerProvider, $provide, $stateProvider, $urlRouterProvider, $httpProvider, $compileProvider, $filterProvider,MENUS) {
       //$provide属性constant decorator factory provider service value
       app.ctrl = $controllerProvider.register;//注册控制器
       app.directive = $compileProvider.directive;//注册指令
@@ -75,7 +81,7 @@ define(["require", "angular"], function (require, angular) {
           }]
         };
       };
-      // console.log(require)
+
       app.fileUrlHash = function (files) {
         return files + "?" + REQUIRE_CONFIG.urlArgs;
       };
@@ -110,22 +116,22 @@ define(["require", "angular"], function (require, angular) {
       //定义主菜单、默认页
       $stateProvider
         .state("main", {
-          url: "/main",
+          url: "/main",//首页
           //abstract: true,
           templateUrl: app.fileUrlHash("./src/pages/main.html"),
           controller: "mainCtrl",
           resolve: app.loadJs("./src/controllers/mainCtrl.js"),
           data:{
-            menu:0
+            menu:MENUS["main"].index
           }
         })
         .state("findland", {
-          url: "/findland",
+          url: "/findland",//我要找地
           templateUrl: app.fileUrlHash("./src/pages/findland.html"),
           controller: "findLandCtrl",
           resolve: app.loadJs("./src/controllers/findLandCtrl.js"),
           data:{
-            menu:1
+            menu:MENUS["findland"].index
           }
         })
       // 默认页

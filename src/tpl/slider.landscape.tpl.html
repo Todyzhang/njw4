@@ -1,0 +1,16 @@
+<div class="fs-0 pos-re">
+    <div class="arrows-btn pos-ab fs-0">
+        <a class="arrows-left dis-ib" ng-class="descSlider.current!=0?'normal':'disabled'" ng-click="prevClick()"></a>
+        <a class="arrows-right dis-ib" ng-class="descSlider.current!=descSlider.lastIndex?'normal':'disabled'" ng-click="nextClick()"></a>
+    </div>
+    <div class="slider-lr-wrap">
+        <div class="slider-lr-big-img" id="{{descSlider.id}}" ng-style="{width:descSlider.totalDis+'px','margin-left':-descSlider.width+'px'}">
+            <div class="dis-ib" ng-style="{'background-image':'url('+descSlider.firstItem.bImg+')'}"></div>
+            <div class="dis-ib" ng-repeat="item in descSlider.list" ng-style="{'background-image':'url('+item.bImg+')'}"></div>
+            <div class="dis-ib" ng-style="{'background-image':'url('+descSlider.lastItem.bImg+')'}"></div>
+        </div>
+    </div>
+    <div class="slider-lr-small-imgs">
+        <a class="dis-ib" ng-repeat="item in descSlider.list" ng-class="{'active':$index==descSlider.current}" ng-style="{'background-image':'url('+item.sImg+')'}" ng-mouseover="descItemClick($index)"></a>
+    </div>
+</div>

@@ -21,22 +21,7 @@
 
     <div class="fl-info-header w1200 clearfix pos-re mt-40 mb-40 se-bg-main">
         <!--图片展示层-->
-        <div class="arrows-btn pos-ab fs-0">
-            <a class="arrows-left dis-ib" ng-class="descSlider.current!=0?'normal':'disabled'" ng-click="prevClick()"></a>
-            <a class="arrows-right dis-ib" ng-class="descSlider.current!=descSlider.lastIndex?'normal':'disabled'" ng-click="nextClick()"></a>
-        </div>
-        <div class="fl fs-0">
-            <div class="fl-info-big-img-wrap">
-                <div class="fl-info-big-img" id="{{descSlider.sliderId}}" ng-style="{width:descSlider.totalDis+'px','margin-left':-descSlider.width+'px'}">
-                    <div class="dis-ib" ng-style="{'background-image':'url('+descSlider.firstItem.bImg+')'}"></div>
-                    <div class="dis-ib" ng-repeat="item in descSlider.imgs" ng-style="{'background-image':'url('+item.bImg+')'}"></div>
-                    <div class="dis-ib" ng-style="{'background-image':'url('+descSlider.lastItem.bImg+')'}"></div>
-                </div>
-            </div>
-            <div class="fl-info-small-imgs">
-                <a class="dis-ib" ng-repeat="item in descSlider.imgs" ng-class="{'active':$index==descSlider.current}" ng-style="{'background-image':'url('+item.sImg+')'}" ng-mouseover="descItemClick($index)"></a>
-            </div>
-        </div>
+        <div class="fl" slider-landscape s-list="sliderList"></div>
 
         <div class="fl-info-msg">
             <p class="fs-18 ell">清新区石潭镇2000亩超有机蔬菜种植基地优质连片招商</p>

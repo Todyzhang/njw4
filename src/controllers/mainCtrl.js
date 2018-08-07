@@ -7,7 +7,7 @@ define(['app', 'css!/src/css/main'], function (app) {
       {img: "static/images/banner0.jpg", url: "#some"},
       {img: "static/images/banner1.jpg", url: "#some"},
       {img: "static/images/banner2.jpg", url: "#some"}
-    ]
+    ];
     $scope.typeList = [
       {"type": 0, "typeName": "合作社"},
       {"type": 1, "typeName": "经纪人/代办"},
@@ -32,7 +32,7 @@ define(['app', 'css!/src/css/main'], function (app) {
     $scope.landRentList = [
       {
         title: "清新区石潭镇185亩超优质连片水田出租",
-        url: "#some",
+        url: "#/landInfo/1",
         icon: "/static/images/282x210.jpg",
         flags: ["出租仓库用地", "出租"],
         area: "96亩",
@@ -41,7 +41,7 @@ define(['app', 'css!/src/css/main'], function (app) {
       },
       {
         title: "清新区石潭镇185亩超优质连片水田出租",
-        url: "#some",
+        url: "#/landInfo/2",
         icon: "/static/images/282x210.jpg",
         area: "96亩",
         price: "900元/亩/年",
@@ -49,7 +49,7 @@ define(['app', 'css!/src/css/main'], function (app) {
       },
       {
         title: "超优质连片水田出租",
-        url: "#some",
+        url: "#/landInfo/3",
         icon: "/static/images/282x210.jpg",
         area: "96亩",
         price: "900元/亩/年",
@@ -57,7 +57,7 @@ define(['app', 'css!/src/css/main'], function (app) {
       },
       {
         title: "清新区石潭镇185亩超优质连片水田出租清新区石潭镇185亩超优质连片水田出租",
-        url: "#some",
+        url: "#/landInfo/4",
         icon: "/static/images/282x210.jpg",
         area: "96亩",
         price: "900元/亩/年",
