@@ -228,6 +228,10 @@ body {
     margin: 0 10px;
 }
 
+.w20{
+    width:20px;
+}
+
 .w128 {
     width: 128px;
 }
@@ -239,6 +243,9 @@ body {
 }
 .w370 {
     width: 370px;
+}
+.h20{
+    height:20px;
 }
 .col-2{
     width:48%;
@@ -707,6 +714,9 @@ body {
     width: 168px;
     padding: 0 35px 0 15px;
 }
+.njw-input.large{
+    width:620px;
+}
 
 .njw-input > input {
     border: none;
@@ -786,11 +796,29 @@ body {
 }
 .input-row-title.required-icon:before{
     content:"*";
-    color:#f78c61;
     display: inline-block;
     vertical-align:middle;
     width:15px;
     text-align: center;
+}
+.njw-input:after{
+    width:20px;
+    height:20px;
+    background-repeat:no-repeat;
+    position:absolute;
+    right:-25px;
+    top:10px
+}
+.ng-invalid.ng-dirty.njw-input:after{
+    content:"";
+    background-image:url("/static/images/ico_input_err.png");
+}
+.ng-invalid.ng-dirty.njw-input{
+    border-color:#f57745
+}
+.ng-valid.ng-dirty.njw-input:after{
+    content:"";
+    background-image:url("/static/images/ico_input_right.png");
 }
 
 

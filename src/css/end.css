@@ -3,6 +3,17 @@
     padding-top:1px;
     padding-bottom:100px;
 }
+.end-main-head{
+    background-image: url("/static/images/logo_end.png");
+    background-repeat:no-repeat;
+    background-position:left center;
+}
+.end-main-head>span{
+    height:20px;
+    width:180px;
+    left:0;
+    bottom:-20px;
+}
 .end-bg{
     background-image: url("/static/images/main_bg.png"),url("/static/images/bg_dot_line.png");
     background-position: 94px 40px,200px 200px;
@@ -37,7 +48,7 @@
 .eml-head-icon{
     width:66px;
     height:66px;
-    margin:15px auto;
+    margin:0 auto;
 }
 .end-main-nav{
     padding-left:4px;
@@ -72,7 +83,7 @@
 
 
 .end-main-right{
-    width:1020px;
+    width:1000px;
 
 }
 .emr-form{
@@ -82,4 +93,8 @@
 
 .end-module-caption{
     background: url("/static/images/ico_dot_line.png") no-repeat 97% center;
+}
+
+.end-main-footer{
+    padding-left:200px;
 }

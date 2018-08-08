@@ -105,7 +105,7 @@ a.active>.se-contrast,
     color:#393;
 }
 .se-orange{
-    color:#f78c61;
+    color:#f57745;
 }
 .se-bg-shallow>input,
 .se-bg-shallow>textarea,
@@ -141,6 +141,7 @@ a.active>.se-contrast,
     background-color:#fff;
     color:#393;
 }
+
 .btn.btn-main{
     background-color:#fff;
     color:#393;
@@ -154,7 +155,16 @@ a.active>.se-contrast,
 .btn.btn-main.look-land-btn{
     border-color:transparent;
 }
-
+.btn.btn-orange{
+    background-color:#f57745;
+    color:#fff;
+    border:1px solid #f57745;
+    box-shadow:1px 1px 10px #f57745;
+}
+.btn.btn-orange:hover{
+    background-color:#fff;
+    color:#f57745;
+}
 
 /*箭头*/
 .arrow-d{
@@ -208,6 +218,11 @@ a.active>.se-contrast,
     border:11px solid transparent;
     border-bottom-color: #fff;
 }
+.input-row-title.required-icon:before{
+    color:#f57745;
+}
+
+
 
 /*首页*/
 .look-land-step{

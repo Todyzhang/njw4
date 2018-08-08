@@ -1,10 +1,14 @@
 <div class="end-content main-bg se-bg-shallow">
-    <div class="w1200 end-main mt-20">
-        <div class="dis-tc end-main-left se-bg-main">
-            <img class="dis-b" src="/static/images/logo_end.png" />
-            <a class="dis-b tc">
+
+    <div class="w1200 end-main-head se-bg-main mt-20">
+        <p class="se-deeper tr pr-10 height-line-62">帐号：3D4H853262EA1<a class="dis-ib pan-icon ml-20"></a></p>
+    </div>
+
+    <div class="w1200 end-main">
+        <div class="dis-tc end-main-left se-bg-main"><!--左侧菜单-->
+            <a class="dis-b tc mt-15">
                 <div class="eml-head-icon border-radius-p50 se-border deeper b-w4 pos-re" ng-style="{'background-image':'url(/static/images/head_icon.jpg)'}"></div>
-                <p class="se-thinner">点击编辑</p>
+                <p class="se-thinner mt-15">点击编辑</p>
             </a>
             <div class="end-main-nav fs-16">
                 <a class="emn-level-1 msg-center-icon">消息中心</a>
@@ -19,18 +23,22 @@
                 <a class="emn-level-1 acc-msg-icon">账户信息管理</a>
             </div>
         </div>
-        <div class="dis-tc end-main-right">
-            <p class="height-line-62 se-deeper tr se-bg-main pr-10">帐号：3D4H853262EA1<a class="dis-ib pan-icon ml-20"></a></p>
-            <div class="emr-form mt-20 se-bg-main ml-20">
-                <form class="">
+        <div class="dis-tc w20"></div><!--中间间隔-->
+        <div class="dis-tc end-main-right se-bg-main"><!--右侧呈示区-->
+            <div class="se-bg-shallow h20"></div>
+            <div class="emr-form">
+                <form name="addLand">
                     <div end-module-caption emc-title="基本信息"></div>
+
                     <div class="input-row plr-30 mt-20">
-                        <p class="se-thinner input-row-title required-icon">土地标题</p>
-                        <label class="njw-input height-line-40 border-radius-20 se-border thinner mlr-3" style="width:620px">
-                            <input placeholder="土地标题信息，20个字符以内" ng-model="as" />
+                        <p class="se-thinner input-row-title required-icon">土地标题<span class="input-error-msg se-orange ml-20">土地标题不能为空</span></p>
+                        <label class="njw-input large height-line-40 border-radius-20 se-border thinner mlr-3"
+                               ng-class="{'ng-invalid':addLand.title.$invalid,'ng-valid':addLand.title.$valid,'ng-pristine':addLand.title.$pristine,'ng-dirty':addLand.title.$dirty}">
+                            <input placeholder="土地标题信息，20个字符以内" ng-model="as" name="title" required />
                         </label>
                         <p class="se-thinner">例：清远市清新区100亩优质水田出租</p>
                     </div>
+
                     <div class="input-row plr-30 mt-20">
                         <p class="se-thinner input-row-title">土地标题</p>
                         <label class="njw-input height-line-40 border-radius-20 se-border thinner mlr-3">
@@ -41,5 +49,14 @@
                 </form>
             </div>
         </div>
+        <div class="w1200 mt-40">
+            <div class="end-main-footer tc">
+                <!--<ui-view name="endMainFooter"></ui-view>-->
+                <a class="btn btn-deeper height-line-40 border-radius-20 pos-re w200">审核</a>
+                <a class="btn btn-deeper height-line-40 border-radius-20 pos-re w200 ml-20">编辑修改</a>
+                <a class="btn btn-orange height-line-40 border-radius-20 pos-re w200 ml-20">删除</a>
+            </div>
+        </div>
+
     </div>
 </div>
