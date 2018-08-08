@@ -6,6 +6,7 @@
 .release-land-btn,
 .border-radius-20,
 .border-radius-30,
+.border-radius-p50,
 .btn-submit,
 .njw-textarea,
 .fni-info-wrap,
@@ -36,4 +37,15 @@
 }
 .se-bg-mask{
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#80333333,endColorstr=#80333333);
+}
+.njw-selector-list-arrow:before{
+    content:"";
+    position:absolute;
+    display: inline-block;
+    border:11px solid transparent;
+    border-bottom-color: #ccc;
+    top: -2px;
+}
+.njw-selector-list > ul {
+    border: 1px solid #ccc;
 }

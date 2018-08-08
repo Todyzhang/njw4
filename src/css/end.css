@@ -1,0 +1,85 @@
+/*双背景*/
+.end-content{
+    padding-top:1px;
+    padding-bottom:100px;
+}
+.end-bg{
+    background-image: url("/static/images/main_bg.png"),url("/static/images/bg_dot_line.png");
+    background-position: 94px 40px,200px 200px;
+    background-repeat: no-repeat,no-repeat;
+    background-size: 100%;
+}
+.pan-icon{
+    background:url("/static/images/ico_pen.png") no-repeat right center;
+    width:18px;
+    height:18px;
+    margin:0 20px;
+}
+.msg-center-icon{
+    background-image:url("/static/images/ico_center_msg.png");
+}
+.land-source-icon{
+    background-image:url("/static/images/ico_land_s.png");
+}
+.project-attract-icon{
+    background-image:url("/static/images/ico_project_attract.png");
+}
+.need-icon{
+    background-image:url("/static/images/ico_need.png");
+}
+.acc-msg-icon{
+    background-image:url("/static/images/ico_acc_msg.png");
+}
+.end-main-left{
+    width:180px;
+    padding-bottom:50px;
+}
+.eml-head-icon{
+    width:66px;
+    height:66px;
+    margin:15px auto;
+}
+.end-main-nav{
+    padding-left:4px;
+}
+.emn-level-1{
+    display: block;
+    background-repeat:no-repeat;
+    background-position:left center;
+    padding-left:40px;
+    margin-top:56px;
+}
+.emn-level-2-wrap{
+    margin-left:19px;
+    padding-top:10px;
+    padding-bottom:50px;
+}
+.emn-level-2-wrap+.emn-level-1{
+    margin-top:0;
+}
+.emn-level-2{
+    display: block;
+    margin-top:30px;
+    margin-right:15px;
+}
+.emn-level-2:before{
+    content:"";
+    display:inline-block;
+    vertical-align: middle;
+    width:28px;
+    height:0;
+}
+
+
+.end-main-right{
+    width:1020px;
+
+}
+.emr-form{
+    width:1000px;
+}
+
+
+.end-module-caption{
+    background: url("/static/images/ico_dot_line.png") no-repeat 97% center;
+}

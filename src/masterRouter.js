@@ -29,5 +29,14 @@ define(['app'], function (app) {
           menu:MENUS["financial"].index
         }
       })
+      .state("end", {
+        url: "/end",//发布平台
+        templateUrl: app.fileUrlHash("/src/pages/end.html"),
+        controller: "endCtrl",
+        resolve: app.loadJs("/src/controllers/endCtrl.js"),
+        data:{
+          menu:-1
+        }
+      })
   }];
 });

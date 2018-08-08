@@ -6,13 +6,17 @@
                ng-model="inputValue"
                ng-click="inputClick($event)"
                ng-disabled="isDisable"
-        /><span class="arrow-d"></span>
+        /><span class="arrow-d dis-ib pos-ab"></span>
     </label>
-    <ul class="njw-selector-list se-border thinner" style="display:none" ng-mouseover="activeOption=undefined" ng-class="{'scroll':options.length>15}">
-        <li ng-repeat="option in options"
-            data-value="{{option[loopValue]||option[loopName]||option}}"
-            ng-click="optionClick($index,option)"
-            ng-class="{'active':$index===activeOption}"
-        >{{option[loopName]||option}}</li>
-    </ul>
+    <div class="njw-selector-list thinner se-bg-main" style="display:none">
+        <div class="njw-selector-list-arrow ml-30 pos-re"><span class="arrow-bg-up pos-ab dis-ib"></span></div>
+        <ul class="mt-20 tc plr-20" ng-mouseover="activeOption=undefined" ng-class="{'scroll':options.length>15}">
+            <li class="ell bb-bar" ng-repeat="option in options"
+                data-value="{{option[loopValue]||option[loopName]||option}}"
+                ng-click="optionClick($index,option)"
+                ng-class="{'active':$index===activeOption}"
+            >{{option[loopName]||option}}</li>
+        </ul>
+    </div>
+
 </div>

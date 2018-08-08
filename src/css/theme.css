@@ -53,6 +53,9 @@ input:-moz-placeholder {
 .se-border.thinner{
     border-color: #dcdcdc;
 }
+.se-border.b-w4{
+    border-width:4px;
+}
 .bb-bar{
     border-bottom:1px solid #dcdcdc;
 }
@@ -62,6 +65,7 @@ input:-moz-placeholder {
 .br-bar.c-shallow{
     border-color:#666;
 }
+.bb-bar.b-w2,
 .br-bar.b-w2{
     border-width:2px;
 }
@@ -185,9 +189,6 @@ a.active>.se-contrast,
 
 
 /*输入框*/
-.njw-selector > ul {
-    background-color: #fff;
-}
 .njw-selector:hover>.njw-input,
 .njw-input:hover{
     border-color:#393;
@@ -196,15 +197,17 @@ a.active>.se-contrast,
     border-left:1px solid #ccc;
     color:#999;
 }
-
+.njw-selector-list > ul {
+    box-shadow: 1px 6px 20px 3px #ccc;
+}
 .njw-selector li.active,
 .njw-selector li:hover {
-    background-color: #393;
-    color:#fff;
+    color:#393;
 }
-
-
-
+.arrow-bg-up{
+    border:11px solid transparent;
+    border-bottom-color: #fff;
+}
 
 /*首页*/
 .look-land-step{
@@ -244,4 +247,13 @@ a.active>.se-contrast,
     box-shadow: 0 4px 20px 5px #dcdcdc;
 }
 
-
+/*后台菜单导航*/
+.emn-level-2-wrap{
+    border-left:1px dotted #393;
+}
+.emn-level-2.active{
+    background: url("/static/images/ico_right.png") no-repeat right center;
+}
+.emn-level-2:before{
+    border-top:1px dotted #393;
+}

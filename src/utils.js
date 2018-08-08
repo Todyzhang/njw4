@@ -215,70 +215,45 @@ define(['app','angular'], function (app,angular) {
         direct:'upDown',//'upDown'(default) or 'leftRight'
         current: 0,
         speed: 200,
-        slide: function (direction, cb,size) {
-          var distance = 0, that = this,param={};
-          if (direction === "down"||direction === "left") {
-            this.current-=size;
-            if (this.current < 0) {
-              this.current = this.last - 1;
-            }
-            distance = this.distance - this.sliderData.distance*size;
-          } else {
-            this.current+=size;
-            if (this.current >= this.last) {
-              this.current = 0;
-            }
-            distance = this.distance + this.sliderData.distance*size;
+        //index 下一个轮播图下标
+        slide: function (index) {
+          var param={},that=this;
+          this.cancelTimer();
+          that.current=index;
+          if(index<0){
+            that.current=that.last;
+          }else if(index>that.last){
+            that.current=0;
           }
           that.$scope.current = that.current;
-
-          that.isAnimated = false;
-          param[that.sliderData.sliderParam]="-" + distance + "px";
-          this.dom.animate(param, this.speed, "linear", function () {
-            var dis = 0;
-            if (distance === 0) {
-              dis = that.lastDistance - that.height;
-            } else if (distance === that.lastDistance) {
-              dis = that.height;
+          param[that.sliderData.sliderParam]="-" + that.getMoveDis(index) + "px";
+          that.dom.animate(param, that.speed, "linear", function () {
+            that.autoSlider&&that.start();
+            if(index!==that.current){
+              that.dom.css(that.sliderData.sliderParam, "-" + that.getMoveDis() + "px");
             }
-            if (dis > 0) {
-              that.dom.css(that.sliderData.sliderParam, "-" + dis + "px");
-              that.distance = dis;
-            } else {
-              that.distance = distance;
-            }
-            that.isAnimated = true;
-
-            typeof(cb) === "function" && cb();
           });
         },
-        move: function (dir,desc) {
-          var that = this;
-          this.cancelTimer();
-          this.slide(dir, function () {
-            that.autoSlider&&that.start();
-          },desc||1);
+        getMoveDis:function (index) {
+          if(index===undefined) index=this.current;
+          return this.sliderData.distance*(index+1);
         },
+        //直接轮播到图index
         moveTo:function (index) {
-          var desc=index-this.current,
-            dir;
-          if(desc>0){
-            dir="nextDirect";
-          }else if(desc<0){
-            dir="prevDirect"
-          }
-          dir&&this.move(this.sliderData[dir],Math.abs(desc));
+          this.slide(index);
         },
+        //下一个
         next: function () {
-          this.move(this.sliderData.nextDirect);
+          this.slide(this.current+1);
         },
+        //上一个
         prev: function () {
-          this.move(this.sliderData.prevDirect);
+          this.slide(this.current-1);
         },
         start: function () {
           var that = this;
           that.timer = $timeout(function () {
-            that.move(that.sliderData.nextDirect);
+            that.next();
           }, that.delay);
         },
         clearAnimate:function () {
@@ -287,12 +262,11 @@ define(['app','angular'], function (app,angular) {
         },
         cancelTimer: function () {
           $timeout.cancel(this.timer);
-          // this.clearAnimate();
+          this.clearAnimate();
         },
         reset: function () {
           this.size = this.list.length;
-          this.last = this.size;
-          this.lastDistance = (this.size + 1) * this.sliderData.distance;
+          this.last = this.size-1;
           this.distance = this.sliderData.distance;
           this.isAnimated = true;
         },
@@ -303,7 +277,7 @@ define(['app','angular'], function (app,angular) {
             delay=param.delay,
             auto=param.auto,
             direct=param.direct;
-          this.dom = jQuery("#" + id);
+          this.dom = angular.element("#" + id);
           this.list = list;
           this.$scope = param;//传地址过来方便改变当前项current
           typeof delay === 'number' && (this.delay = delay * 1000);
@@ -312,17 +286,13 @@ define(['app','angular'], function (app,angular) {
             this.direct = 'leftRight';
             this.sliderData={
               distance:this.width,
-              sliderParam:"margin-left",
-              nextDirect:"right",
-              prevDirect:"left"
+              sliderParam:"margin-left"
             }
           }else{
             this.direct="upDown";
             this.sliderData={
               distance:this.height,
-              sliderParam:"margin-top",
-              nextDirect:"up",
-              prevDirect:"down"
+              sliderParam:"margin-top"
             }
           }
           this.reset();

@@ -250,8 +250,8 @@ define(['app', "angular"], function (app, angular) {
           descSlider.direct="upDown";
 
           $scope.descSlider=descSlider;
+          if (descSlider.size > 1) {
 
-          if (descSlider.sliderSize > 1) {
             $timeout(function () {
               slider.init(descSlider);
             }, 0);
@@ -364,7 +364,7 @@ define(['app', "angular"], function (app, angular) {
         link: function ($scope, iElm, iAttrs) {
           var selecter = angular.element(iElm);
           var input = selecter.find("input");
-          var ul = selecter.find("ul");
+          var ul = selecter.find(".njw-selector-list");
           var activeOption;
           var id = "njw-selector-" + (+new Date);
           var setActiveOption = function (i) {
@@ -654,7 +654,7 @@ define(['app', "angular"], function (app, angular) {
               });
               $scope.items =createItems($scope.currentPage,$scope.total);
               //回滚到顶部
-              // jq("html,body").animate({"scrollTop": 0});
+              // angular.element("html,body").animate({"scrollTop": 0})
             }
           };
         }
@@ -682,6 +682,32 @@ define(['app', "angular"], function (app, angular) {
         link: function ($scope, iElm, iAttrs) {
           if(!angular.isArray($scope.pList)) throw new Error("place send the 'nlList' type to 'Array'");
           $scope.mcTitle=iAttrs.mcTitle;
+        }
+      }
+    })
+    /**
+     * 模块标题栏
+     * emc-title:标题
+     * emc-btn-name:按钮名称，不传则不显示按钮
+     * emc-btn-click:按钮点击事件（如有）
+     * e.g.
+     * <div end-module-caption emc-title="基本信息" emc-btn-name="+ 新增土地资源" emc-btn-click="btnClickFn" ></div>
+     */
+    .directive("endModuleCaption", function () {
+      return {
+        restrict: "EA",
+        scope: {
+          emcTitle: "@",
+          emcBtnName: "@",
+          emcBtnClick:"&"
+        },
+        templateUrl:app.fileUrlHash('/src/tpl/end.module.caption.tpl.html'),
+        // template: '',
+        replace: true,
+        link: function ($scope, iElm, iAttrs) {
+          // $scope.btnClick=function () {
+            // $scope.emcBtnClick();
+          // }
         }
       }
     })
