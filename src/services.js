@@ -8,7 +8,8 @@ define(['app'], function (app) {
 
         jQuery.ajax({
           type: type,
-          url: publicVal.serviceUrl+requestUrl,
+          // url: publicVal.serviceUrl+requestUrl,
+          url: requestUrl,
           dataType: 'json',
           crossDomain: true,
           async: true,
@@ -50,7 +51,9 @@ define(['app'], function (app) {
       var _path="/ManagementTypes/";
       //根据区域id得到该地区下的所有子地区集.为“0”则是顶级父集，即得到所有省份
       function getArea(id) {
-        return fetch.get(_path+"area/queryAreaList/"+(id||0)+".action");
+        // return fetch.get(_path+"area/queryAreaList/"+(id||0)+".action");
+        return fetch.get("http://nonjiayi-end.nongj.com/nonjiayi/api/area/area/find/findByParentId/"+(id||0));
+
       }
       //根据土地类型得到该土地的所有分类.为 0 时得到一级分类
       function getLand(id) {
