@@ -27,25 +27,14 @@
         <div class="dis-tc end-main-right se-bg-main"><!--右侧呈示区-->
             <div class="se-bg-shallow h20"></div>
             <div class="emr-form">
-                <form name="addLand">
+                <form name="addLand" novalidate>
                     <div end-module-caption emc-title="基本信息"></div>
 
-                    <div class="input-row plr-30 mt-20">
-                        <p class="se-thinner input-row-title required-icon">土地标题<span class="input-error-msg se-orange ml-20">土地标题不能为空</span></p>
-                        <label class="njw-input large height-line-40 border-radius-20 se-border thinner mlr-3"
-                               ng-class="{'ng-invalid':addLand.title.$invalid,'ng-valid':addLand.title.$valid,'ng-pristine':addLand.title.$pristine,'ng-dirty':addLand.title.$dirty}">
-                            <input placeholder="土地标题信息，20个字符以内" ng-model="as" name="title" required />
-                        </label>
-                        <p class="se-thinner">例：清远市清新区100亩优质水田出租</p>
-                    </div>
+                    <div njw-input class="plr-30 mt-20" ni-data="inputFiled"></div>
 
-                    <div class="input-row plr-30 mt-20">
-                        <p class="se-thinner input-row-title">土地标题</p>
-                        <label class="njw-input height-line-40 border-radius-20 se-border thinner mlr-3">
-                            <input placeholder="土地标题信息" ng-model="a1s" /><span class="word-tips">亩</span>
-                        </label>
-                        <p class="se-thinner">例：清远市清新区100亩优质水田出租</p>
-                    </div>
+                    <div njw-selector-group class="plr-30 mt-20" selector-data="selector_2"></div>
+                    <!--<div njw-selector-group class="plr-30 mt-20" selector-data="selector_3"></div>-->
+
                 </form>
             </div>
         </div>

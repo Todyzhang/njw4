@@ -1,6 +1,6 @@
 define(['app','css!/src/css/agroService'], function (app) {
   'use strict';
-  app.ctrl('financialCtrl', ["$scope",function ($scope,$state) {
+  app.ctrl('financialCtrl', ["$scope",function ($scope) {
     $scope.sliderList=[
       {img:"/static/images/financial.jpg",url:"#some"}
     ];

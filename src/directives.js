@@ -379,6 +379,7 @@ define(['app', "angular"], function (app, angular) {
             }
             $scope.result = re;
           };
+
           var initFn = function () {
             $scope.isPlaceholder = true;
             if ($scope.selectInit !== undefined && $scope.selectInit !== "") {
@@ -417,7 +418,7 @@ define(['app', "angular"], function (app, angular) {
           };
 
           $scope.$watch("result", function () {
-            $scope.changeEvent({_name: $scope.inputValue});
+            $scope.changeEvent({_name: $scope.inputValue,_value:$scope.result});
           });
 
           $scope.$watch("selectInit", function () {
@@ -434,6 +435,40 @@ define(['app', "angular"], function (app, angular) {
         }
       };
     }])
+    /**
+     * 二级级联
+     * mc-title:标题
+     * mc-more-url:
+     * mc-type:
+     * mc-more-text:
+     * e.g.
+     * <div module-caption mc-title="找地案例" mc-more-url="#some" ></div>
+     */
+    .directive("njwSelectorGroup", function () {
+      return {
+        restrict: "EA",
+        scope: {
+          selectorData: "="
+        },
+        templateUrl:app.fileUrlHash('/src/tpl/selector.group.tpl.html'),
+        // template: '',
+        replace: true,
+        link: function ($scope, iElm, iAttrs) {
+          for(var i=0;i<$scope.selectorData.selectors.length;i++){
+            var refreshIndex=i;
+            $scope.$watch("selectorData.selectors["+i+"].list",function(){
+              $scope.selectorData.selectors[refreshIndex]["refresh"]=+new Date;
+            },true);
+          }
+
+          // $scope.get2List=function (_name,_value) {
+          //   if(!_name||!_value) return ;
+          //   $scope.selectorData.selectors[0].getSelect2List(_value);
+          // }
+
+        }
+      }
+    })
     /**
      * 模块标题栏
      * mc-title:标题
@@ -707,6 +742,42 @@ define(['app', "angular"], function (app, angular) {
         link: function ($scope, iElm, iAttrs) {
           // $scope.btnClick=function () {
             // $scope.emcBtnClick();
+          // }
+        }
+      }
+    })
+    /**
+     * 模块标题栏
+     * emc-title:标题
+     * emc-btn-name:按钮名称，不传则不显示按钮
+     * emc-btn-click:按钮点击事件（如有）
+     * e.g.
+     * <div end-module-caption emc-title="基本信息" emc-btn-name="+ 新增土地资源" emc-btn-click="btnClickFn" ></div>
+     */
+    .directive("njwInput", function () {
+      return {
+        restrict: "EA",
+        scope: {
+          field:"=niData"
+        },
+        templateUrl:app.fileUrlHash('/src/tpl/input.tpl.html'),
+        // template: '',
+        replace: true,
+        link: function ($scope, iElm, iAttrs) {
+          $scope.someModel=null;
+          $scope.fieldClass={};
+          if($scope.field.check){
+
+            $scope.fieldClass={
+              'ng-invalid':$scope.inputRowForm.someInput.$invalid,
+              'ng-valid':$scope.inputRowForm.someInput.$valid,
+              'ng-pristine':$scope.inputRowForm.someInput.$pristine,
+              'ng-dirty':$scope.inputRowForm.someInput.$dirty,
+              'lager':$scope.field.lager
+            }
+          }
+          // $scope.btnClick=function () {
+          // $scope.emcBtnClick();
           // }
         }
       }

@@ -1,6 +1,6 @@
 define(['app', 'css!/src/css/main'], function (app) {
   'use strict';
-  app.ctrl('mainCtrl', ["$scope", function ($scope, $state) {
+  app.ctrl('mainCtrl', ["$scope", function ($scope) {
     // console.log(require.pathFromUrl('../css/main.css'))
     //$state.transitionTo("main.index")
     $scope.sliderList = [

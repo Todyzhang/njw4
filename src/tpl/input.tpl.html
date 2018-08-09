@@ -1,0 +1,22 @@
+<div class="input-row" ng-form="inputRowForm">
+    <p class="se-thinner input-row-title" ng-class="{'required-icon':field.required}">
+        {{field.title}}<span class="input-error-msg se-orange ml-20"
+    ng-show="inputRowForm.someInput.$dirty&&inputRowForm.someInput.$invalid">
+        {{inputRowForm.someInput.$error.required&&field.required}}
+    </span></p>
+    <label class="njw-input height-line-40 border-radius-20 se-border thinner mlr-3"
+           ng-class="{
+           'ng-invalid':field.check&&inputRowForm.someInput.$invalid,
+          'ng-valid':field.check&&inputRowForm.someInput.$valid,
+          'ng-pristine':field.check&&inputRowForm.someInput.$pristine,
+          'ng-dirty':field.check&&inputRowForm.someInput.$dirty,
+          'large':field.large}">
+        <input placeholder="{{field.placeholder}}"
+               ng-model="someModel"
+               name="someInput"
+               ng-required="!!field.required"
+               maxlength="{{field.check.maxlength.value}}"
+        /><span class="word-tips" ng-if="field.unit">{{field.unit}}</span>
+    </label>
+    <p class="se-thinner">{{field.tipsText}}</p>
+</div>

@@ -1,6 +1,6 @@
 define(['app','css!/src/css/findland'], function (app) {
   'use strict';
-  app.ctrl('findLandCtrl', ["$scope",function ($scope,$state) {
+  app.ctrl('findLandCtrl', ["$scope",function ($scope) {
     $scope.typeList = [
       {"type": 0, "typeName": "合作社"},
       {"type": 1, "typeName": "经纪人/代办"},
