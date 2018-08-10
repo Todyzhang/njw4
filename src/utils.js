@@ -54,7 +54,8 @@ define(['app','angular'], function (app,angular) {
           url:"#some"
         }
       ];
-      val.serviceUrl="http://192.168.1.84:8080";
+      val.frontHost="http://192.168.1.84125:8080/";
+      val.severHost="http://192.168.1.84:8080/";
       return val;
     }])
     .factory("njwCookie", [function () {

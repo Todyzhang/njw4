@@ -24,18 +24,40 @@
             </div>
         </div>
         <div class="dis-tc w20"></div><!--中间间隔-->
-        <div class="dis-tc end-main-right se-bg-main"><!--右侧呈示区-->
+        <div class="dis-tc end-main-right se-bg-main pb-40"><!--右侧呈示区-->
             <div class="se-bg-shallow h20"></div>
             <div class="emr-form">
-                <form name="addLand" novalidate>
+                <div ng-form="addLand" novalidate>
                     <div end-module-caption emc-title="基本信息"></div>
 
-                    <div njw-input class="plr-30 mt-20" ni-data="inputFiled"></div>
+                    <div njw-input class="plr-30 mt-20" ni-data="inputFiled_1"></div>
 
                     <div njw-selector-group class="plr-30 mt-20" selector-data="selector_2"></div>
-                    <!--<div njw-selector-group class="plr-30 mt-20" selector-data="selector_3"></div>-->
 
-                </form>
+                    <div njw-selector-group class="plr-30 mt-20" selector-data="selector_3"></div>
+
+                    <div njw-selector-group class="plr-30 mt-20" selector-data="selector_4"></div>
+
+                    <div njw-selector-input class="plr-30 mt-20" selector-data="inputSelector_1"></div>
+
+                    <div njw-input class="plr-30 mt-20" ni-data="inputFiled_2"></div>
+
+                    <div njw-selector-input class="plr-30 mt-20" selector-data="inputSelector_2"></div>
+
+                    <div class="input-row plr-30 mt-20">
+                        <p class="se-thinner input-row-title">土地图片</p>
+                        <div class="mt-20" njw-img-upload niu-size="4" niu-len="6" niu-imgs="imgs"></div>
+                    </div>
+
+                    <div njw-input class="plr-30 mt-20" ni-data="inputFiled_3"></div>
+
+                    <div njw-input class="plr-30 mt-20 pb-40" ni-data="inputFiled_4"></div>
+
+                    <div class="se-bg-shallow h20"></div>
+                    <div end-module-caption emc-title="土地情况"></div>
+
+
+                </div>
             </div>
         </div>
         <div class="w1200 mt-40">

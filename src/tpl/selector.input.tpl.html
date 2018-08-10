@@ -1,0 +1,28 @@
+<div class="input-row">
+    <p class="se-thinner input-row-title" ng-class="{'required-icon':selectorData.required}">
+        {{selectorData.title}}</p>
+    <div class="njw-selector-input">
+        <div class="njw-input height-line-40 border-radius-20 se-border thinner"
+        ng-style="{'width':selectorData.width||'188px'}">
+            <input ng-model="inputValue"
+                   placeholder="{{selectorData.placeholder}}"
+                   ng-style="{'padding-right':rightTips||'50px'}"
+            /><p class="dis-ib pos-ab right-tips"
+                 ng-click="selectorClick($event)"
+        ><span class="word-tips pl-5 tl">{{selectorName}}</span><span class="arrow-d dis-ib mlt-5"></span></p>
+        </div>
+        <div class="njw-selector-list thinner se-bg-main" style="display:none">
+            <div class="njw-selector-list-arrow ml-30 pos-re"><span class="arrow-bg-up pos-ab dis-ib"></span></div>
+            <ul class="mt-20 tc plr-20" ng-mouseover="activeOption=undefined" ng-class="{'scroll':options.length>15}">
+                <li class="ell bb-bar"
+                    ng-repeat="option in selectorData.list"
+                    data-value="{{option[selectorData.optionValue]}}"
+                    ng-click="optionClick($index,option)"
+                    ng-class="{'active':$index===activeOption}"
+                >{{option[selectorData.optionName]}}</li>
+            </ul>
+        </div>
+    </div>
+    <p class="se-thinner">{{selectorData.tipsText}}</p>
+
+</div>

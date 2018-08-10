@@ -203,15 +203,20 @@ a.active>.se-contrast,
 .njw-input:hover{
     border-color:#393;
 }
-.njw-input>.word-tips{
+.njw-input .word-tips{
     border-left:1px solid #ccc;
     color:#999;
+}
+.njw-selector-input .word-tips:hover{
+    color:#393;
+    border-color:#393;
+    cursor:default;
 }
 .njw-selector-list > ul {
     box-shadow: 1px 6px 20px 3px #ccc;
 }
-.njw-selector li.active,
-.njw-selector li:hover {
+.njw-selector-list li.active,
+.njw-selector-list li:hover {
     color:#393;
 }
 .arrow-bg-up{

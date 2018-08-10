@@ -460,15 +460,104 @@ define(['app', "angular"], function (app, angular) {
               $scope.selectorData.selectors[refreshIndex]["refresh"]=+new Date;
             },true);
           }
-
-          // $scope.get2List=function (_name,_value) {
-          //   if(!_name||!_value) return ;
-          //   $scope.selectorData.selectors[0].getSelect2List(_value);
-          // }
-
         }
       }
     })
+    /**
+     * 下拉选择器
+     * placeholder:缺省提示
+     * options:下拉列表
+     * option-name:下拉选项的文本字段
+     * option-value:下拉选项的值字段
+     * option-init:下拉框的初始值，可以赋值为选项的值字段或文本字段
+     * result:下拉框结果
+     * refresh:刷新指令，最好是时间戳
+     * change-event：下拉框值改变时调用的事件，参数_name传入的是下拉框的值
+     * is-disable:控制选择指令的是否可用
+     * e.g.
+     * <div njw-selector placeholder="请选择供应商类型" options="typeList"
+     * option-name="typeName" option-value="type" option-init="{{supplierType}}"
+     * result="supplierType" change-event="changeFn(_name)"
+     * is-disable="isDisable"></div>
+     */
+    .directive("njwSelectorInput", ["$document","$timeout",function ($document,$timeout) {
+      return {
+        restrict: "EA",
+        templateUrl: app.fileUrlHash("/src/tpl/selector.input.tpl.html"),
+        replace: true,
+        scope: {
+          // placeholder: "@",
+          // options: "=",
+          // loopName: "@optionName",
+          // loopValue: "@optionValue",
+          // selectInit: "@optionInit",
+          // result: "=",
+          // refresh: "@"
+          selectorData:"="
+        },
+        link: function ($scope, iElm, iAttrs) {
+          var selecter = angular.element(iElm);
+          var ul = selecter.find(".njw-selector-list");
+          var rightTips=selecter.find(".right-tips");
+          var activeOption,
+            selectorName=$scope.selectorData.optionName,
+            selectorValue=$scope.selectorData.optionValue;
+
+
+          // $scope.inputSelector={
+          //   title: '土地面积',
+          //   required: true,
+          //   optionName: "name",
+          //   optionValue: "id",
+          //   list: [
+          //     {id:'1',name:'亩'},
+          //     {id:'2',name:'平米'}
+          //   ],
+          //   placeholder: '请选择',
+          //   value: null
+          // };
+
+
+          var setActiveOption = function (i) {
+            $scope.activeOption = activeOption = i;
+          };
+          var setTipsWidth=function () {
+            $timeout(function () {
+              $scope.rightTips=rightTips.width()+'px';
+            },0);
+          };
+          var setOption = function (i, option) {
+            $scope.selectorName = option[selectorName];
+            $scope.selectorData.selectorValue=option[selectorValue];
+            setActiveOption(i);
+            setTipsWidth();
+          };
+
+          $scope.selectorName=$scope.selectorData.list[0][selectorName];
+          setTipsWidth();
+
+          $scope.selectorClick = function (e) {
+            e.stopPropagation();
+            $scope.activeOption = activeOption;
+            var isShow=ul.css("display")==="block";
+            angular.element(".njw-selector-list").hide();
+            if(!isShow) ul.show();
+          };
+
+          $scope.optionClick = function (i, option) {
+            setOption(i, option);
+          };
+
+          $scope.$watch("selectorData.refresh", function () {
+            $scope.selectorName=$scope.selectorData.list[0][selectorName];
+          });
+
+          $document.on("click",function () {
+            ul.hide();//点其它关闭select
+          })
+        }
+      };
+    }])
     /**
      * 模块标题栏
      * mc-title:标题
@@ -782,4 +871,113 @@ define(['app', "angular"], function (app, angular) {
         }
       }
     })
+    /**
+     * 上传图片
+     * emc-title:标题
+     * emc-btn-name:按钮名称，不传则不显示按钮
+     * emc-btn-click:按钮点击事件（如有）
+     * e.g.
+     * <div end-module-caption emc-title="基本信息" emc-btn-name="+ 新增土地资源" emc-btn-click="btnClickFn" ></div>
+     */
+    .directive("njwImgUpload", ["uploadImg",function (uploadImg) {
+      return {
+        restrict: "EA",
+        scope: {
+          niuImgs:"=",
+          niuSize:"@",//图片大小
+          niuLen:"@",//图片张数
+          subPath:"@"
+        },
+        templateUrl:app.fileUrlHash('/src/tpl/img.upload.tpl.html'),
+        // template: '',
+        replace: true,
+        link: function ($scope, iElm, iAttrs) {
+          var $dom=angular.element(iElm);
+          var $inputFile=$dom.find(".njyImgFile");
+          var _form=$dom.find(".imgUploadForm")[0];
+          var limitSize;
+
+          $scope.len=+($scope.niuLen||1);
+          $scope.size=+($scope.niuSize||3);
+          limitSize=$scope.size*1024*1024;
+          $scope.deleteBtn=function (index, imgId) {
+            // angular.isArray($scope.delId) && $scope.delId.push(imgId);
+            $scope.niuImgs.splice(index, 1);
+          };
+
+          var uploadFn = function () {
+            uploadImg.upload(_form)
+              .then(function (data) {
+                /*
+                 compressImageName:item.smallImagePath,
+                 compressImagePath :item.smallImageUrl,
+                 originImageName : item.imagePath,
+                 originImagePath : item.imageUrl,
+                 seq :i,
+                 uuid:item.uuid
+                 */
+                if (data && data.success) {
+                  var _img = data.content;
+                  var seq = 0;
+                  var len = $scope.imgs.length;
+                  if (len >= $scope.size) return;//网络延时可能会导致上传数量超出，去掉多的数据
+                  if (len > 0) {
+                    seq = $scope.imgs[len - 1].seq + 1;
+                  }
+
+                  $scope.imgs.push({
+                    compressImageName: _img.smallImagePath,
+                    compressImagePath: _img.smallImageUrl,
+                    originImageName: _img.imagePath,
+                    originImagePath: _img.imageUrl,
+                    seq: seq,
+                    uuid: _img.uuid
+                  });
+                } else {
+                  //上传失败
+                  alert(data.errorMessage || "上传图片失败！");
+                }
+              }, function () {
+                //上传失败
+                alert(data.errorMessage || "上传图片失败！");
+              })
+              .then(function () {
+                _form.reset();//清空file input中的文件
+              });
+          };
+
+          $inputFile.on("change", function (e) {
+            var self = this;
+            var specialCharReg = /^(\w|[\u4e00-\u9fa5]|[\-\(\)（）])+\.[A-Za-z0-9]+$/;
+            var file = self.files && self.files[0];
+            var filePathName = self.value;
+            var pathAry = filePathName.split(/\\|\//);
+            var fileName = pathAry[pathAry.length - 1];
+            if (!/\.(png|jpeg|jpg|gif)$/.test(fileName.toLocaleLowerCase())) {
+              alert("请选择png|jpeg|jpg|gif格式的图片上传");
+              _form.reset();
+              return false;
+            }
+            if (!specialCharReg.test(fileName)) {
+              alert("文件名不能含有特殊字符，请修改后重新上传。");
+              _form.reset();
+              return false;
+            }
+            if(fileName.split(".")[0].length>80){
+              alert("该文件名超过80字，请修改后重新上传。");
+              _form.reset();
+              return false;
+            }
+            //支持html5 file判断大小
+            if (file && file.size && file.size > limitSize) {
+              alert("图片文件不能大于"+$scope.size+"MB，请修改后重新上传。");
+              _form.reset();
+              return false;
+            }
+
+            uploadFn();
+          });
+        }
+      }
+    }])
 });

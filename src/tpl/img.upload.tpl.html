@@ -1,0 +1,19 @@
+<div class="njw-image-upload">
+<ul class="fs-0">
+    <li ng-repeat="img in niuImgs" class="dis-ib mr-30 mb-30 pos-re">
+        <img ng-src="{{img.compressImagePath}}" data-index="{{img.seq=$index}}" />
+        <a class="icon-x-btn dis-b pos-ab" ng-click="deleteBtn($index,img.id)"></a>
+    </li>
+    <li class="dis-ib mb-30" ng-hide="niuImgs.length>=len">
+        <form class="imgUploadForm">
+            <label class="upload-btn fs-12 pos-re">
+                <p class="se-main">点击上传</p>
+                <p class="se-thinner">最多上传{{len}}张,单张<{{size||3}}MB 支持JPG/JPEG/GIF /PNG格式</p>
+                <p class="fs-20 pos-ab dis-ib add-icon bold se-thinner">+</p>
+                <input type="file" class="njwImgFile pos-ab" name="file" accept="image/png,image/jpeg,image/gif,image/jpg" />
+            </label>
+            <input type="hidden" name="subPath" value="{{subPath}}" />
+        </form>
+    </li>
+</ul>
+</div>
