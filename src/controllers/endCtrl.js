@@ -189,6 +189,110 @@ define(['app', 'css!/src/css/end'], function (app) {
       {compressImagePath:'/static/images/282x190.jpg',id:"6"}
     ]
 
+    $scope.selector_5 =
+      {
+        title: '平整程度',
+        optionName: "name",
+        optionValue: "id",
+        selectors: [
+          {
+            list: [
+              {id:'1',name:'非常平整'},
+              {id:'2',name:'程度一般'},
+              {id:'3',name:'程度较差'}
+            ],
+            placeholder: '请选择',
+            value: null
+          }
+        ]
+      };
+
+    $scope.selector_6 =
+      {
+        title: '供电条件',
+        optionName: "name",
+        optionValue: "id",
+        selectors: [
+          {
+            list: [
+              {id:'1',name:'已通电'},
+              {id:'2',name:'未通可通电'},
+              {id:'3',name:'未通电'}
+            ],
+            placeholder: '请选择',
+            value: null
+          }
+        ]
+      };
+
+    $scope.selector_7 =
+      {
+        title: '供水条件',
+        optionName: "name",
+        optionValue: "id",
+        selectors: [
+          {
+            list: [
+              {id:'1',name:'已通水'},
+              {id:'2',name:'未通可通水'},
+              {id:'3',name:'未通水'}
+            ],
+            placeholder: '请选择',
+            value: null
+          }
+        ]
+      };
+    $scope.selector_8 =
+      {
+        title: '网络条件',
+        optionName: "name",
+        optionValue: "id",
+        selectors: [
+          {
+            list: [
+              {id:'1',name:'已通网络'},
+              {id:'2',name:'未通可通网络'},
+              {id:'3',name:'未通网络'}
+            ],
+            placeholder: '请选择',
+            value: null
+          }
+        ]
+      };
+    $scope.selector_9 =
+      {
+        title: '是否通路',
+        optionName: "name",
+        optionValue: "id",
+        selectors: [
+          {
+            list: [
+              {id:'1',name:'已通路'},
+              {id:'2',name:'未通路'}
+            ],
+            placeholder: '请选择',
+            value: null
+          }
+        ]
+      };
+
+    $scope.selector_10 =
+      {
+        title: '水源条件',
+        optionName: "name",
+        optionValue: "id",
+        selectors: [
+          {
+            list: [
+              {id:'1',name:'水源充足'},
+              {id:'2',name:'水源稀缺'}
+            ],
+            placeholder: '请选择',
+            value: null
+          }
+        ]
+      };
+
 
   }]);
 

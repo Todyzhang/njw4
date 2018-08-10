@@ -559,6 +559,87 @@ define(['app', "angular"], function (app, angular) {
       };
     }])
     /**
+     * 下拉选择器
+     * placeholder:缺省提示
+     * options:下拉列表
+     * option-name:下拉选项的文本字段
+     * option-value:下拉选项的值字段
+     * option-init:下拉框的初始值，可以赋值为选项的值字段或文本字段
+     * result:下拉框结果
+     * refresh:刷新指令，最好是时间戳
+     * change-event：下拉框值改变时调用的事件，参数_name传入的是下拉框的值
+     * is-disable:控制选择指令的是否可用
+     * e.g.
+     * <div njw-selector placeholder="请选择供应商类型" options="typeList"
+     * option-name="typeName" option-value="type" option-init="{{supplierType}}"
+     * result="supplierType" change-event="changeFn(_name)"
+     * is-disable="isDisable"></div>
+     */
+    .directive("njwSelectorMulti", ["$document","$timeout",function ($document,$timeout) {
+      return {
+        restrict: "EA",
+        templateUrl: app.fileUrlHash("/src/tpl/selector.input.tpl.html"),
+        replace: true,
+        scope: {
+          // placeholder: "@",
+          // options: "=",
+          // loopName: "@optionName",
+          // loopValue: "@optionValue",
+          // selectInit: "@optionInit",
+          // result: "=",
+          // refresh: "@"
+          selectorData:"="
+        },
+        link: function ($scope, iElm, iAttrs) {
+          var selecter = angular.element(iElm);
+          var ul = selecter.find(".njw-selector-list");
+          var rightTips=selecter.find(".right-tips");
+          var activeOption,
+            selectorName=$scope.selectorData.optionName,
+            selectorValue=$scope.selectorData.optionValue;
+
+
+          var setActiveOption = function (i) {
+            $scope.activeOption = activeOption = i;
+          };
+          var setTipsWidth=function () {
+            $timeout(function () {
+              $scope.rightTips=rightTips.width()+'px';
+            },0);
+          };
+          var setOption = function (i, option) {
+            $scope.selectorName = option[selectorName];
+            $scope.selectorData.selectorValue=option[selectorValue];
+            setActiveOption(i);
+            setTipsWidth();
+          };
+
+          $scope.selectorName=$scope.selectorData.list[0][selectorName];
+          setTipsWidth();
+
+          $scope.selectorClick = function (e) {
+            e.stopPropagation();
+            $scope.activeOption = activeOption;
+            var isShow=ul.css("display")==="block";
+            angular.element(".njw-selector-list").hide();
+            if(!isShow) ul.show();
+          };
+
+          $scope.optionClick = function (i, option) {
+            setOption(i, option);
+          };
+
+          $scope.$watch("selectorData.refresh", function () {
+            $scope.selectorName=$scope.selectorData.list[0][selectorName];
+          });
+
+          $document.on("click",function () {
+            ul.hide();//点其它关闭select
+          })
+        }
+      };
+    }])
+    /**
      * 模块标题栏
      * mc-title:标题
      * mc-more-url:更多按钮链接，不传则不显示“查看更多”，同时标题居中显示
