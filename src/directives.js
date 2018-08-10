@@ -457,7 +457,6 @@ define(['app', "angular"], function (app, angular) {
           for(var i=0;i<$scope.selectorData.selectors.length;i++){
             var refreshIndex=i;
             $scope.$watch("selectorData.selectors["+i+"].list",function(){
-
               $scope.selectorData.selectors[refreshIndex]["refresh"]=+new Date;
             },true);
           }
