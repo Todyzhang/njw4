@@ -448,27 +448,186 @@ define(['app', "angular"], function (app, angular) {
       return {
         restrict: "EA",
         scope: {
-          selectorData: "="
+          selectorData: "=",
+          nsgTitle:"@",
+          result:"="
         },
         templateUrl:app.fileUrlHash('/src/tpl/selector.group.tpl.html'),
         // template: '',
         replace: true,
         link: function ($scope, iElm, iAttrs) {
-          for(var i=0;i<$scope.selectorData.selectors.length;i++){
+          for(var i=0,len=$scope.selectorData.selectors.length;i<len;i++){
             var refreshIndex=i;
             $scope.$watch("selectorData.selectors["+i+"].list",function(){
               $scope.selectorData.selectors[refreshIndex]["refresh"]=+new Date;
             },true);
+            if(i==len-1){
+              $scope.$watch("selectorData.selectors["+i+"].value",function (newValue,oldValue) {
+                $scope.result=newValue;
+              })
+            }
           }
-
-          // $scope.get2List=function (_name,_value) {
-          //   if(!_name||!_value) return ;
-          //   $scope.selectorData.selectors[0].getSelect2List(_value);
-          // }
-
         }
       }
     })
+    /**
+     * 下拉选择器
+     * placeholder:缺省提示
+     * options:下拉列表
+     * option-name:下拉选项的文本字段
+     * option-value:下拉选项的值字段
+     * option-init:下拉框的初始值，可以赋值为选项的值字段或文本字段
+     * result:下拉框结果
+     * refresh:刷新指令，最好是时间戳
+     * change-event：下拉框值改变时调用的事件，参数_name传入的是下拉框的值
+     * is-disable:控制选择指令的是否可用
+     * e.g.
+     * <div njw-selector placeholder="请选择供应商类型" options="typeList"
+     * option-name="typeName" option-value="type" option-init="{{supplierType}}"
+     * result="supplierType" change-event="changeFn(_name)"
+     * is-disable="isDisable"></div>
+     */
+    .directive("njwSelectorInput", ["$document","$timeout",function ($document,$timeout) {
+      return {
+        restrict: "EA",
+        templateUrl: app.fileUrlHash("/src/tpl/selector.input.tpl.html"),
+        replace: true,
+        scope: {
+          selectorData:"=",
+          nsiTitle:"@",
+          result1:"=",
+          result2:"="
+        },
+        link: function ($scope, iElm, iAttrs) {
+          var selecter = angular.element(iElm);
+          var ul = selecter.find(".njw-selector-list");
+          var rightTips=selecter.find(".right-tips");
+          var activeOption,
+            selectorName=$scope.selectorData.optionName,
+            selectorValue=$scope.selectorData.optionValue;
+
+          var setActiveOption = function (i) {
+            $scope.activeOption = activeOption = i;
+          };
+          var setTipsWidth=function () {
+            $timeout(function () {
+              $scope.rightTips=rightTips.width()+'px';
+            },0);
+          };
+          var setOption = function (i, option) {
+            $scope.selectorName = option[selectorName];
+            $scope.selectorData.selectorValue=option[selectorValue];
+            $scope.result2=option[selectorValue];
+            setActiveOption(i);
+            setTipsWidth();
+          };
+
+          $scope.selectorClick = function (e) {
+            e.stopPropagation();
+            $scope.activeOption = activeOption;
+            var isShow=ul.css("display")==="block";
+            angular.element(".njw-selector-list").hide();
+            if(!isShow) ul.show();
+          };
+
+          $scope.optionClick = function (i, option) {
+            setOption(i, option);
+          };
+
+          $scope.$watch("selectorData.refresh", function () {
+            setOption(0,$scope.selectorData.list[0]);
+          });
+          $scope.$watch("inputValue", function (newValue,oldValue) {
+            $scope.result1=newValue;
+          });
+          $document.on("click",function () {
+            ul.hide();//点其它关闭select
+          })
+        }
+      };
+    }])
+    /**
+     * 下拉选择器
+     * placeholder:缺省提示
+     * options:下拉列表
+     * option-name:下拉选项的文本字段
+     * option-value:下拉选项的值字段
+     * option-init:下拉框的初始值，可以赋值为选项的值字段或文本字段
+     * result:下拉框结果
+     * refresh:刷新指令，最好是时间戳
+     * change-event：下拉框值改变时调用的事件，参数_name传入的是下拉框的值
+     * is-disable:控制选择指令的是否可用
+     * e.g.
+     * <div njw-selector placeholder="请选择供应商类型" options="typeList"
+     * option-name="typeName" option-value="type" option-init="{{supplierType}}"
+     * result="supplierType" change-event="changeFn(_name)"
+     * is-disable="isDisable"></div>
+     */
+    .directive("njwSelectorMulti", ["$document","$timeout",function ($document,$timeout) {
+      return {
+        restrict: "EA",
+        templateUrl: app.fileUrlHash("/src/tpl/selector.multi.tpl.html"),
+        replace: true,
+        scope: {
+          nsmTitle:"@",//标题
+          nmsPlaceholder:"@",
+          nsmSize:"@",//最多可添加数量
+          nsmList:"=", //下拉框数据
+          optionName:"@",//下拉框显示名字字段
+          optionValue:"@",//下拉框选中的值字段
+          result:"="
+        },
+        link: function ($scope, iElm, iAttrs) {
+          var selecter = angular.element(iElm);
+          var ul = selecter.find(".njw-selector-list");
+          var activeOption;
+          $scope.result="";
+
+          $scope.selectedList=[];
+
+          $scope.delectBtn=function (index,option) {
+            $scope.selectedList.splice(index,1);
+            $scope.result.replace(option[$scope.optionValue]+",","");
+          };
+
+
+          var setActiveOption = function (i) {
+            $scope.activeOption = activeOption = i;
+          };
+
+          var setOption = function (i, option) {
+            var id=option[$scope.optionValue]+",";
+            if($scope.result.indexOf(id)===-1){
+              $scope.selectedList.push(option);
+              $scope.result+=id;
+              setActiveOption(i);
+            }
+
+          };
+
+
+          $scope.selectorClick = function (e) {
+            e.stopPropagation();
+            $scope.activeOption = activeOption;
+            var isShow=ul.css("display")==="block";
+            angular.element(".njw-selector-list").hide();
+            if(!isShow) ul.show();
+          };
+
+          $scope.optionClick = function (i, option) {
+            setOption(i, option);
+          };
+
+          // $scope.$watch("selectorData.refresh", function () {
+          //   $scope.selectorName=$scope.selectorData.list[0][selectorName];
+          // });
+
+          $document.on("click",function () {
+            ul.hide();//点其它关闭select
+          })
+        }
+      };
+    }])
     /**
      * 模块标题栏
      * mc-title:标题
@@ -758,7 +917,9 @@ define(['app', "angular"], function (app, angular) {
       return {
         restrict: "EA",
         scope: {
-          field:"=niData"
+          field:"=niData",
+          niTitle:"@",
+          result:"="
         },
         templateUrl:app.fileUrlHash('/src/tpl/input.tpl.html'),
         // template: '',
@@ -776,10 +937,159 @@ define(['app', "angular"], function (app, angular) {
               'lager':$scope.field.lager
             }
           }
+          $scope.$watch("someModel",function () {
+            $scope.result=$scope.someModel;
+          })
           // $scope.btnClick=function () {
           // $scope.emcBtnClick();
           // }
         }
       }
     })
+    /**
+     * 上传图片
+     * emc-title:标题
+     * emc-btn-name:按钮名称，不传则不显示按钮
+     * emc-btn-click:按钮点击事件（如有）
+     * e.g.
+     * <div end-module-caption emc-title="基本信息" emc-btn-name="+ 新增土地资源" emc-btn-click="btnClickFn" ></div>
+     */
+    .directive("njwImgUpload", ["uploadImg","publicVal",function (uploadImg,publicVal) {
+      return {
+        restrict: "EA",
+        scope: {
+          niuImgs:"=",
+          niuSize:"@",//图片大小
+          niuLen:"@",//图片张数
+          subPath:"@",
+          result:"="
+        },
+        templateUrl:app.fileUrlHash('/src/tpl/img.upload.tpl.html'),
+        // template: '',
+        replace: true,
+        link: function ($scope, iElm, iAttrs) {
+          var $dom=angular.element(iElm);
+          var $inputFile=$dom.find(".njwImgFile");
+          var _form=$dom.find(".imgUploadForm")[0];
+          var limitSize;
+          $scope.imgHost=publicVal.imgHost;
+          $scope.len=+($scope.niuLen||1);
+          $scope.size=+($scope.niuSize||3);
+          limitSize=$scope.size*1024*1024;
+          $scope.deleteBtn=function (index) {
+            // angular.isArray($scope.delId) && $scope.delId.push(imgId);
+            $scope.niuImgs.splice(index, 1);
+          };
+
+          var uploadFn = function () {
+            uploadImg.upload(_form)
+              .then(function (data) {
+                /*
+                 compressImageName:item.smallImagePath,
+                 compressImagePath :item.smallImageUrl,
+                 originImageName : item.imagePath,
+                 originImagePath : item.imageUrl,
+                 seq :i,
+                 uuid:item.uuid
+                 */
+                if (data && data.success) {
+                  var len = $scope.niuImgs.length;
+                  if (len >= $scope.len) return;//网络延时可能会导致上传数量超出，去掉多的数据
+
+                  $scope.niuImgs.push(data.t);
+                } else {
+                  //上传失败
+                  alert(data.errorMessage || "上传图片失败！");
+                }
+              }, function () {
+                //上传失败
+                alert(data.errorMessage || "上传图片失败！");
+              })
+              .then(function () {
+                _form.reset();//清空file input中的文件
+              });
+          };
+
+          $inputFile.on("change", function (e) {
+            var self = this;
+            var specialCharReg = /^(\w|[\u4e00-\u9fa5]|[\-\(\)（）])+\.[A-Za-z0-9]+$/;
+            var file = self.files && self.files[0];
+            var filePathName = self.value;
+            var pathAry = filePathName.split(/\\|\//);
+            var fileName = pathAry[pathAry.length - 1];
+            if (!/\.(png|jpeg|jpg|gif)$/.test(fileName.toLocaleLowerCase())) {
+              alert("请选择png|jpeg|jpg|gif格式的图片上传");
+              _form.reset();
+              return false;
+            }
+            if (!specialCharReg.test(fileName)) {
+              alert("文件名不能含有特殊字符，请修改后重新上传。");
+              _form.reset();
+              return false;
+            }
+            if(fileName.split(".")[0].length>80){
+              alert("该文件名超过80字，请修改后重新上传。");
+              _form.reset();
+              return false;
+            }
+            //支持html5 file判断大小
+            if (file && file.size && file.size > limitSize) {
+              alert("图片文件不能大于"+$scope.size+"MB，请修改后重新上传。");
+              _form.reset();
+              return false;
+            }
+
+            uploadFn();
+          });
+
+
+          $scope.$watch("niuImgs",function (n,o) {
+            for(var i=1;i<7;i++){
+              $scope.result["img"+i]="";
+            }
+            angular.forEach(n,function (v,i) {
+              $scope.result["img"+(i+1)]=v;
+            })
+          },true);
+        }
+      }
+    }])
+    .directive("checkbox",[function () {
+      return {
+        restrict: "EA",
+        scope: {
+          cbTitle:"@",
+          value:"="
+        },
+        template: '<a class="checkbox-icon dis-ib" ng-class="value?\'active\':\'\'" ng-click="value=!value">{{cbTitle}}</a>',
+        // templateUrl:app.fileUrlHash('/src/tpl/checkbox.group.tpl.html'),
+        replace: true,
+        link: function ($scope, iElm, iAttrs) {
+          $scope.clickFn=function () {
+            $scope.value=!$scope.value;
+          }
+        }
+      }
+    }])
+    .directive("checkboxGroup",[function () {
+      return {
+        restrict: "EA",
+        scope: {
+          cgList:"=",
+          result:"="
+        },
+        // template: '<a class="checkbox-icon dis-ib" ng-class="{\'active\':value}" ng-click="value=!value">{{cbTitle}}</a>',
+        templateUrl:app.fileUrlHash('/src/tpl/checkbox.group.tpl.html'),
+        replace: true,
+        link: function ($scope, iElm, iAttrs) {
+          $scope.$watch("cgList",function (n, o) {
+            var val="";
+            angular.forEach(n,function (v) {
+              if(v.value) val+=v.id+",";
+            });
+            $scope.result=val;
+          },true)
+        }
+      }
+    }])
 });

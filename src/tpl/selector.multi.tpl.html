@@ -1,0 +1,21 @@
+<div class="input-row">
+    <p class="se-thinner input-row-title">{{nsmTitle}}</p>
+
+    <div class="njw-selector-multi pos-re">
+        <div class="njw-input height-line-40 border-radius-20 se-border thinner large">
+            <p class="placeholder" ng-hide="selectedList.length>0">{{nmsPlaceholder}}</p>
+            <a class="nsm-item plr-10 mr-10" ng-repeat="item in selectedList">{{item[optionName]}}<span class="ml-10" ng-click="delectBtn($index,item)">×</span></a>
+            <div class="icon-add pos-ab" ng-hide="selectedList.length>=nsmSize" ng-click="selectorClick($event)"></div>
+        </div>
+    </div>
+    <div class="njw-selector-list thinner" style="display:none;width:300px;margin-left:500px;">
+        <div class="njw-selector-list-arrow pos-re" style="margin-left:60%"><span class="arrow-bg-up pos-ab dis-ib"></span></div>
+        <ul class="mt-20 tc plr-20 se-bg-main" ng-mouseover="activeOption=undefined" ng-class="{'scroll':nsmList.length>15}">
+            <li class="ell bb-bar" ng-repeat="option in nsmList"
+                data-value="{{option[optionValue]}}"
+                ng-click="optionClick($index,option)"
+                ng-class="{'active':$index===activeOption}"
+            >{{option[optionName]}}</li>
+        </ul>
+    </div>
+</div>

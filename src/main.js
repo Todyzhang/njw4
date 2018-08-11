@@ -48,7 +48,7 @@ var REQUIRE_CONFIG = {
     // js
     'jquery': '../static/js/jquery-1.11.1.min',
     'jquery-form': '../static/js/jquery.form',
-    'jquery-xdomainrequest': '../static/js/jquery.xdomainrequest.min',
+    'ie8-ajax': '../static/js/jquery.xdomainrequest.min',
     'angular': '../static/js/angular.min',
     'ui-router': '../static/js/angular-ui-router.min',
     'modernizr': '../static/js/modernizr-2.6.2.min',
@@ -68,10 +68,14 @@ var REQUIRE_CONFIG = {
       deps: ['jquery'],
       exports: 'jquery-form'
     },
+    'ie8-ajax': {
+      deps: ['jquery'],
+      exports: 'ie8-ajax'
+    },
     'angular': {
       //指定要加载的一个依赖数组。当将require设置为一个config object在加载require.js之前使用时很有用。一旦require.js被定义，这些依赖就已加载。
       //使用deps就像调用require([])，但它在loader处理配置完毕之后就立即生效。它并不阻塞其他的require()调用，它仅是指定某些模块作为config块的一部分而异步加载的手段而已。
-      deps: ['jquery', 'modernizr', 'es5-shim', 'css'],
+      deps: ['jquery', 'modernizr', 'es5-shim', 'css','ie8-ajax'],
       exports: 'angular'
     },
     'ui-router': {
@@ -92,7 +96,7 @@ var REQUIRE_CONFIG = {
 require.config(REQUIRE_CONFIG);
 
 // 有返回值的写在前面，方便填写注入的参数
-require(['app', 'angular','masterRouter', 'css!normalize', 'jquery', 'jquery-form', 'ui-router', 'css!common','css!/src/css/theme', 'utils', 'services','directives.html.tpl', 'directives', 'filters'],
+require(['app', 'angular','masterRouter','css!normalize', 'jquery', 'jquery-form', 'ui-router', 'css!common','css!/src/css/theme', 'utils', 'services','directives.html.tpl', 'directives', 'filters'],
   function (app,angular,masterRouter) {
     var isIE = function(ver){
       var b = document.createElement('b')

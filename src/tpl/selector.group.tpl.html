@@ -1,14 +1,15 @@
 <div class="input-row">
     <p class="se-thinner input-row-title" ng-class="{'required-icon':selectorData.required}">
-        {{selectorData.title}}</p>
+        {{nsgTitle}}</p>
     <div njw-selector ng-repeat="selector in selectorData.selectors"
          ng-class="{'ml-20':$index>0}"
          placeholder="{{selector.placeholder}}"
          options="selector.list"
          option-name="{{selectorData.optionName}}"
          option-value="{{selectorData.optionValue}}"
+         option-init="{{selector.value}}"
          result="selector.value"
-         change-event="selector.getSelect2List(_name,_value)"
+         change-event="selector.getNextSelectList(_name,_value)"
          refresh="{{selector.refresh}}"></div>
 
 </div>

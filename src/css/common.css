@@ -269,7 +269,10 @@ body {
 .mlr-5 {
     margin: 0 5px;
 }
-
+.mlt-5{
+    margin-left:5px;
+    margin-top:5px;
+}
 .ml-0 {
     margin-left: 0 !important;
 }
@@ -310,6 +313,12 @@ body {
 .ml-0 {
     margin-left: 0!important;
 }
+.ml-10{
+    margin-left:10px;
+}
+.mr-10{
+    margin-right:10px;
+}
 .mr-30{
     margin-right:30px;
 }
@@ -338,8 +347,14 @@ body {
 .pt-20{
     padding-top:20px;
 }
+.pl-5{
+    padding-left:5px;
+}
 .pl-20{
     padding-left:20px;
+}
+.pl-30{
+    padding-left:30px;
 }
 .pl-50{
     padding-left:50px;
@@ -368,7 +383,14 @@ body {
 .pb-40 {
     padding-bottom: 40px;
 }
-
+.ptb-10{
+    padding-top:10px;
+    padding-bottom:10px;
+}
+.plr-10{
+    padding-left:10px;
+    padding-right:10px;
+}
 .plr-20{
     padding-left:20px;
     padding-right:20px;
@@ -576,6 +598,13 @@ body {
     background-image: url("/static/images/look_land_on.png");
 }
 
+.icon-x-btn{
+    width:40px;
+    height:40px;
+    background:url("/static/images/btn_delete.png") no-repeat center;
+}
+
+
 
 /*slider*/
 .slider-warp {
@@ -733,6 +762,7 @@ body {
     padding-left: 10px;
 }
 
+.njw-selector-input,
 .njw-selector {
     display: inline-block;
     position: relative;
@@ -747,6 +777,59 @@ body {
     caret-color: transparent; /*属性可以改变输入框插入光标的颜色，同时又不改变输入框里面的内容的颜色*/
     cursor: default;
 }
+
+
+.njw-selector-input{}
+
+.njw-selector-input > .njw-input{
+    padding:0 15px;
+}
+.njw-selector-input > .njw-input>input{
+    padding-right:50px;
+    box-sizing: border-box;
+}
+.njw-selector-input > .njw-input>input+p{
+    white-space: nowrap;
+    right:15px;
+    top:0;
+}
+
+.njw-selector-multi{
+
+}
+.njw-selector-multi .nsm-item{
+    height:26px;
+    line-height: 26px;
+    background:#e0fbe4;
+    color:#393;
+    border-radius: 13px;
+    display:inline-block;
+}
+.icon-add{
+    background:url("/static/images/ico_add.png") no-repeat center;
+    width:54px;
+    height:54px;
+    right:-60px;
+    top:-10px;
+
+}
+.njw-checkbox-group{
+    padding-left:15px;
+}
+.checkbox-icon{
+    background: url("/static/images/ico_check.png") no-repeat left center;
+    padding-left:20px;
+    user-select:none;
+    height: 20px;
+    line-height: 20px;
+}
+.checkbox-icon.active{
+    background-image:url("/static/images/ico_check_on.png");
+}
+.njw-selector-multi{}
+.njw-selector-multi{}
+
+
 .njw-selector-list{
     border-top: none;
     position: absolute;
@@ -1176,4 +1259,39 @@ body {
     width:248px;
     height:150px;
     display: inline-block;
+}
+
+.njw-image-upload{}
+.njw-image-upload li{
+    width:148px;
+    height:100px;
+    border:1px dotted #dcdcdc;
+}
+.njw-image-upload li>img{
+    width:100%;
+    height:100%;
+    display: block;
+}
+.njw-image-upload li>.icon-x-btn{
+    right:-20px;
+    top:-20px;
+}
+.njw-image-upload .upload-btn{
+    display: block;
+    padding-top:14px;
+    padding-left:10px;
+    overflow: hidden;
+    line-height: 1.5;
+    height:86px;
+    cursor: default;
+}
+.njw-image-upload .add-icon{
+    right:14px;
+    bottom:4px;
+}
+.njw-image-upload .upload-btn input{
+    width:100%;
+    right:100%;
+    height:1px;
+    overflow:hidden;
 }
