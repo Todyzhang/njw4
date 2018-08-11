@@ -806,12 +806,25 @@ body {
     display:inline-block;
 }
 .icon-add{
-    background:url("../../static/images/ico_add.png") no-repeat center;
+    background:url("/static/images/ico_add.png") no-repeat center;
     width:54px;
     height:54px;
     right:-60px;
     top:-10px;
 
+}
+.njw-checkbox-group{
+    padding-left:15px;
+}
+.checkbox-icon{
+    background: url("/static/images/ico_check.png") no-repeat left center;
+    padding-left:20px;
+    user-select:none;
+    height: 20px;
+    line-height: 20px;
+}
+.checkbox-icon.active{
+    background-image:url("/static/images/ico_check_on.png");
 }
 .njw-selector-multi{}
 .njw-selector-multi{}

@@ -1,8 +1,8 @@
 <div class="njw-image-upload">
 <ul class="fs-0">
-    <li ng-repeat="img in niuImgs" class="dis-ib mr-30 mb-30 pos-re">
-        <img ng-src="{{img.compressImagePath}}" data-index="{{img.seq=$index}}" />
-        <a class="icon-x-btn dis-b pos-ab" ng-click="deleteBtn($index,img.id)"></a>
+    <li ng-repeat="img in niuImgs track by $index" data-index="{{$index}}" class="dis-ib mr-30 mb-30 pos-re">
+        <img ng-src="{{imgHost+img}}" />
+        <a class="icon-x-btn dis-b pos-ab" ng-click="deleteBtn($index)"></a>
     </li>
     <li class="dis-ib mb-30" ng-hide="niuImgs.length>=len">
         <form class="imgUploadForm">

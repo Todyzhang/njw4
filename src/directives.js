@@ -448,17 +448,24 @@ define(['app', "angular"], function (app, angular) {
       return {
         restrict: "EA",
         scope: {
-          selectorData: "="
+          selectorData: "=",
+          nsgTitle:"@",
+          result:"="
         },
         templateUrl:app.fileUrlHash('/src/tpl/selector.group.tpl.html'),
         // template: '',
         replace: true,
         link: function ($scope, iElm, iAttrs) {
-          for(var i=0;i<$scope.selectorData.selectors.length;i++){
+          for(var i=0,len=$scope.selectorData.selectors.length;i<len;i++){
             var refreshIndex=i;
             $scope.$watch("selectorData.selectors["+i+"].list",function(){
               $scope.selectorData.selectors[refreshIndex]["refresh"]=+new Date;
             },true);
+            if(i==len-1){
+              $scope.$watch("selectorData.selectors["+i+"].value",function (newValue,oldValue) {
+                $scope.result=newValue;
+              })
+            }
           }
         }
       }
@@ -486,14 +493,10 @@ define(['app', "angular"], function (app, angular) {
         templateUrl: app.fileUrlHash("/src/tpl/selector.input.tpl.html"),
         replace: true,
         scope: {
-          // placeholder: "@",
-          // options: "=",
-          // loopName: "@optionName",
-          // loopValue: "@optionValue",
-          // selectInit: "@optionInit",
-          // result: "=",
-          // refresh: "@"
-          selectorData:"="
+          selectorData:"=",
+          nsiTitle:"@",
+          result1:"=",
+          result2:"="
         },
         link: function ($scope, iElm, iAttrs) {
           var selecter = angular.element(iElm);
@@ -502,21 +505,6 @@ define(['app', "angular"], function (app, angular) {
           var activeOption,
             selectorName=$scope.selectorData.optionName,
             selectorValue=$scope.selectorData.optionValue;
-
-
-          // $scope.inputSelector={
-          //   title: '土地面积',
-          //   required: true,
-          //   optionName: "name",
-          //   optionValue: "id",
-          //   list: [
-          //     {id:'1',name:'亩'},
-          //     {id:'2',name:'平米'}
-          //   ],
-          //   placeholder: '请选择',
-          //   value: null
-          // };
-
 
           var setActiveOption = function (i) {
             $scope.activeOption = activeOption = i;
@@ -529,12 +517,10 @@ define(['app', "angular"], function (app, angular) {
           var setOption = function (i, option) {
             $scope.selectorName = option[selectorName];
             $scope.selectorData.selectorValue=option[selectorValue];
+            $scope.result2=option[selectorValue];
             setActiveOption(i);
             setTipsWidth();
           };
-
-          $scope.selectorName=$scope.selectorData.list[0][selectorName];
-          setTipsWidth();
 
           $scope.selectorClick = function (e) {
             e.stopPropagation();
@@ -549,9 +535,11 @@ define(['app', "angular"], function (app, angular) {
           };
 
           $scope.$watch("selectorData.refresh", function () {
-            $scope.selectorName=$scope.selectorData.list[0][selectorName];
+            setOption(0,$scope.selectorData.list[0]);
           });
-
+          $scope.$watch("inputValue", function (newValue,oldValue) {
+            $scope.result1=newValue;
+          });
           $document.on("click",function () {
             ul.hide();//点其它关闭select
           })
@@ -578,44 +566,45 @@ define(['app', "angular"], function (app, angular) {
     .directive("njwSelectorMulti", ["$document","$timeout",function ($document,$timeout) {
       return {
         restrict: "EA",
-        templateUrl: app.fileUrlHash("/src/tpl/selector.input.tpl.html"),
+        templateUrl: app.fileUrlHash("/src/tpl/selector.multi.tpl.html"),
         replace: true,
         scope: {
-          // placeholder: "@",
-          // options: "=",
-          // loopName: "@optionName",
-          // loopValue: "@optionValue",
-          // selectInit: "@optionInit",
-          // result: "=",
-          // refresh: "@"
-          selectorData:"="
+          nsmTitle:"@",//标题
+          nmsPlaceholder:"@",
+          nsmSize:"@",//最多可添加数量
+          nsmList:"=", //下拉框数据
+          optionName:"@",//下拉框显示名字字段
+          optionValue:"@",//下拉框选中的值字段
+          result:"="
         },
         link: function ($scope, iElm, iAttrs) {
           var selecter = angular.element(iElm);
           var ul = selecter.find(".njw-selector-list");
-          var rightTips=selecter.find(".right-tips");
-          var activeOption,
-            selectorName=$scope.selectorData.optionName,
-            selectorValue=$scope.selectorData.optionValue;
+          var activeOption;
+          $scope.result="";
+
+          $scope.selectedList=[];
+
+          $scope.delectBtn=function (index,option) {
+            $scope.selectedList.splice(index,1);
+            $scope.result.replace(option[$scope.optionValue]+",","");
+          };
 
 
           var setActiveOption = function (i) {
             $scope.activeOption = activeOption = i;
           };
-          var setTipsWidth=function () {
-            $timeout(function () {
-              $scope.rightTips=rightTips.width()+'px';
-            },0);
-          };
+
           var setOption = function (i, option) {
-            $scope.selectorName = option[selectorName];
-            $scope.selectorData.selectorValue=option[selectorValue];
-            setActiveOption(i);
-            setTipsWidth();
+            var id=option[$scope.optionValue]+",";
+            if($scope.result.indexOf(id)===-1){
+              $scope.selectedList.push(option);
+              $scope.result+=id;
+              setActiveOption(i);
+            }
+
           };
 
-          $scope.selectorName=$scope.selectorData.list[0][selectorName];
-          setTipsWidth();
 
           $scope.selectorClick = function (e) {
             e.stopPropagation();
@@ -629,9 +618,9 @@ define(['app', "angular"], function (app, angular) {
             setOption(i, option);
           };
 
-          $scope.$watch("selectorData.refresh", function () {
-            $scope.selectorName=$scope.selectorData.list[0][selectorName];
-          });
+          // $scope.$watch("selectorData.refresh", function () {
+          //   $scope.selectorName=$scope.selectorData.list[0][selectorName];
+          // });
 
           $document.on("click",function () {
             ul.hide();//点其它关闭select
@@ -928,7 +917,9 @@ define(['app', "angular"], function (app, angular) {
       return {
         restrict: "EA",
         scope: {
-          field:"=niData"
+          field:"=niData",
+          niTitle:"@",
+          result:"="
         },
         templateUrl:app.fileUrlHash('/src/tpl/input.tpl.html'),
         // template: '',
@@ -946,6 +937,9 @@ define(['app', "angular"], function (app, angular) {
               'lager':$scope.field.lager
             }
           }
+          $scope.$watch("someModel",function () {
+            $scope.result=$scope.someModel;
+          })
           // $scope.btnClick=function () {
           // $scope.emcBtnClick();
           // }
@@ -960,28 +954,29 @@ define(['app', "angular"], function (app, angular) {
      * e.g.
      * <div end-module-caption emc-title="基本信息" emc-btn-name="+ 新增土地资源" emc-btn-click="btnClickFn" ></div>
      */
-    .directive("njwImgUpload", ["uploadImg",function (uploadImg) {
+    .directive("njwImgUpload", ["uploadImg","publicVal",function (uploadImg,publicVal) {
       return {
         restrict: "EA",
         scope: {
           niuImgs:"=",
           niuSize:"@",//图片大小
           niuLen:"@",//图片张数
-          subPath:"@"
+          subPath:"@",
+          result:"="
         },
         templateUrl:app.fileUrlHash('/src/tpl/img.upload.tpl.html'),
         // template: '',
         replace: true,
         link: function ($scope, iElm, iAttrs) {
           var $dom=angular.element(iElm);
-          var $inputFile=$dom.find(".njyImgFile");
+          var $inputFile=$dom.find(".njwImgFile");
           var _form=$dom.find(".imgUploadForm")[0];
           var limitSize;
-
+          $scope.imgHost=publicVal.imgHost;
           $scope.len=+($scope.niuLen||1);
           $scope.size=+($scope.niuSize||3);
           limitSize=$scope.size*1024*1024;
-          $scope.deleteBtn=function (index, imgId) {
+          $scope.deleteBtn=function (index) {
             // angular.isArray($scope.delId) && $scope.delId.push(imgId);
             $scope.niuImgs.splice(index, 1);
           };
@@ -998,22 +993,10 @@ define(['app', "angular"], function (app, angular) {
                  uuid:item.uuid
                  */
                 if (data && data.success) {
-                  var _img = data.content;
-                  var seq = 0;
-                  var len = $scope.imgs.length;
-                  if (len >= $scope.size) return;//网络延时可能会导致上传数量超出，去掉多的数据
-                  if (len > 0) {
-                    seq = $scope.imgs[len - 1].seq + 1;
-                  }
+                  var len = $scope.niuImgs.length;
+                  if (len >= $scope.len) return;//网络延时可能会导致上传数量超出，去掉多的数据
 
-                  $scope.imgs.push({
-                    compressImageName: _img.smallImagePath,
-                    compressImagePath: _img.smallImageUrl,
-                    originImageName: _img.imagePath,
-                    originImagePath: _img.imageUrl,
-                    seq: seq,
-                    uuid: _img.uuid
-                  });
+                  $scope.niuImgs.push(data.t);
                 } else {
                   //上传失败
                   alert(data.errorMessage || "上传图片失败！");
@@ -1058,6 +1041,54 @@ define(['app', "angular"], function (app, angular) {
 
             uploadFn();
           });
+
+
+          $scope.$watch("niuImgs",function (n,o) {
+            for(var i=1;i<7;i++){
+              $scope.result["img"+i]="";
+            }
+            angular.forEach(n,function (v,i) {
+              $scope.result["img"+(i+1)]=v;
+            })
+          },true);
+        }
+      }
+    }])
+    .directive("checkbox",[function () {
+      return {
+        restrict: "EA",
+        scope: {
+          cbTitle:"@",
+          value:"="
+        },
+        template: '<a class="checkbox-icon dis-ib" ng-class="value?\'active\':\'\'" ng-click="value=!value">{{cbTitle}}</a>',
+        // templateUrl:app.fileUrlHash('/src/tpl/checkbox.group.tpl.html'),
+        replace: true,
+        link: function ($scope, iElm, iAttrs) {
+          $scope.clickFn=function () {
+            $scope.value=!$scope.value;
+          }
+        }
+      }
+    }])
+    .directive("checkboxGroup",[function () {
+      return {
+        restrict: "EA",
+        scope: {
+          cgList:"=",
+          result:"="
+        },
+        // template: '<a class="checkbox-icon dis-ib" ng-class="{\'active\':value}" ng-click="value=!value">{{cbTitle}}</a>',
+        templateUrl:app.fileUrlHash('/src/tpl/checkbox.group.tpl.html'),
+        replace: true,
+        link: function ($scope, iElm, iAttrs) {
+          $scope.$watch("cgList",function (n, o) {
+            var val="";
+            angular.forEach(n,function (v) {
+              if(v.value) val+=v.id+",";
+            });
+            $scope.result=val;
+          },true)
         }
       }
     }])

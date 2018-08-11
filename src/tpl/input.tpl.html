@@ -1,7 +1,7 @@
 <div class="input-row" ng-form="inputRowForm">
     <p class="se-thinner input-row-title" ng-class="{'required-icon':field.required}">
-        {{field.title}}<span class="input-error-msg se-orange ml-20"
-    ng-show="inputRowForm.someInput.$dirty&&inputRowForm.someInput.$invalid">
+        {{niTitle}}<span class="input-error-msg se-orange ml-20"
+                         ng-show="inputRowForm.someInput.$dirty&&inputRowForm.someInput.$invalid">
         {{inputRowForm.someInput.$error.required&&field.required}}
     </span></p>
     <label class="njw-input height-line-40 border-radius-20 se-border thinner mlr-3"

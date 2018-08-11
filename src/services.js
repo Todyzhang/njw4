@@ -17,7 +17,7 @@ define(['app'], function (app) {
           "cache": false,
           data: data ? JSON.stringify(data) : '',
           beforeSend: function (xhr) {
-            xhr.setRequestHeader("Content-Type", "text/html;charset=utf-8");
+            xhr.setRequestHeader("Content-Type", "application/json;charset=utf-8");
           }
         }).done(function (_data) {
 
@@ -96,12 +96,23 @@ define(['app'], function (app) {
         return fetch.get(_path+"secondStair/list/"+(id||0)+".action");
       }
 
+
       return {
         getArea: getArea,
         getLand:getLand,
         getStair:getStair
       };
     }])
+    .factory("soil",["fetch",function (fetch) {
+      function addSoil(data) {
+        return fetch.post("soil/add.action",data);
+      }
+
+      return {
+        addSoil:addSoil
+      }
+    }]);
+
 
 
 });

@@ -54,7 +54,8 @@ define(['app','angular'], function (app,angular) {
           url:"#some"
         }
       ];
-      val.frontHost="http://192.168.1.84125:8080/";
+      val.frontHost="http://192.168.1.125:8080/";
+      val.imgHost="http://192.168.1.84:8096/";
       val.severHost="http://192.168.1.84:8080/";
       return val;
     }])
