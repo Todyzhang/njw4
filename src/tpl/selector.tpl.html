@@ -1,5 +1,13 @@
-<div class="njw-selector">
-    <label class="njw-input height-line-40 border-radius-20 se-border thinner">
+<div class="njw-selector" ng-form="inputRowForm">
+    <label class="njw-input height-line-40 border-radius-20 se-border thinner"
+           ng-class="{
+           'ng-invalid':field.check&&inputRowForm.inputValue.$invalid,
+          'ng-valid':field.check&&inputRowForm.inputValue.$valid,
+          'ng-pristine':field.check&&inputRowForm.inputValue.$pristine,
+          'ng-dirty':field.check&&inputRowForm.inputValue.$dirty,
+          'disabled':isDisable,
+          'normal':!isDisable
+          }">
         <input ng-class="{'placeholder':isPlaceholder}"
                readonly
                unselectable="on"

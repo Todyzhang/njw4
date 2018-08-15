@@ -1,10 +1,20 @@
-<div class="input-row">
+<div class="input-row" ng-form="inputRowForm">
     <p class="se-thinner input-row-title" ng-class="{'required-icon':selectorData.required}">
         {{selectorData.title}}</p>
     <div class="njw-selector-input">
         <div class="njw-input height-line-40 border-radius-20 se-border thinner"
-        ng-style="{'width':selectorData.width||'188px'}">
+        ng-style="{'width':selectorData.width||'188px'}"
+             ng-class="{
+           'ng-invalid':selectorData.check&&inputRowForm.inputValue.$invalid,
+          'ng-valid':selectorData.check&&inputRowForm.inputValue.$valid,
+          'ng-pristine':selectorData.check&&inputRowForm.inputValue.$pristine,
+          'ng-dirty':selectorData.check&&inputRowForm.inputValue.$dirty,
+          'large':selectorData.large,
+          'disabled':selectorData.idDisabled,
+          'normal':!selectorData.idDisabled
+          }">
             <input ng-model="inputValue"
+                   ng-disabled="{{selectorData.idDisabled}}"
                    placeholder="{{selectorData.placeholder}}"
                    ng-style="{'padding-right':rightTips||'50px'}"
             /><p class="dis-ib pos-ab right-tips"
@@ -15,7 +25,7 @@
             <div class="njw-selector-list-arrow ml-30 pos-re"><span class="arrow-bg-up pos-ab dis-ib"></span></div>
             <ul class="mt-20 tc plr-20" ng-mouseover="activeOption=undefined" ng-class="{'scroll':options.length>15}">
                 <li class="ell bb-bar"
-                    ng-repeat="option in selectorData.list"
+                    ng-repeat="option in selectorData.list | filter:selectorData.selectorFilter"
                     data-value="{{option[selectorData.optionValue]}}"
                     ng-click="optionClick($index,option)"
                     ng-class="{'active':$index===activeOption}"

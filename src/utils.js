@@ -9,6 +9,25 @@ define(['app','angular'], function (app,angular) {
       "agroService":{title: "涉农服务", url: "#/agro-service",index:3},
       "news":{title: "土地资讯", url: "#/news",index:4}
     })
+    /*
+    <a class="emn-level-1 msg-center-icon">消息中心</a>
+    <a class="emn-level-1 land-source-icon">土地资源管理</a>
+    <div class="emn-level-2-wrap fs-14"><!--最后一个需加 .pb-0-->
+        <a class="emn-level-2 active">土地资源管理</a>
+        <a class="emn-level-2">土地资源编辑</a>
+        <a class="emn-level-2">查看土地资源</a>
+    </div>
+    <a class="emn-level-1 project-attract-icon">项目招商管理</a>
+    <a class="emn-level-1 need-icon">需求管理</a>
+    <a class="emn-level-1 acc-msg-icon">账户信息管理</a>
+     */
+    .constant("ENDMENUS",{
+      "msg-center":{title: "消息中心", url: "#/main",index:0},
+      "land-source":{title: "土地资源管理", url: "#/findland",index:1},
+      "project-attract":{title: "项目招商管理", url: "#/financial",index:2},
+      "need":{title: "需求管理", url: "#/agro-service",index:3},
+      "acc-msg":{title: "账户信息管理", url: "#/news",index:4}
+    })
     .factory("publicVal", ["MENUS",function (MENUS) {
       var val={
         // menus: [
@@ -54,10 +73,157 @@ define(['app','angular'], function (app,angular) {
           url:"#some"
         }
       ];
+
+      //可流转方式
+      val.dealModeId= [
+        {id:'1',name:'转让'},
+        {id:'2',name:'出租'},
+        {id:'3',name:'转包'},
+        {id:'4',name:'入股'},
+        {id:'5',name:'互换'},
+        {id:'6',name:'其他'}
+      ];
+
+      //流转价格单位
+      val.dealUnitId=[
+        {id:'1',name:'元/亩/年',type:"13"},
+        {id:'2',name:'元/平米/月',type:"12"},
+        {id:'3',name:'万元/年',type:"123"},
+        {id:'4',name:'万元',type:"1"}
+      ];
+
+      //地上设施
+      val.facility=[
+        {id:1,name:"水井"},
+        {id:2,name:"大棚"},
+        {id:3,name:"仓库"},
+        {id:4,name:"农机房"},
+        {id:5,name:"晾晒场"},
+        {id:6,name:"育种育苗场"},
+        {id:7,name:"生活生产用房"}
+      ];
+
+      //地上设施
+      val.服务配套=[
+        {id:1,name:"物流"},
+        {id:2,name:"仓储"},
+        {id:3,name:"批发市场"},
+        {id:4,name:"超市"},
+        {id:5,name:"农科站"}
+      ];
+
+      //权属类型
+      val.ownershipType=[
+        {id:'1',name:'集体'},
+        {id:'2',name:'个人'},
+        {id:'3',name:'国有'}
+      ];
+
+      //水源条件
+      val.water=[
+        {id:'1',name:'水源充足'},
+        {id:'2',name:'水源稀缺'}
+      ];
+
+      //是否通路
+      val.ifAccessId=[
+        {id:'1',name:'已通路'},
+        {id:'2',name:'未通路'}
+      ];
+
+      //网络条件
+      val.networkId=[
+        {id:'1',name:'已通网络'},
+        {id:'2',name:'未通可通网络'},
+        {id:'3',name:'未通网络'}
+      ];
+
+      //供水条件
+      val.headWaters=[
+        {id:'1',name:'已通水'},
+        {id:'2',name:'未通可通水'},
+        {id:'3',name:'未通水'}
+      ];
+
+      //供电条件
+      val.powerSupplyId=[
+        {id:'1',name:'已通电'},
+        {id:'2',name:'未通可通电'},
+        {id:'3',name:'未通电'}
+      ];
+
+      //平整程度
+      val.smoothDegreeId=[
+        {id:'1',name:'非常平整'},
+        {id:'2',name:'程度一般'},
+        {id:'3',name:'程度较差'}
+      ];
+
+      //土地面积
+      val.acreageUnit=[
+        {id:'亩',name:'亩'},
+        {id:'平米',name:'平米'}
+      ];
+
+      //==========以下为angular run ajax中返回
+      //适合经营
+      val.managementTypesId=[
+        //   {name:'粮食油料类',id:'1'},
+        //   {name:'水果坚果类',id:'2'},
+        //   {name:'养殖类',id:'3'},
+        //   {name:'蔬菜瓜果类',id:'4'},
+        //   {name:'林木类',id:'5'},
+        //   {name:'商业住宅类',id:'6'},
+        //   {name:'工矿仓储类',id:'7'},
+        //   {name:'其他',id:'8'}
+      ];
+
+      //土地类型一级类型
+      val.landType=[];
+
+      //区域一级列表-省
+      val.provinceArea=[];
+
+
+
+
+
+
+      //=========服务器host配置
       val.frontHost="http://192.168.1.125:8080/";
       val.imgHost="http://192.168.1.84:8096/";
       val.severHost="http://192.168.1.84:8080/";
+
       return val;
+    }])
+
+    .run(["publicVal","queryClassify",function (publicVal,queryClassify) {
+      //适合经营
+      queryClassify.getStair()
+        .then(function (value) {
+          publicVal.managementTypesId=value;
+        })
+        .catch(function (reason) {
+          publicVal.managementTypesId=[];
+        });
+
+      //土地类型
+      queryClassify.getLand()
+        .then(function(result){
+          publicVal.landType=result;
+        })
+        .catch(function (reason) {
+          publicVal.landType=[];
+        });
+
+      //区域-省
+      queryClassify.getArea()
+        .then(function(result){
+          publicVal.provinceArea=result;
+        })
+        .catch(function (reason) {
+          publicVal.provinceArea=[];
+        });
     }])
     .factory("njwCookie", [function () {
       function setCookie(name, value, domain, day) {

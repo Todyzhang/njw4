@@ -36,7 +36,10 @@
                     <div njw-selector-group nsg-title="流转方式" class="plr-30 mt-20" selector-data="selector_4" result="soilAddVo.dealModeId"></div>
                     <div njw-selector-input nsi-title="土地面积" class="plr-30 mt-20" selector-data="inputSelector_1" result1="soilAddVo.acreage" result2="soilAddVo.acreageUnit"></div>
                     <div njw-input ni-title="可流转年限" class="plr-30 mt-20" ni-data="inputFiled_2" result="soilAddVo.dealAge"></div>
-                    <div njw-selector-input nsi-title="流转价格" class="plr-30 mt-20" selector-data="inputSelector_2" result1="soilAddVo.dealPrice" result2="soilAddVo.dealUnitId"></div>
+
+                    <div njw-selector-input nsi-title="流转价格" class="plr-30 mt-20" selector-data="inputSelector_2" result1="soilAddVo.dealPrice" result2="soilAddVo.dealUnitId" ng-if="!inputFiled_10"></div>
+                    <div njw-input ng-if="inputFiled_10" ni-title="流转价格" class="plr-30 mt-20" ni-data="inputFiled_10" result="soilAddVo.dealPrice"></div>
+
                     <div class="input-row plr-30 mt-20">
                         <p class="se-thinner input-row-title">土地图片</p>
                         <div class="mt-20" njw-img-upload niu-size="4" niu-len="6" niu-imgs="imgs"  result="soilAddVo"></div>

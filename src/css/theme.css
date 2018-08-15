@@ -199,11 +199,11 @@ a.active>.se-contrast,
 
 
 /*输入框*/
-.njw-selector:hover>.njw-input,
-.njw-input:hover{
+.njw-selector.normal:hover>.njw-input.normal,
+.njw-input.normal:hover{
     border-color:#393;
 }
-.njw-input .word-tips{
+.njw-input.normal .word-tips{
     border-left:1px solid #ccc;
     color:#999;
 }
@@ -219,6 +219,15 @@ a.active>.se-contrast,
 .njw-selector-list li:hover {
     color:#393;
 }
+
+.njw-input.disabled{
+    background-color:#ccc;
+}
+.njw-input.disabled input{
+    background-color:#ccc;
+}
+
+
 .arrow-bg-up{
     border:11px solid transparent;
     border-bottom-color: #fff;

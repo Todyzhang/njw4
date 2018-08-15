@@ -1,6 +1,6 @@
 define(['app', 'css!/src/css/end'], function (app) {
   'use strict';
-  app.ctrl('endCtrl', ["$scope", "queryClassify", "$q","soil", function ($scope, queryClassify, $q,soil) {
+  app.ctrl('endCtrl', ["$scope", "queryClassify", "$q","soil", "publicVal",function ($scope, queryClassify, $q,soil,publicVal) {
 
     /*
     SoilAddVo {
@@ -41,6 +41,18 @@ define(['app', 'css!/src/css/end'], function (app) {
     warrantType (string, optional): 政权类型 ,
     water (integer, optional): 水源条件 1,'水源充足' 2,'水源稀缺'
     }
+
+    1	土地标题	为空	请输入土地标题！
+    2	土地标题	格式错误	请输入20个字符以内有效土地标题！
+    3	土地类型	未选择	请选择土地类型！
+    4	土地类型	二级未选	请选择土地类型二级类目！
+    5	所在区域	未选择	请选择所在区域！
+    6	所在区域	部分未选	请完整选择所在区域！
+    7	流转方式	未选择	请选择流转方式！
+    8	土地联系人	为空	请输入土地联系人！
+    9	土地联系人	格式错误	请输入10个字符以内有效联系人！
+    10	联系方式	为空	请输入联系方式！
+    11	联系方式	格式有误	请输入正确的联系方式！
      */
 
     $scope.soilAddVo={};
@@ -117,7 +129,7 @@ define(['app', 'css!/src/css/end'], function (app) {
       large: true
     };
 
-    var selector_2 =
+    $scope.selector_2 =
       {
         title: '土地类型',
         required: true,
@@ -125,10 +137,10 @@ define(['app', 'css!/src/css/end'], function (app) {
         optionValue: "id",
         selectors: [
           {
-            list: [],
+            list: publicVal.landType,
             placeholder: '一级大类',
             value: null,
-            getNextSelectList: function (name,id) {
+            optionChange: function (name,id) {
               if(!name||!id) return ;
 
               queryClassify.getLand(id)
@@ -145,12 +157,8 @@ define(['app', 'css!/src/css/end'], function (app) {
           }
         ]
       };
-    $scope.selector_2 = selector_2;
-    queryClassify.getLand()
-      .then(function(result){
-        selector_2.selectors[0].list=result;
-      })
-    var selector_3 =
+
+    $scope.selector_3 =
       {
         title: '所在区域',
         required: true,
@@ -158,10 +166,10 @@ define(['app', 'css!/src/css/end'], function (app) {
         optionValue: "id",
         selectors: [
           {
-            list: [],
+            list: publicVal.provinceArea,
             placeholder: '省份',
             value: null,
-            getNextSelectList: function (name,id) {
+            optionChange: function (name,id) {
               if(!name||!id) return ;
 
               queryClassify.getArea(id)
@@ -175,7 +183,7 @@ define(['app', 'css!/src/css/end'], function (app) {
             list: [],
             placeholder: '城市',
             value: null,
-            getNextSelectList: function (name,id) {
+            optionChange: function (name,id) {
               if(!name||!id) return ;
 
               queryClassify.getArea(id)
@@ -192,12 +200,31 @@ define(['app', 'css!/src/css/end'], function (app) {
           }
         ]
       };
-    $scope.selector_3 = selector_3;
 
-    queryClassify.getArea()
-      .then(function(result){
-        selector_3.selectors[0].list=result;
-      });
+    //土地面积
+    $scope.inputSelector_1={
+      title: '土地面积',
+      required: true,
+      optionName: "name",
+      optionValue: "id",
+      list: publicVal.acreageUnit,
+      initSelectorValue:'亩',//选择框初始值
+      placeholder: '请输入',
+      value: null
+    };
+
+    $scope.inputSelector_2={
+      title: '流转价格',
+      optionName: "name",
+      optionValue: "id",
+      list: publicVal.dealUnitId,
+      initSelectorValue:1,
+      selectorFilter:"1",
+      placeholder: '请输入',
+      value: null,
+      width:'224px',
+      tipsText:'0 或 不填则为面议'
+    };
 
     $scope.selector_4 =
       {
@@ -207,48 +234,13 @@ define(['app', 'css!/src/css/end'], function (app) {
         optionValue: "id",
         selectors: [
           {
-            list: [
-              {id:'1',name:'转让'},
-              {id:'2',name:'出租'},
-              {id:'3',name:'转包'},
-              {id:'4',name:'入股'},
-              {id:'5',name:'互换'},
-              {id:'6',name:'其他'}
-            ],
+            list:publicVal.dealModeId,
             placeholder: '请选择',
             value: null
           }
         ]
       };
-    //土地面积
-    $scope.inputSelector_1={
-      title: '土地面积',
-      required: true,
-      optionName: "name",
-      optionValue: "id",
-      list: [
-        {id:'亩',name:'亩'},
-        {id:'平米',name:'平米'}
-      ],
-      placeholder: '请输入',
-      value: null
-    };
 
-    $scope.inputSelector_2={
-      title: '流转价格',
-      optionName: "name",
-      optionValue: "id",
-      list: [
-        {id:'1',name:'元/亩/年'},
-        {id:'2',name:'元/平米/月'},
-        {id:'3',name:'万元/年'},
-        {id:'3',name:'万元'}
-      ],
-      placeholder: '请输入',
-      value: null,
-      width:'224px',
-      tipsText:'0 或 不填则为面议'
-    };
 
     $scope.imgs=[];
 
@@ -259,11 +251,7 @@ define(['app', 'css!/src/css/end'], function (app) {
         optionValue: "id",
         selectors: [
           {
-            list: [
-              {id:'1',name:'非常平整'},
-              {id:'2',name:'程度一般'},
-              {id:'3',name:'程度较差'}
-            ],
+            list: publicVal.smoothDegreeId,
             placeholder: '请选择',
             value: null
           }
@@ -277,11 +265,7 @@ define(['app', 'css!/src/css/end'], function (app) {
         optionValue: "id",
         selectors: [
           {
-            list: [
-              {id:'1',name:'已通电'},
-              {id:'2',name:'未通可通电'},
-              {id:'3',name:'未通电'}
-            ],
+            list: publicVal.powerSupplyId,
             placeholder: '请选择',
             value: null
           }
@@ -295,11 +279,7 @@ define(['app', 'css!/src/css/end'], function (app) {
         optionValue: "id",
         selectors: [
           {
-            list: [
-              {id:'1',name:'已通水'},
-              {id:'2',name:'未通可通水'},
-              {id:'3',name:'未通水'}
-            ],
+            list: publicVal.headWaters,
             placeholder: '请选择',
             value: null
           }
@@ -312,11 +292,7 @@ define(['app', 'css!/src/css/end'], function (app) {
         optionValue: "id",
         selectors: [
           {
-            list: [
-              {id:'1',name:'已通网络'},
-              {id:'2',name:'未通可通网络'},
-              {id:'3',name:'未通网络'}
-            ],
+            list: publicVal.networkId,
             placeholder: '请选择',
             value: null
           }
@@ -329,10 +305,7 @@ define(['app', 'css!/src/css/end'], function (app) {
         optionValue: "id",
         selectors: [
           {
-            list: [
-              {id:'1',name:'已通路'},
-              {id:'2',name:'未通路'}
-            ],
+            list: publicVal.ifAccessId,
             placeholder: '请选择',
             value: null
           }
@@ -346,10 +319,7 @@ define(['app', 'css!/src/css/end'], function (app) {
         optionValue: "id",
         selectors: [
           {
-            list: [
-              {id:'1',name:'水源充足'},
-              {id:'2',name:'水源稀缺'}
-            ],
+            list: publicVal.water,
             placeholder: '请选择',
             value: null
           }
@@ -362,50 +332,20 @@ define(['app', 'css!/src/css/end'], function (app) {
         optionValue: "id",
         selectors: [
           {
-            list: [
-              {id:'1',name:'集体'},
-              {id:'2',name:'个人'},
-              {id:'3',name:'国有'}
-            ],
+            list: publicVal.ownershipType,
             placeholder: '请选择',
             value: null
           }
         ]
       };
 
-    queryClassify.getStair()
-      .then(function (value) {
-        $scope.selector_multi=value;
-      });
 
 
-    // $scope.selector_multi=[
-    //   {name:'粮食油料类',value:'1'},
-    //   {name:'水果坚果类',value:'2'},
-    //   {name:'养殖类',value:'3'},
-    //   {name:'蔬菜瓜果类',value:'4'},
-    //   {name:'林木类',value:'5'},
-    //   {name:'商业住宅类',value:'6'},
-    //   {name:'工矿仓储类',value:'7'},
-    //   {name:'其他',value:'8'}
-    // ];
+    //适合经营
+    $scope.selector_multi=publicVal.managementTypesId;
 
-    $scope.checkbox1=[
-      {id:1,name:"水井"},
-      {id:2,name:"大棚"},
-      {id:3,name:"仓库"},
-      {id:4,name:"农机房"},
-      {id:5,name:"晾晒场"},
-      {id:6,name:"育种育苗场"},
-      {id:7,name:"生活生产用房"}
-    ]
-    $scope.checkbox2=[
-      {id:1,name:"物流"},
-      {id:2,name:"仓储"},
-      {id:3,name:"批发市场"},
-      {id:4,name:"超市"},
-      {id:5,name:"农科站"}
-    ]
+    $scope.checkbox1=publicVal.facility;
+    $scope.checkbox2=publicVal.serveAssort;
 
     $scope.submitBtn=function(){
       soil.addSoil($scope.soilAddVo)
@@ -414,6 +354,60 @@ define(['app', 'css!/src/css/end'], function (app) {
         })
     }
 
+    $scope.changeSelect=function () {
+      var id=$scope.selector_4.selectors[0].value;
+      if(!id) return;
+      id=+id;//变整数
+      //当选择的流转方式为“转让”时，默认流转价格单位为“万元”
+      if(id===1){
+        $scope.inputSelector_2.initSelectorValue="万元";
+        $scope.inputSelector_2.selectorFilter="1";
+        $scope.inputSelector_1.initSelectorValue="亩";
+        $scope.inputFiled_10=null;
+      }
+      //流转方式为“出租”情况下
+      else if(id===2){
+        //当土地一级类型为“商业住宅用地”或二级类型为“工矿仓储用地”中的“厂房”及“仓储用地”时
+        if(
+          $scope.selector_2.selectors[0].value===17
+          ||$scope.selector_2.selectors[1].value===22
+          ||$scope.selector_2.selectors[1].value===25
+        ){
+          //默认土地面积单位为“平米”；默认流转价格单位为“万元/年”，可选单位包括“万元/年”、“元/平米/月”
+          $scope.inputSelector_1.initSelectorValue="平米";
+          $scope.inputSelector_2.initSelectorValue="万元/年";
+          $scope.inputSelector_2.selectorFilter="2";
+          $scope.inputFiled_10=null;
+        }else{
+          //默认土地面积单位为“亩”，默认流转价格单位为“元/亩/年”，可选单位包括“元/亩/年”、“万元/年”
+          $scope.inputSelector_1.initSelectorValue="亩";
+          $scope.inputSelector_2.initSelectorValue="元/亩/年";
+          $scope.inputSelector_2.selectorFilter="3";
+          $scope.inputFiled_10=null;
+        }
+      }
+      //当选择的流转方式为“转包”、“入股”、“互换”或“其他”时，“流转价格”变换样式为“面议”不可编辑
+      else if(id>=3){
+        $scope.inputSelector_2.selectorFilter="1";
+        $scope.inputSelector_1.initSelectorValue="亩";
+        $scope.inputSelector_2.initSelectorValue="元/亩/年";
+        $scope.inputFiled_10 = {
+          value: '面议',
+          title: '流转价格',
+          idDisabled:true
+        };
+      }
+    };
+
+    $scope.$watch("selector_4.selectors[0].value",function (n,o) {
+      $scope.changeSelect();
+    });
+    $scope.$watch("$scope.selector_2.selectors[0].value",function (n,o) {
+      $scope.changeSelect();
+    });
+    $scope.$watch("$scope.selector_2.selectors[1].value",function (n,o) {
+      $scope.changeSelect();
+    });
 
   }]);
 
