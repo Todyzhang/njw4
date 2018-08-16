@@ -803,3 +803,17 @@ var urlMatcher = $urlMatcherFactory.compile("/home/:id?param1");
 $stateProvider.state('myState', {
     url: urlMatcher
 });
+
+
+怎么防止模板缓存
+
+在开发过程中，模板缓存严重影响我们调试，有时候代码修改了，模板却没有任何变化。很苦恼，其他我们只需要监听下stateChangeSuccess，然后再清除$templateCache就行,这里我们采用run方法添加监听：
+
+bookApp.run(['$rootScope','$templateCache', function ($rootScope, $templateCache) {
+
+  var stateChangeSuccess = $rootScope.$on('$stateChangeSuccess', stateChangeSuccess);
+
+  function stateChangeSuccess($rootScope) {
+   $templateCache.removeAll();
+ }
+}]);

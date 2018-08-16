@@ -1,0 +1,74 @@
+<div class="emr-form">
+    <div ng-form="addLand" novalidate ng-submit="submitFn()">
+
+        <div end-module-caption emc-title="基本信息"></div>
+        <div njw-input ni-title="土地标题" class="plr-30 mt-20" ni-data="inputFiled_1" result="soilAddVo.title"></div>
+        <div njw-selector-group nsg-title="土地类型" class="plr-30 mt-20" selector-data="selector_2" result="soilAddVo.typeId"></div>
+        <div njw-selector-group nsg-title="所在区域" class="plr-30 mt-20" selector-data="selector_3" result="soilAddVo.areaId"></div>
+        <div njw-selector-group nsg-title="流转方式" class="plr-30 mt-20" selector-data="selector_4" result="soilAddVo.dealModeId"></div>
+        <div njw-selector-input nsi-title="土地面积" class="plr-30 mt-20" selector-data="inputSelector_1" result1="soilAddVo.acreage" result2="soilAddVo.acreageUnit"></div>
+        <div njw-input ni-title="可流转年限" class="plr-30 mt-20" ni-data="inputFiled_2" result="soilAddVo.dealAge"></div>
+
+        <div njw-selector-input nsi-title="流转价格" class="plr-30 mt-20" selector-data="inputSelector_2" result1="soilAddVo.dealPrice" result2="soilAddVo.dealUnitId" ng-if="!inputFiled_10"></div>
+        <div njw-input ng-if="inputFiled_10" ni-title="流转价格" class="plr-30 mt-20" ni-data="inputFiled_10" result="soilAddVo.dealPrice"></div>
+
+        <div class="input-row plr-30 mt-20">
+            <p class="se-thinner input-row-title">土地图片</p>
+            <div class="mt-20" njw-img-upload niu-size="4" niu-len="6" niu-imgs="imgs"  result="soilAddVo"></div>
+        </div>
+        <div njw-input ni-title="土地联系人" class="plr-30" ni-data="inputFiled_3" result="soilAddVo.contact"></div>
+        <div njw-input ni-title="联系方式" class="plr-30 mt-20 pb-40" ni-data="inputFiled_4" result="soilAddVo.contactMode"></div>
+
+
+
+        <div class="se-bg-shallow h20"></div>
+        <div end-module-caption emc-title="土地情况"></div>
+        <div class="plr-30 mt-20">
+            <div njw-selector-group nsg-title="平整程度" class="dis-ib" selector-data="selector_5" result="soilAddVo.smoothDegreeId"></div>
+            <div njw-selector-group nsg-title="供电条件" class="ml-20 dis-ib" selector-data="selector_6" result="soilAddVo.powerSupplyId"></div>
+        </div>
+        <div class="plr-30 mt-20">
+            <div njw-selector-group nsg-title="供水条件" class=" dis-ib" selector-data="selector_7" result="soilAddVo.headWaters"></div>
+            <div njw-selector-group nsg-title="网络条件" class="ml-20 dis-ib" selector-data="selector_8" result="soilAddVo.networkId"></div>
+        </div>
+        <div class="plr-30 mt-20">
+            <div njw-selector-group nsg-title="是否通路" class="dis-ib" selector-data="selector_9" result="soilAddVo.ifAccessId"></div>
+            <div njw-selector-group nsg-title="水源条件" class="ml-20 dis-ib" selector-data="selector_10" result="soilAddVo.water"></div>
+        </div>
+        <div class="plr-30 mt-20" njw-selector-multi
+             nsm-list="selector_multi"
+             nsm-title="适合经营"
+             option-name="name"
+             option-value="id"
+             nms-placeholder="请选择类型，最多添加5个"
+             nsm-size="5"
+             result="soilAddVo.managementTypesId"
+        ></div>
+        <div class="input-row plr-30 mt-20 mb-40">
+            <p class="se-thinner input-row-title">地上设施</p>
+            <div checkbox-group cg-list="checkbox1" result="soilAddVo.facility"></div>
+        </div>
+
+
+
+
+        <div class="se-bg-shallow h20"></div>
+        <div end-module-caption emc-title="土地性质与权属"></div>
+        <div njw-input ni-title="土地性质" class="plr-30 mt-20" ni-data="inputFiled_5" result="soilAddVo.nature"></div>
+        <div njw-selector-group nsg-title="权属类型" class="plr-30 mt-20" selector-data="selector_11" result="soilAddVo.ownershipType"></div>
+        <div njw-input ni-title="权证类型" class="plr-30 mt-20 mb-40" ni-data="inputFiled_6" result="soilAddVo.warrantType"></div>
+
+
+
+        <div class="se-bg-shallow h20"></div>
+        <div end-module-caption emc-title="周边环境"></div>
+        <div njw-input ni-title="交通要道" class="plr-30 mt-20" ni-data="inputFiled_7" result="soilAddVo.highway"></div>
+        <div class="input-row plr-30 mt-20">
+            <p class="se-thinner input-row-title">服务配套</p>
+            <div checkbox-group cg-list="checkbox2" result="soilAddVo.serveAssort"></div>
+        </div>
+        <div njw-input ni-title="产业资源" class="plr-30 mt-20" ni-data="inputFiled_8" result="soilAddVo.industryResource"></div>
+        <div njw-input ni-title="旅游景点" class="plr-30 mt-20" ni-data="inputFiled_9" result="soilAddVo.scenicSpots"></div>
+
+    </div>
+</div>

@@ -538,9 +538,8 @@ body {
     font-size: 12px;
     line-height: 1.4;
     text-align: center;
-    position: absolute;
-    right: 0;
-    top: 6px;
+    position:relative;
+    top: -6px;
     transform: scale(0.8);
 }
 
@@ -566,10 +565,8 @@ body {
 }
 
 .login-msg-btn {
-    background: url("/static/images/ico_msg.png") no-repeat left center;
+    background: url("/static/images/ico_msg.png") no-repeat left 60%;
     padding-left: 22px;
-    margin-right: 10px;
-    width: 18px;
     position: relative;
     height: 36px;
 }

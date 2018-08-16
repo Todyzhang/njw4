@@ -61,11 +61,16 @@
     margin-top:56px;
 }
 .emn-level-2-wrap{
+    height:0;
+    overflow: hidden;
+}
+.emn-level-2-wrap.active{
+    height:auto;
     margin-left:19px;
     padding-top:10px;
     padding-bottom:50px;
 }
-.emn-level-2-wrap+.emn-level-1{
+.emn-level-2-wrap.active+.emn-level-1{
     margin-top:0;
 }
 .emn-level-2{

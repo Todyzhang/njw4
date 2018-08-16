@@ -3,11 +3,11 @@ define(['app','angular'], function (app,angular) {
 
   app
     .constant("MENUS",{
-      "main":{title: "首页", url: "#/main",index:0},
-      "findland":{title: "我要找地", url: "#/findland",index:1},
-      "financial":{title: "金融服务", url: "#/financial",index:2},
-      "agroService":{title: "涉农服务", url: "#/agro-service",index:3},
-      "news":{title: "土地资讯", url: "#/news",index:4}
+      "main":{id:0,title: "首页", url: "#/main",index:0},
+      "findland":{id:1,title: "我要找地", url: "#/findland",index:1},
+      "financial":{id:2,title: "金融服务", url: "#/financial",index:2},
+      "agroService":{id:3,title: "涉农服务", url: "#/agro-service",index:3},
+      "news":{id:4,title: "土地资讯", url: "#/news",index:4}
     })
     /*
     <a class="emn-level-1 msg-center-icon">消息中心</a>
@@ -22,23 +22,22 @@ define(['app','angular'], function (app,angular) {
     <a class="emn-level-1 acc-msg-icon">账户信息管理</a>
      */
     .constant("ENDMENUS",{
-      "msg-center":{title: "消息中心", url: "#/main",index:0},
-      "land-source":{title: "土地资源管理", url: "#/findland",index:1},
-      "project-attract":{title: "项目招商管理", url: "#/financial",index:2},
-      "need":{title: "需求管理", url: "#/agro-service",index:3},
-      "acc-msg":{title: "账户信息管理", url: "#/news",index:4}
+      "end.msgCenter":{id:0,title: "消息中心", url: "#/msgCenter",index:0,kls:"msg-center-icon"},
+      "end.mngLand":{id:1,title: "土地资源管理", index:1,kls:"land-source-icon"},
+      "end.projectAttract":{id:2,title: "项目招商管理", url: "#/projectAttract",index:2,kls:"project-attract-icon"},
+      "end.needMng":{id:3,title: "需求管理", url: "#/needMng",index:3,kls:"need-icon"},
+      "end.accMsg":{id:4,title: "账户信息管理", url: "#/accMsg",index:4,kls:"acc-msg-icon"},
+
+      "end.manageLand":{id:5,title: "土地资源管理", url: "#/manageLand",index:0,pid:1},
+      "end.editLand":{id:6,title: "土地资源编辑", url: "#/editLand",index:1,pid:1},
+      "end.addLand":{id:7,title: "新增土地资源", url: "#/addLand",index:2,pid:1}
     })
-    .factory("publicVal", ["MENUS",function (MENUS) {
+
+    .factory("publicVal", ["MENUS","ENDMENUS",function (MENUS,ENDMENUS) {
       var val={
-        // menus: [
-        //   {title: "首页", url: "main"},
-        //   {title: "我要找地", url: "findland"},
-        //   {title: "金融服务", url: "financial"},
-        //   {title: "涉农服务", url: "agroService"},
-        //   {title: "土地资讯", url: "news"}
-        // ],
         serverTel: "020-87595266"
       };
+
       val.menus=(function () {
         var ary=[];
         angular.forEach(MENUS,function(value, key){
@@ -46,6 +45,25 @@ define(['app','angular'], function (app,angular) {
         });
         return ary;
       })();
+
+      val.endMenus=(function () {
+        var ary=[];
+        angular.forEach(ENDMENUS,function(value, key){
+          if(value.pid!==undefined){
+            if(ary[value.pid]===undefined) ary[value.pid]={};
+            if(ary[value.pid]["children"]===undefined) ary[value.pid]["children"]=[];
+            ary[value.pid]["children"][value.index]=value;
+          }else{
+            if(ary[value.index]!==undefined){
+              angular.extend(ary[value.index],value);
+            }else{
+              ary[value.index]=value;
+            }
+          }
+        });
+        return ary;
+      })();
+
       val.landService=[
         {
           title:"金融服务",
@@ -193,6 +211,9 @@ define(['app','angular'], function (app,angular) {
       val.frontHost="http://192.168.1.125:8080/";
       val.imgHost="http://192.168.1.84:8096/";
       val.severHost="http://192.168.1.84:8080/";
+      val.loginHost="http://nonjiayi-auth.nongj.com/admin/toLogin";
+
+
 
       return val;
     }])
@@ -247,16 +268,37 @@ define(['app','angular'], function (app,angular) {
         setCookie(name, "", null, -1);
       }
 
+      function getDomain() {
+        var domain=document.domain;
+        var exg=/\.(com|net|org)(\.cn)?$/;
+        var end,_front,lastDot;
+        end=domain.match(exg);
+        if(end){
+          end=end[0];
+          _front=domain.replace(end,"");
+          lastDot=_front.lastIndexOf(".");
+          if(lastDot!=-1){
+            _front=_front.substr(lastDot+1);
+          }
+          domain=_front+end;
+        }
+        console.log(domain)
+        return domain;
+      }
+
       return {
         setCookie: setCookie,
         getCookie: getCookie,
-        delCookie: delCookie
+        delCookie: delCookie,
+        getDomain:getDomain
       };
     }])
     .factory("njwUrlUtil", function () {
       return {
         getFromURL: function (url, parameter) {
-          var index = url.indexOf("?");
+          var index;
+          url=url||location.href;
+          index= url.indexOf("?");
           if (typeof(parameter) == "undefined" || parameter == "") {
             return "";
           }
@@ -548,6 +590,7 @@ define(['app','angular'], function (app,angular) {
         return items;
       };
     })
+
 
 
 });

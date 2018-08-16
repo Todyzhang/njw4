@@ -46,11 +46,18 @@ define(["require", "angular"], function (require, angular) {
         // $state.go("login",{from:fromState.name,w:"notLogin"});//跳转到登录界面
       // }
       // console.log(event);
-      // console.log(toState);
+      console.log(toState);
       // console.log(toParams);
-      // console.log(fromState);
+      console.log(fromState);
       // console.log(fromParams);
+      if(toState.name==="login"){
+        //记录需登录前的url，登录成功后需跳转到该地址
+        $rootScope.loginRebackUrl=toState.url;
+      }
       $rootScope.menuActive=toState.data.menu;
+      $rootScope.endMenuActive1 = toState.data.endMenu1;
+      $rootScope.endMenuActive2 = toState.data.endMenu2;
+      $rootScope.isLoginPage=toState.data.isLoginPage;
       $window.scrollTo(0,0);//到顶部
     });
   }]);
@@ -122,7 +129,7 @@ define(["require", "angular"], function (require, angular) {
           controller: "mainCtrl",
           resolve: app.loadJs("./src/controllers/mainCtrl.js"),
           data:{
-            menu:MENUS["main"].index
+            menu:MENUS["main"].id
           }
         })
         .state("findland", {
@@ -131,7 +138,7 @@ define(["require", "angular"], function (require, angular) {
           controller: "findLandCtrl",
           resolve: app.loadJs("./src/controllers/findLandCtrl.js"),
           data:{
-            menu:MENUS["findland"].index
+            menu:MENUS["findland"].id
           }
         })
       // 默认页
@@ -141,14 +148,21 @@ define(["require", "angular"], function (require, angular) {
 
 
   app.run(["$rootScope", "publicVal", function ($rootScope, publicVal) {
+
     $rootScope.serverTel = publicVal.serverTel;
     $rootScope.menuList = publicVal.menus;
-    $rootScope.menuActive = 0;
+    $rootScope.endMenus = publicVal.endMenus;
+    $rootScope.menuActive = 0;//
+    $rootScope.endMenuActive1 = 0;//发布平台激活菜单一标识
+    $rootScope.endMenuActive2 = 0;//发布平台激活菜单二标识
+    $rootScope.loginRebackUrl = "/main"
+
     $rootScope.loginMsg={
       name:"18022224312",
-      msgNum:"3",
+      msgTotal:3,//个人新消息数（单位数），多于两位显示".."
       login:true
     }
+
   }]);
 
   app.controller("pageHeaderCtrl", ["$scope", "$rootScope", function ($scope, $rootScope) {
