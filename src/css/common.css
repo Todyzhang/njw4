@@ -319,6 +319,9 @@ body {
 .mr-10{
     margin-right:10px;
 }
+.mr-20{
+    margin-right:20px;
+}
 .mr-30{
     margin-right:30px;
 }
@@ -468,6 +471,9 @@ body {
     display: inline-block;
     vertical-align: middle;
 }
+.dis-t {
+    display: table;
+}
 .dis-tc {
     display: table-cell;
     vertical-align: top;
@@ -520,7 +526,9 @@ body {
 .fs-24 {
     font-size: 24px;
 }
-
+.fs-30 {
+    font-size: 30px;
+}
 .fs-36 {
     font-size: 36px;
 }

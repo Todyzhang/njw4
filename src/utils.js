@@ -3,11 +3,11 @@ define(['app','angular'], function (app,angular) {
 
   app
     .constant("MENUS",{
-      "main":{id:0,title: "首页", url: "#/main",index:0},
-      "findland":{id:1,title: "我要找地", url: "#/findland",index:1},
-      "financial":{id:2,title: "金融服务", url: "#/financial",index:2},
-      "agroService":{id:3,title: "涉农服务", url: "#/agro-service",index:3},
-      "news":{id:4,title: "土地资讯", url: "#/news",index:4}
+      "main":{id:0,name:"main",title: "首页", url: "#/main",index:0},
+      "findland":{id:1,name:"findland",title: "我要找地", url: "#/findland",index:1},
+      "financial":{id:2,name:"financial",title: "金融服务", url: "#/financial",index:2},
+      "agroService":{id:3,name:"agroService",title: "涉农服务", url: "#/agro-service",index:3},
+      "news":{id:4,name:"news",title: "土地资讯", url: "#/news",index:4}
     })
     /*
     <a class="emn-level-1 msg-center-icon">消息中心</a>
@@ -22,15 +22,15 @@ define(['app','angular'], function (app,angular) {
     <a class="emn-level-1 acc-msg-icon">账户信息管理</a>
      */
     .constant("ENDMENUS",{
-      "end.msgCenter":{id:0,title: "消息中心", url: "#/msgCenter",index:0,kls:"msg-center-icon"},
+      "end.msgCenter":{id:0,name:"end.msgCenter",title: "消息中心", url: "#/msgCenter",index:0,kls:"msg-center-icon"},
       "end.mngLand":{id:1,title: "土地资源管理", index:1,kls:"land-source-icon"},
-      "end.projectAttract":{id:2,title: "项目招商管理", url: "#/projectAttract",index:2,kls:"project-attract-icon"},
-      "end.needMng":{id:3,title: "需求管理", url: "#/needMng",index:3,kls:"need-icon"},
-      "end.accMsg":{id:4,title: "账户信息管理", url: "#/accMsg",index:4,kls:"acc-msg-icon"},
+      "end.projectAttract":{id:2,name:"end.projectAttract",title: "项目招商管理", url: "#/projectAttract",index:2,kls:"project-attract-icon"},
+      "end.needMng":{id:3,name:"end.needMng",title: "需求管理", url: "#/needMng",index:3,kls:"need-icon"},
+      "end.accMsg":{id:4,name:"end.accMsg",title: "账户信息管理", url: "#/accMsg",index:4,kls:"acc-msg-icon"},
 
-      "end.manageLand":{id:5,title: "土地资源管理", url: "#/manageLand",index:0,pid:1},
-      "end.editLand":{id:6,title: "土地资源编辑", url: "#/editLand",index:1,pid:1},
-      "end.addLand":{id:7,title: "新增土地资源", url: "#/addLand",index:2,pid:1}
+      "end.manageLand":{id:5,name:"end.manageLand",title: "土地资源管理", url: "#/manageLand",index:0,pid:1},
+      "end.editLand":{id:6,name:"end.editLand",title: "土地资源编辑", url: "#/editLand",index:1,pid:1},
+      "end.addLand":{id:7,name:"end.addLand",title: "新增土地资源", url: "#/addLand",index:2,pid:1}
     })
 
     .factory("publicVal", ["MENUS","ENDMENUS",function (MENUS,ENDMENUS) {
@@ -223,8 +223,7 @@ define(['app','angular'], function (app,angular) {
       queryClassify.getStair()
         .then(function (value) {
           publicVal.managementTypesId=value;
-        })
-        .catch(function (reason) {
+        },function (reason) {
           publicVal.managementTypesId=[];
         });
 
@@ -232,8 +231,7 @@ define(['app','angular'], function (app,angular) {
       queryClassify.getLand()
         .then(function(result){
           publicVal.landType=result;
-        })
-        .catch(function (reason) {
+        },function (reason) {
           publicVal.landType=[];
         });
 
@@ -241,8 +239,7 @@ define(['app','angular'], function (app,angular) {
       queryClassify.getArea()
         .then(function(result){
           publicVal.provinceArea=result;
-        })
-        .catch(function (reason) {
+        },function (reason) {
           publicVal.provinceArea=[];
         });
     }])

@@ -1,21 +1,27 @@
 <div class="input-row" ng-form="inputRowForm">
     <p class="se-thinner input-row-title" ng-class="{'required-icon':selectorData.required}">
-        {{selectorData.title}}</p>
+        {{selectorData.title}}
+        <span class="input-error-msg se-orange ml-20"
+              ng-show="inputRowForm.someInput.$dirty&&inputRowForm.someInput.$invalid">
+        {{inputRowForm.someInput.$error.required&&selectorData.required}}
+    </span></p>
     <div class="njw-selector-input">
         <div class="njw-input height-line-40 border-radius-20 se-border thinner"
         ng-style="{'width':selectorData.width||'188px'}"
              ng-class="{
-           'ng-invalid':selectorData.check&&inputRowForm.inputValue.$invalid,
-          'ng-valid':selectorData.check&&inputRowForm.inputValue.$valid,
-          'ng-pristine':selectorData.check&&inputRowForm.inputValue.$pristine,
-          'ng-dirty':selectorData.check&&inputRowForm.inputValue.$dirty,
+           'ng-invalid':selectorData.check&&inputRowForm.someInput.$invalid,
+          'ng-valid':selectorData.check&&inputRowForm.someInput.$valid,
+          'ng-pristine':selectorData.check&&inputRowForm.someInput.$pristine,
+          'ng-dirty':selectorData.check&&inputRowForm.someInput.$dirty,
           'large':selectorData.large,
           'disabled':selectorData.idDisabled,
           'normal':!selectorData.idDisabled
           }">
             <input ng-model="inputValue"
+                   name="someInput"
                    ng-disabled="{{selectorData.idDisabled}}"
                    placeholder="{{selectorData.placeholder}}"
+                   ng-required="{{!!selectorData.required}}"
                    ng-style="{'padding-right':rightTips||'50px'}"
             /><p class="dis-ib pos-ab right-tips"
                  ng-click="selectorClick($event)"

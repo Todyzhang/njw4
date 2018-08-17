@@ -11,6 +11,15 @@ define(['app'], function (app) {
           isLoginPage:true
         }
       })
+      .state('logon', {
+        url: '/logon',//涉农服务
+        templateUrl: app.fileUrlHash('/src/pages/login.html'),
+        controller: 'loginCtrl',
+        resolve: app.loadJs('/src/controllers/loginCtrl.js'),
+        data:{
+          isLoginPage:true
+        }
+      })
       .state('agroService', {
         url: '/agro-service',//涉农服务
         templateUrl: app.fileUrlHash('/src/pages/agroService.html'),
@@ -38,6 +47,15 @@ define(['app'], function (app) {
           menu:MENUS["financial"].id
         }
       })
+      .state("news", {
+        url: "/news",//金融服务
+        templateUrl: app.fileUrlHash("/src/pages/news.html"),
+        // controller: "financialCtrl",
+        // resolve: app.loadJs("/src/controllers/financialCtrl.js"),
+        data:{
+          menu:MENUS["news"].id
+        }
+      })
       .state("end", {
         url: "/end",//发布平台
         abstract:true,
@@ -58,11 +76,12 @@ define(['app'], function (app) {
             resolve: app.loadJs("/src/controllers/landAddCtrl.js")
           },
           "end-footer-btns":{
-            template: '<div class="end-main-footer tc"><a class="btn btn-deeper height-line-40 border-radius-20 pos-re w200" ng-click="submitBtn()">提交审核</a></div>',
+            template: '<div class="end-main-footer tc"><a class="btn btn-deeper height-line-40 border-radius-20 pos-re w200" ng-class="{\'disabled\':$parent.addLandFormOk}" ng-click="submitBtn()">提交审核</a></div>',
             controller: ["$scope",function ($scope) {
               $scope.submitBtn=function () {
                 var btnFn=$scope.$parent.alternation.addLand;
-                btnFn&&btnFn();
+                var isNotDisabled=!$scope.$parent.addLandFormOk;
+                isNotDisabled&&btnFn&&btnFn();
               }
             }]
           }

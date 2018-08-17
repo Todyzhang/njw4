@@ -817,3 +817,10 @@ bookApp.run(['$rootScope','$templateCache', function ($rootScope, $templateCache
    $templateCache.removeAll();
  }
 }]);
+
+
+Angular新窗口打开
+let url = $state.href('app.user');
+window.open(url, '_blank')
+详情：
+https://ui-router.github.io/ng1/docs/0.3.1/index.html#/api/ui.router.state.$state

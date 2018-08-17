@@ -1,12 +1,17 @@
-<div class="login-content">
-    <div class="login-header">
-        <img class="logo" src="/static/images/logo.png" />
-        <h1>登录页面</h1>
+<div class="login-content se-bg-main">
+    <div class="login-header w1200 pt-50 pb-40">
+        <img class="dis-ib mr-20" src="/static/images/logo.png" />
+        <p class="bl-bar fs-30 se-main pl-20 dis-ib va-b">{{title}}页面</p>
     </div>
-    <div class="page-bg main" style="background-image:url(/static/images/njw_bg.jpg)">
-        <iframe id="snLogin" width=478 height=332 scrolling="no" frameborder="0" ></iframe>
+    <div style="background-image:url(/static/images/njw_bg.jpg);">
+        <div class="w1200 dis-t tc" style="height: 658px;">
+            <div class="dis-tc va-m">
+                <iframe id="snLogin" width=478 height={{height}} scrolling="no" frameborder="0" ></iframe>
+            </div>
+
+        </div>
     </div>
-    <div class="login-footer">
-        <p>Copyright © 广州神农网络科技有限公司主办|粤ICP备12071480-4号</p>
+    <div class="login-footer se-bg-main tc">
+        <p class="se-thinner fs-12 pt-50 pb-20">Copyright &copy; 广州神农网络科技有限公司主办 | <a href="http://www.miitbeian.gov.cn/" target="_blank">粤ICP备12071480-4号</a></p>
     </div>
 </div>

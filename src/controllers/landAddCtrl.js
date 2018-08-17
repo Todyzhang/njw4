@@ -129,6 +129,13 @@ define(['app', 'css!/src/css/end'], function (app) {
       large: true
     };
 
+    $scope.inputFiled_10={
+      value: "面议",
+      title: '流转价格',
+      idDisabled:true,
+      show:false
+    };
+
     $scope.selector_2 =
       {
         title: '土地类型',
@@ -204,7 +211,8 @@ define(['app', 'css!/src/css/end'], function (app) {
     //土地面积
     $scope.inputSelector_1={
       title: '土地面积',
-      required: true,
+      required: '请输入土地面积',
+      check:{},
       optionName: "name",
       optionValue: "id",
       list: publicVal.acreageUnit,
@@ -363,7 +371,7 @@ define(['app', 'css!/src/css/end'], function (app) {
         $scope.inputSelector_2.initSelectorValue="万元";
         $scope.inputSelector_2.selectorFilter="1";
         $scope.inputSelector_1.initSelectorValue="亩";
-        $scope.inputFiled_10=null;
+        $scope.inputFiled_10.show=false;
       }
       //流转方式为“出租”情况下
       else if(id===2){
@@ -377,13 +385,13 @@ define(['app', 'css!/src/css/end'], function (app) {
           $scope.inputSelector_1.initSelectorValue="平米";
           $scope.inputSelector_2.initSelectorValue="万元/年";
           $scope.inputSelector_2.selectorFilter="2";
-          $scope.inputFiled_10=null;
+          $scope.inputFiled_10.show=false;
         }else{
           //默认土地面积单位为“亩”，默认流转价格单位为“元/亩/年”，可选单位包括“元/亩/年”、“万元/年”
           $scope.inputSelector_1.initSelectorValue="亩";
           $scope.inputSelector_2.initSelectorValue="元/亩/年";
           $scope.inputSelector_2.selectorFilter="3";
-          $scope.inputFiled_10=null;
+          $scope.inputFiled_10.show=false;
         }
       }
       //当选择的流转方式为“转包”、“入股”、“互换”或“其他”时，“流转价格”变换样式为“面议”不可编辑
@@ -391,11 +399,7 @@ define(['app', 'css!/src/css/end'], function (app) {
         $scope.inputSelector_2.selectorFilter="1";
         $scope.inputSelector_1.initSelectorValue="亩";
         $scope.inputSelector_2.initSelectorValue="元/亩/年";
-        $scope.inputFiled_10 = {
-          value: '面议',
-          title: '流转价格',
-          idDisabled:true
-        };
+        $scope.inputFiled_10.show=true;
       }
     };
 
@@ -411,12 +415,18 @@ define(['app', 'css!/src/css/end'], function (app) {
 
 
     $scope.submitFn=function () {
-      alert("submit");
+      if($scope.addLand.$invalid){
+        alert("表单还有未完成")
+      }
     };
 
     $scope.$parent.alternation["addLand"]=function () {
       $scope.submitFn();
     }
+
+    $scope.$watch('addLand.$invalid',function (n) {
+      $scope.$parent.addLandFormOk=n;
+    })
 
 
   }]);

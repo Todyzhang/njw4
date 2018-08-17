@@ -22,7 +22,7 @@
     <div class="page-header" ng-hide="isLoginPage">
         <div class="ph-login-msg se-bg-shallow">
             <div class="w1200 se-shallow fs-12">
-                <p class="fr" ng-if="!loginMsg.login"><a>登录</a> | <a>注册</a></p>
+                <p class="fr" ng-if="!loginMsg.login"><a class="dis-ib mr-10" ui-sref="login">登录</a>|<a class="dis-ib ml-10" ui-sref="logon">注册</a></p>
                 <p class="fr" ng-if="loginMsg.login"><a class="btn login-msg-btn mr-10"><span class="badge" ng-if="loginMsg.msgTotal">{{loginMsg.msgTotal}}</span></a>|<a class="btn person-btn">{{loginMsg.name | njwNumSer}}</a><a class="btn exit-btn" ng-click="exit()">退出</a></p>
                 <p>欢迎来到农家网，服务热线：{{serverTel}}</p>
             </div>
@@ -37,9 +37,9 @@
                 <a ng-repeat="menu in menuList"
                    ng-class="{'active':menuActive===menu.id}"
                    ng-click="menuClick($index)"
-                   ng-href="{{menu.url}}">{{menu.title}}<span class="se-shallow fs-36">.</span></a>
+                   ui-sref="{{menu.name}}">{{menu.title}}<span class="se-shallow fs-36">.</span></a>
             </div>
-            <a class="btn btn-deeper release-land-btn fs-14" ng-href="{{menuList[1].url}}">免费发布土地</a>
+            <a class="btn btn-deeper release-land-btn fs-14" ui-sref="end.addLand">免费发布土地</a>
         </div>
     </div>
     <div ui-view></div>
@@ -50,12 +50,12 @@
         <div class="pf-menu">
             <img class="dis-ib" src="static/images/logo_white.png"/>
             <div class="dis-ib pf-nav fs-16">
-                <a ng-repeat="menu in menuList" ng-href="{{menu.url}}">{{menu.title}}</a>
+                <a ng-repeat="menu in menuList" ui-sref="{{menu.name}}">{{menu.title}}</a>
             </div>
             <p class="pf-nav-links">
                 <a href="http://sengnon.cn/about_us.html" target="_blank">关于我们</a><span>/</span>
                 <a href="http://sengnon.cn/contact_us.html" target="_blank">联系我们</a><span>/</span>
-                <a target="_blank" href="/help">帮助中心</a><span>/</span>
+                <a href="/help" target="_blank">帮助中心</a><span>/</span>
                 <a href="http://vip.nongj.com/nonjia/new/account/regAgreement.action" target="_blank">用户协议</a>
             </p>
         </div>

@@ -4,10 +4,6 @@ define(['app', 'css!/src/css/end'], function (app) {
 
     $scope.alternation={};//方便views之间数据交互调用
 
-    $scope.userMsg={
-      account:"3D4H853262EA1",
-      headIcon:"/static/images/head_icon.jpg"
-    };
     $scope.endMenu1Click=function(menu){
       $rootScope.endMenuActive1=menu.index;
     };

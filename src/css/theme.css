@@ -166,6 +166,16 @@ a.active>.se-contrast,
     color:#f57745;
 }
 
+.btn.disabled:hover,
+.btn.disabled{
+    background-color:#dcdcdc;
+    box-shadow:none;
+    border-color:#dcdcdc;
+    color:#999;
+    cursor:default;
+    pointer-events: none;
+}
+
 /*箭头*/
 .arrow-d{
     border:6px solid transparent;

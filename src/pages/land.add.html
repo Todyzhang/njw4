@@ -1,6 +1,5 @@
 <div class="emr-form">
     <div ng-form="addLand" novalidate ng-submit="submitFn()">
-
         <div end-module-caption emc-title="基本信息"></div>
         <div njw-input ni-title="土地标题" class="plr-30 mt-20" ni-data="inputFiled_1" result="soilAddVo.title"></div>
         <div njw-selector-group nsg-title="土地类型" class="plr-30 mt-20" selector-data="selector_2" result="soilAddVo.typeId"></div>
@@ -9,8 +8,8 @@
         <div njw-selector-input nsi-title="土地面积" class="plr-30 mt-20" selector-data="inputSelector_1" result1="soilAddVo.acreage" result2="soilAddVo.acreageUnit"></div>
         <div njw-input ni-title="可流转年限" class="plr-30 mt-20" ni-data="inputFiled_2" result="soilAddVo.dealAge"></div>
 
-        <div njw-selector-input nsi-title="流转价格" class="plr-30 mt-20" selector-data="inputSelector_2" result1="soilAddVo.dealPrice" result2="soilAddVo.dealUnitId" ng-if="!inputFiled_10"></div>
-        <div njw-input ng-if="inputFiled_10" ni-title="流转价格" class="plr-30 mt-20" ni-data="inputFiled_10" result="soilAddVo.dealPrice"></div>
+        <div njw-selector-input nsi-title="流转价格" class="plr-30 mt-20" selector-data="inputSelector_2" result1="soilAddVo.dealPrice" result2="soilAddVo.dealUnitId" ng-show="!inputFiled_10.show"></div>
+        <div njw-input ng-show="inputFiled_10.show" ni-title="流转价格" class="plr-30 mt-20" ni-data="inputFiled_10" result="soilAddVo.dealPrice"></div>
 
         <div class="input-row plr-30 mt-20">
             <p class="se-thinner input-row-title">土地图片</p>
