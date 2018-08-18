@@ -50,9 +50,19 @@ define(["require", "angular"], function (require, angular) {
       // console.log(toParams);
       // console.log(fromState);
       // console.log(fromParams);
+      if(toState.name==="login"||toState.name==="logon"){
+        //记录需登录前的url，登录成功后需跳转到该地址
+        $rootScope.loginRebackUrl=fromState.name||"main";
+      }
       $rootScope.menuActive=toState.data.menu;
-      $window.scrollTo(0,0);//到顶部
+      $rootScope.endMenuActive1 = toState.data.endMenu1;
+      $rootScope.endMenuActive2 = toState.data.endMenu2;
+      $rootScope.isLoginPage=toState.data.isLoginPage;
     });
+
+    $rootScope.$on("$stateChangeSuccess",function (event,viewConfig) {
+      $window.scrollTo(0,0);//到顶部
+    })
   }]);
 
   app.config(["$controllerProvider", "$provide", "$stateProvider", "$urlRouterProvider", "$httpProvider", "$compileProvider", "$filterProvider","MENUS",
@@ -122,7 +132,7 @@ define(["require", "angular"], function (require, angular) {
           controller: "mainCtrl",
           resolve: app.loadJs("./src/controllers/mainCtrl.js"),
           data:{
-            menu:MENUS["main"].index
+            menu:MENUS["main"].id
           }
         })
         .state("findland", {
@@ -131,24 +141,37 @@ define(["require", "angular"], function (require, angular) {
           controller: "findLandCtrl",
           resolve: app.loadJs("./src/controllers/findLandCtrl.js"),
           data:{
-            menu:MENUS["findland"].index
+            menu:MENUS["findland"].id
           }
         })
+      //todo 404页面
       // 默认页
       $urlRouterProvider.otherwise("/main");
       $urlRouterProvider.when("","/main");
     }]);
 
 
-  app.run(["$rootScope", "publicVal", function ($rootScope, publicVal) {
+  app.run(["$rootScope", "publicVal","MENUS","ENDMENUS", function ($rootScope, publicVal,MENUS,ENDMENUS) {
+
     $rootScope.serverTel = publicVal.serverTel;
     $rootScope.menuList = publicVal.menus;
-    $rootScope.menuActive = 0;
+    $rootScope.endMenus = publicVal.endMenus;
+    $rootScope.MENUS=MENUS;
+    $rootScope.ENDMENUS=ENDMENUS;
+
+    $rootScope.menuActive = 0;//
+    $rootScope.endMenuActive1 = 0;//发布平台激活菜单一标识
+    $rootScope.endMenuActive2 = 0;//发布平台激活菜单二标识
+    $rootScope.loginRebackUrl = "main";
+
     $rootScope.loginMsg={
       name:"18022224312",
-      msgNum:"3",
-      login:true
+      msgTotal:3,//个人新消息数（单位数），多于两位显示".."
+      account:"3D4H853262EA1",
+      headIcon:"/static/images/head_icon.jpg",
+      login:false
     }
+
   }]);
 
   app.controller("pageHeaderCtrl", ["$scope", "$rootScope", function ($scope, $rootScope) {

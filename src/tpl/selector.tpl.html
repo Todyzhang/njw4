@@ -1,13 +1,23 @@
-<div class="njw-selector">
-    <label class="njw-input height-line-40 border-radius-20 se-border thinner">
+<div class="njw-selector" ng-form="inputRowForm">
+    <label class="njw-input height-line-40 border-radius-20 se-border thinner"
+           ng-class="{
+           'ng-invalid':field.check&&inputRowForm.someInput.$invalid,
+          'ng-valid':field.check&&inputRowForm.someInput.$valid,
+          'ng-pristine':field.check&&inputRowForm.someInput.$pristine,
+          'ng-dirty':field.check&&inputRowForm.someInput.$dirty,
+          'disabled':isDisable,
+          'normal':!isDisable
+          }">
         <input ng-class="{'placeholder':isPlaceholder}"
                readonly
                unselectable="on"
                ng-model="inputValue"
+               name="someInput"
                ng-click="inputClick($event)"
                ng-disabled="isDisable"
         /><span class="arrow-d"></span>
     </label>
+    {{options}}
     <div class="njw-selector-list thinner se-bg-main" style="display:none">
         <div class="njw-selector-list-arrow ml-30 pos-re"><span class="arrow-bg-up pos-ab dis-ib"></span></div>
         <ul class="mt-20 tc plr-20" ng-mouseover="activeOption=undefined" ng-class="{'scroll':options.length>15}">

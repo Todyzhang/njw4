@@ -1,10 +1,6 @@
 define(['app', 'css!/src/css/findland'], function (app) {
   'use strict';
   app.ctrl('findLandInfoCtrl', ["$scope", "$timeout", "Slider","$state", function ($scope, $timeout, slider,$state) {
-    console.log("============================")
-    console.log($state)
-
-
 
     $scope.dialogMsg = {
       txt: '',

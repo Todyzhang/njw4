@@ -29,6 +29,10 @@ define(['app', 'css!/src/css/main'], function (app) {
       {"type": 17, "typeName": "其他"}
     ];
     $scope.supplierType = 0;
+
+    $scope.findLandBtn=function () {
+
+    };
     $scope.landRentList = [
       {
         title: "清新区石潭镇185亩超优质连片水田出租",

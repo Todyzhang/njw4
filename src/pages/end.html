@@ -1,110 +1,41 @@
 <div class="end-content main-bg se-bg-shallow">
 
     <div class="w1200 end-main-head se-bg-main mt-20">
-        <p class="se-deeper tr pr-10 height-line-62">帐号：3D4H853262EA1<a class="dis-ib pan-icon ml-20"></a></p>
+        <p class="se-deeper tr pr-10 height-line-62">帐号：{{loginMsg.account}}<a class="dis-ib pan-icon ml-20"></a></p>
     </div>
-
     <div class="w1200 end-main">
         <div class="dis-tc end-main-left se-bg-main"><!--左侧菜单-->
             <a class="dis-b tc mt-15">
-                <div class="eml-head-icon border-radius-p50 se-border deeper b-w4 pos-re" ng-style="{'background-image':'url(/static/images/head_icon.jpg)'}"></div>
+                <div class="eml-head-icon border-radius-p50 se-border deeper b-w4 pos-re" ng-style="{'background-image':'url('+loginMsg.headIcon+')'}"></div>
                 <p class="se-thinner mt-15">点击编辑</p>
             </a>
+            <!--左侧菜单-->
             <div class="end-main-nav fs-16">
-                <a class="emn-level-1 msg-center-icon">消息中心</a>
-                <a class="emn-level-1 land-source-icon">土地资源管理</a>
-                <div class="emn-level-2-wrap fs-14"><!--最后一个需加 .pb-0-->
-                    <a class="emn-level-2 active">土地资源管理</a>
-                    <a class="emn-level-2">土地资源编辑</a>
-                    <a class="emn-level-2">查看土地资源</a>
+                <a ng-repeat-start="menu1 in endMenus"
+                   class="emn-level-1 {{menu1.kls}}"
+                   ng-class="{'active':menu1.index===endMenuActive1}"
+                   ng-click="endMenu1Click(menu1)"
+                   ng-href="{{menu1.url}}"
+                >{{menu1.title}}</a>
+                <div class="emn-level-2-wrap fs-14"
+                     ng-repeat-end
+                     ng-if="menu1.children"
+                     ng-class="{'pb-0':$last,'active':menu1.index===endMenuActive1}"><!--最后一个需加 .pb-0-->
+                    <a class="emn-level-2"
+                       ng-repeat="menu2 in menu1.children"
+                       ng-class="{'active':menu2.id===endMenuActive2}"
+                       ng-click="endMenu2Click(menu2)"
+                       ng-href="{{menu2.url}}">{{menu2.title}}</a>
                 </div>
-                <a class="emn-level-1 project-attract-icon">项目招商管理</a>
-                <a class="emn-level-1 need-icon">需求管理</a>
-                <a class="emn-level-1 acc-msg-icon">账户信息管理</a>
             </div>
         </div>
         <div class="dis-tc w20"></div><!--中间间隔-->
         <div class="dis-tc end-main-right se-bg-main pb-40"><!--右侧呈示区-->
             <div class="se-bg-shallow h20"></div>
-            <div class="emr-form">
-                <div ng-form="addLand" novalidate>
-
-                    <div end-module-caption emc-title="基本信息"></div>
-                    <div njw-input ni-title="土地标题" class="plr-30 mt-20" ni-data="inputFiled_1" result="soilAddVo.title"></div>
-                    <div njw-selector-group nsg-title="土地类型" class="plr-30 mt-20" selector-data="selector_2" result="soilAddVo.typeId"></div>
-                    <div njw-selector-group nsg-title="所在区域" class="plr-30 mt-20" selector-data="selector_3" result="soilAddVo.areaId"></div>
-                    <div njw-selector-group nsg-title="流转方式" class="plr-30 mt-20" selector-data="selector_4" result="soilAddVo.dealModeId"></div>
-                    <div njw-selector-input nsi-title="土地面积" class="plr-30 mt-20" selector-data="inputSelector_1" result1="soilAddVo.acreage" result2="soilAddVo.acreageUnit"></div>
-                    <div njw-input ni-title="可流转年限" class="plr-30 mt-20" ni-data="inputFiled_2" result="soilAddVo.dealAge"></div>
-                    <div njw-selector-input nsi-title="流转价格" class="plr-30 mt-20" selector-data="inputSelector_2" result1="soilAddVo.dealPrice" result2="soilAddVo.dealUnitId"></div>
-                    <div class="input-row plr-30 mt-20">
-                        <p class="se-thinner input-row-title">土地图片</p>
-                        <div class="mt-20" njw-img-upload niu-size="4" niu-len="6" niu-imgs="imgs"  result="soilAddVo"></div>
-                    </div>
-                    <div njw-input ni-title="土地联系人" class="plr-30" ni-data="inputFiled_3" result="soilAddVo.contact"></div>
-                    <div njw-input ni-title="联系方式" class="plr-30 mt-20 pb-40" ni-data="inputFiled_4" result="soilAddVo.contactMode"></div>
-
-
-
-                    <div class="se-bg-shallow h20"></div>
-                    <div end-module-caption emc-title="土地情况"></div>
-                    <div class="plr-30 mt-20">
-                        <div njw-selector-group nsg-title="平整程度" class="dis-ib" selector-data="selector_5" result="soilAddVo.smoothDegreeId"></div>
-                        <div njw-selector-group nsg-title="供电条件" class="ml-20 dis-ib" selector-data="selector_6" result="soilAddVo.powerSupplyId"></div>
-                    </div>
-                    <div class="plr-30 mt-20">
-                        <div njw-selector-group nsg-title="供水条件" class=" dis-ib" selector-data="selector_7" result="soilAddVo.headWaters"></div>
-                        <div njw-selector-group nsg-title="网络条件" class="ml-20 dis-ib" selector-data="selector_8" result="soilAddVo.networkId"></div>
-                    </div>
-                    <div class="plr-30 mt-20">
-                        <div njw-selector-group nsg-title="是否通路" class="dis-ib" selector-data="selector_9" result="soilAddVo.ifAccessId"></div>
-                        <div njw-selector-group nsg-title="水源条件" class="ml-20 dis-ib" selector-data="selector_10" result="soilAddVo.water"></div>
-                    </div>
-                    <div class="plr-30 mt-20" njw-selector-multi
-                         nsm-list="selector_multi"
-                         nsm-title="适合经营"
-                         option-name="name"
-                         option-value="id"
-                         nms-placeholder="请选择类型，最多添加5个"
-                         nsm-size="5"
-                         result="soilAddVo.managementTypesId"
-                    ></div>
-                    <div class="input-row plr-30 mt-20 mb-40">
-                        <p class="se-thinner input-row-title">地上设施</p>
-                        <div checkbox-group cg-list="checkbox1" result="soilAddVo.facility"></div>
-                    </div>
-
-
-
-
-                    <div class="se-bg-shallow h20"></div>
-                    <div end-module-caption emc-title="土地性质与权属"></div>
-                    <div njw-input ni-title="土地性质" class="plr-30 mt-20" ni-data="inputFiled_5" result="soilAddVo.nature"></div>
-                    <div njw-selector-group nsg-title="权属类型" class="plr-30 mt-20" selector-data="selector_11" result="soilAddVo.ownershipType"></div>
-                    <div njw-input ni-title="权证类型" class="plr-30 mt-20 mb-40" ni-data="inputFiled_6" result="soilAddVo.warrantType"></div>
-
-
-
-                    <div class="se-bg-shallow h20"></div>
-                    <div end-module-caption emc-title="周边环境"></div>
-                    <div njw-input ni-title="交通要道" class="plr-30 mt-20" ni-data="inputFiled_7" result="soilAddVo.highway"></div>
-                    <div class="input-row plr-30 mt-20">
-                        <p class="se-thinner input-row-title">服务配套</p>
-                        <div checkbox-group cg-list="checkbox2" result="soilAddVo.serveAssort"></div>
-                    </div>
-                    <div njw-input ni-title="产业资源" class="plr-30 mt-20" ni-data="inputFiled_8" result="soilAddVo.industryResource"></div>
-                    <div njw-input ni-title="旅游景点" class="plr-30 mt-20" ni-data="inputFiled_9" result="soilAddVo.scenicSpots"></div>
-
-                </div>
-            </div>
+            <div ui-view="end-main"></div>
         </div>
         <div class="w1200 mt-40">
-            <div class="end-main-footer tc">
-                <!--<ui-view name="endMainFooter"></ui-view>-->
-                <a class="btn btn-deeper height-line-40 border-radius-20 pos-re w200" ng-click="submitBtn()">提交审核</a>
-                <!--<a class="btn btn-deeper height-line-40 border-radius-20 pos-re w200 ml-20">编辑修改</a>-->
-                <!--<a class="btn btn-orange height-line-40 border-radius-20 pos-re w200 ml-20">删除</a>-->
-            </div>
+            <div ui-view="end-footer-btns"></div>
         </div>
 
     </div>

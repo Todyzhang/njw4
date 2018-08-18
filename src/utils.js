@@ -3,23 +3,41 @@ define(['app','angular'], function (app,angular) {
 
   app
     .constant("MENUS",{
-      "main":{title: "首页", url: "#/main",index:0},
-      "findland":{title: "我要找地", url: "#/findland",index:1},
-      "financial":{title: "金融服务", url: "#/financial",index:2},
-      "agroService":{title: "涉农服务", url: "#/agro-service",index:3},
-      "news":{title: "土地资讯", url: "#/news",index:4}
+      "main":{id:0,name:"main",title: "首页", url: "#/main",index:0},
+      "findland":{id:1,name:"findland",title: "我要找地", url: "#/findland",index:1},
+      "financial":{id:2,name:"financial",title: "金融服务", url: "#/financial",index:2},
+      "agroService":{id:3,name:"agroService",title: "涉农服务", url: "#/agro-service",index:3},
+      "news":{id:4,name:"news",title: "土地资讯", url: "#/news",index:4}
     })
-    .factory("publicVal", ["MENUS",function (MENUS) {
+    /*
+    <a class="emn-level-1 msg-center-icon">消息中心</a>
+    <a class="emn-level-1 land-source-icon">土地资源管理</a>
+    <div class="emn-level-2-wrap fs-14"><!--最后一个需加 .pb-0-->
+        <a class="emn-level-2 active">土地资源管理</a>
+        <a class="emn-level-2">土地资源编辑</a>
+        <a class="emn-level-2">查看土地资源</a>
+    </div>
+    <a class="emn-level-1 project-attract-icon">项目招商管理</a>
+    <a class="emn-level-1 need-icon">需求管理</a>
+    <a class="emn-level-1 acc-msg-icon">账户信息管理</a>
+     */
+    .constant("ENDMENUS",{
+      "end.msgCenter":{id:0,name:"end.msgCenter",title: "消息中心", url: "#/msgCenter",index:0,kls:"msg-center-icon"},
+      "end.mngLand":{id:1,title: "土地资源管理", index:1,kls:"land-source-icon"},
+      "end.projectAttract":{id:2,name:"end.projectAttract",title: "项目招商管理", url: "#/projectAttract",index:2,kls:"project-attract-icon"},
+      "end.needMng":{id:3,name:"end.needMng",title: "需求管理", url: "#/needMng",index:3,kls:"need-icon"},
+      "end.accMsg":{id:4,name:"end.accMsg",title: "账户信息管理", url: "#/accMsg",index:4,kls:"acc-msg-icon"},
+
+      "end.manageLand":{id:5,name:"end.manageLand",title: "土地资源管理", url: "#/manageLand",index:0,pid:1},
+      "end.editLand":{id:6,name:"end.editLand",title: "土地资源编辑", url: "#/editLand",index:1,pid:1},
+      "end.addLand":{id:7,name:"end.addLand",title: "新增土地资源", url: "#/addLand",index:2,pid:1}
+    })
+
+    .factory("publicVal", ["MENUS","ENDMENUS",function (MENUS,ENDMENUS) {
       var val={
-        // menus: [
-        //   {title: "首页", url: "main"},
-        //   {title: "我要找地", url: "findland"},
-        //   {title: "金融服务", url: "financial"},
-        //   {title: "涉农服务", url: "agroService"},
-        //   {title: "土地资讯", url: "news"}
-        // ],
         serverTel: "020-87595266"
       };
+
       val.menus=(function () {
         var ary=[];
         angular.forEach(MENUS,function(value, key){
@@ -27,6 +45,25 @@ define(['app','angular'], function (app,angular) {
         });
         return ary;
       })();
+
+      val.endMenus=(function () {
+        var ary=[];
+        angular.forEach(ENDMENUS,function(value, key){
+          if(value.pid!==undefined){
+            if(ary[value.pid]===undefined) ary[value.pid]={};
+            if(ary[value.pid]["children"]===undefined) ary[value.pid]["children"]=[];
+            ary[value.pid]["children"][value.index]=value;
+          }else{
+            if(ary[value.index]!==undefined){
+              angular.extend(ary[value.index],value);
+            }else{
+              ary[value.index]=value;
+            }
+          }
+        });
+        return ary;
+      })();
+
       val.landService=[
         {
           title:"金融服务",
@@ -54,10 +91,157 @@ define(['app','angular'], function (app,angular) {
           url:"#some"
         }
       ];
+
+      //可流转方式
+      val.dealModeId= [
+        {id:'1',name:'转让'},
+        {id:'2',name:'出租'},
+        {id:'3',name:'转包'},
+        {id:'4',name:'入股'},
+        {id:'5',name:'互换'},
+        {id:'6',name:'其他'}
+      ];
+
+      //流转价格单位
+      val.dealUnitId=[
+        {id:'1',name:'元/亩/年',type:"13"},
+        {id:'2',name:'元/平米/月',type:"12"},
+        {id:'3',name:'万元/年',type:"123"},
+        {id:'4',name:'万元',type:"1"}
+      ];
+
+      //地上设施
+      val.facility=[
+        {id:1,name:"水井"},
+        {id:2,name:"大棚"},
+        {id:3,name:"仓库"},
+        {id:4,name:"农机房"},
+        {id:5,name:"晾晒场"},
+        {id:6,name:"育种育苗场"},
+        {id:7,name:"生活生产用房"}
+      ];
+
+      //地上设施
+      val.服务配套=[
+        {id:1,name:"物流"},
+        {id:2,name:"仓储"},
+        {id:3,name:"批发市场"},
+        {id:4,name:"超市"},
+        {id:5,name:"农科站"}
+      ];
+
+      //权属类型
+      val.ownershipType=[
+        {id:'1',name:'集体'},
+        {id:'2',name:'个人'},
+        {id:'3',name:'国有'}
+      ];
+
+      //水源条件
+      val.water=[
+        {id:'1',name:'水源充足'},
+        {id:'2',name:'水源稀缺'}
+      ];
+
+      //是否通路
+      val.ifAccessId=[
+        {id:'1',name:'已通路'},
+        {id:'2',name:'未通路'}
+      ];
+
+      //网络条件
+      val.networkId=[
+        {id:'1',name:'已通网络'},
+        {id:'2',name:'未通可通网络'},
+        {id:'3',name:'未通网络'}
+      ];
+
+      //供水条件
+      val.headWaters=[
+        {id:'1',name:'已通水'},
+        {id:'2',name:'未通可通水'},
+        {id:'3',name:'未通水'}
+      ];
+
+      //供电条件
+      val.powerSupplyId=[
+        {id:'1',name:'已通电'},
+        {id:'2',name:'未通可通电'},
+        {id:'3',name:'未通电'}
+      ];
+
+      //平整程度
+      val.smoothDegreeId=[
+        {id:'1',name:'非常平整'},
+        {id:'2',name:'程度一般'},
+        {id:'3',name:'程度较差'}
+      ];
+
+      //土地面积
+      val.acreageUnit=[
+        {id:'亩',name:'亩'},
+        {id:'平米',name:'平米'}
+      ];
+
+      //==========以下为angular run ajax中返回
+      //适合经营
+      val.managementTypesId=[
+        //   {name:'粮食油料类',id:'1'},
+        //   {name:'水果坚果类',id:'2'},
+        //   {name:'养殖类',id:'3'},
+        //   {name:'蔬菜瓜果类',id:'4'},
+        //   {name:'林木类',id:'5'},
+        //   {name:'商业住宅类',id:'6'},
+        //   {name:'工矿仓储类',id:'7'},
+        //   {name:'其他',id:'8'}
+      ];
+
+      //土地类型一级类型
+      val.landType=[];
+
+      //区域一级列表-省
+      val.provinceArea=[];
+
+
+
+
+
+
+      //=========服务器host配置
       val.frontHost="http://192.168.1.125:8080/";
       val.imgHost="http://192.168.1.84:8096/";
       val.severHost="http://192.168.1.84:8080/";
+      val.loginHost="http://nonjiayi-auth.nongj.com/admin/toLogin";
+
+
+
       return val;
+    }])
+
+    .run(["publicVal","queryClassify",function (publicVal,queryClassify) {
+      //适合经营
+      queryClassify.getStair()
+        .then(function (value) {
+          publicVal.managementTypesId=value;
+        },function (reason) {
+          publicVal.managementTypesId=[];
+        });
+
+      //土地类型
+      queryClassify.getLand()
+        .then(function(result){
+          publicVal.landType=result;
+        },function (reason) {
+          publicVal.landType=[];
+        });
+
+      //区域-省
+      queryClassify.getArea()
+        .then(function(result){
+          publicVal.provinceArea=result;
+        },function (reason) {
+          publicVal.provinceArea=[];
+        });
     }])
     .factory("njwCookie", [function () {
       function setCookie(name, value, domain, day) {
@@ -81,16 +265,37 @@ define(['app','angular'], function (app,angular) {
         setCookie(name, "", null, -1);
       }
 
+      function getDomain() {
+        var domain=document.domain;
+        var exg=/\.(com|net|org)(\.cn)?$/;
+        var end,_front,lastDot;
+        end=domain.match(exg);
+        if(end){
+          end=end[0];
+          _front=domain.replace(end,"");
+          lastDot=_front.lastIndexOf(".");
+          if(lastDot!=-1){
+            _front=_front.substr(lastDot+1);
+          }
+          domain=_front+end;
+        }
+        console.log(domain)
+        return domain;
+      }
+
       return {
         setCookie: setCookie,
         getCookie: getCookie,
-        delCookie: delCookie
+        delCookie: delCookie,
+        getDomain:getDomain
       };
     }])
     .factory("njwUrlUtil", function () {
       return {
         getFromURL: function (url, parameter) {
-          var index = url.indexOf("?");
+          var index;
+          url=url||location.href;
+          index= url.indexOf("?");
           if (typeof(parameter) == "undefined" || parameter == "") {
             return "";
           }
@@ -382,6 +587,7 @@ define(['app','angular'], function (app,angular) {
         return items;
       };
     })
+
 
 
 });

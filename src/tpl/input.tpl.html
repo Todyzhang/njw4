@@ -10,9 +10,13 @@
           'ng-valid':field.check&&inputRowForm.someInput.$valid,
           'ng-pristine':field.check&&inputRowForm.someInput.$pristine,
           'ng-dirty':field.check&&inputRowForm.someInput.$dirty,
-          'large':field.large}">
+          'large':field.large,
+          'disabled':field.idDisabled,
+          'normal':!field.idDisabled
+          }">
         <input placeholder="{{field.placeholder}}"
                ng-model="someModel"
+               ng-disabled="{{field.idDisabled}}"
                name="someInput"
                ng-required="!!field.required"
                maxlength="{{field.check.maxlength.value}}"
