@@ -1,0 +1,13 @@
+<div class="pos-ab full-mask se-bg-mask" ng-if="sdData.show" ng-style="{'height':wrapPos.height+'px'}">
+    <div class="select-dialog-wrap pos-ab se-bg-main p-20" ng-style="{'left':wrapPos.left+'px','top':wrapPos.top+'px'}">
+        <div class="arrow-bg-up pos-ab" ng-style="{'right':wrapPos.arrowRight}"></div>
+        <p class="sd-title height-line-20 bl-bar b-w2 deeper pl-12 fs-16">{{sdData.placeholder}}</p>
+        <div class="sd-list pl-14 ptb-10 clearfix">
+            <a ng-repeat="item in curList"
+               ng-click="itemClick(item,$index)"
+               ng-class="{'active':$index===currentItem}"
+            >{{item.name}}</a>
+        </div>
+        <a class="pl-14 fs-12" ng-show="level>1" ng-click="reBack()"><span class="se-deeper fs-14">&lt;&lt; </span>{{sdData.reBackTip[level]||sdData.reBackTip["2"]}}</a>
+    </div>
+</div>

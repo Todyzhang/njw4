@@ -3,9 +3,7 @@
 define(["require", "angular"], function (require, angular) {
   var app = angular.module("App", ["ui.router"]);
 
-  window.jQuery && (jQuery.noConflict(), jQuery.support.cors = true);
-
-  app.factory("interceptor", ["$q",function ($q) {
+  app.factory("interceptor", ["$q", function ($q) {
     return {
       request: function (config) {
         //console.log(config.url);
@@ -34,8 +32,8 @@ define(["require", "angular"], function (require, angular) {
   //   });
   // });
 
-  app.run(["$rootScope","$location","$state","$window",function($rootScope,$location,$state,$window) {
-    $rootScope.$on("$stateChangeStart",function(event, toState, toParams, fromState, fromParams){
+  app.run(["$rootScope", "$location", "$state", "$window", function ($rootScope, $location, $state, $window) {
+    $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
       // if(toState.name=="login")return;// 如果是进入登录界面则允许
       // 如果用户不存在
       // if(ifLoginTrue==false){
@@ -43,30 +41,30 @@ define(["require", "angular"], function (require, angular) {
       //   event.preventDefault();// 取消默认跳转行为
       //   $("#my-modal-loading").modal("open");//开启加载中loading
 
-        // $state.go("login",{from:fromState.name,w:"notLogin"});//跳转到登录界面
+      // $state.go("login",{from:fromState.name,w:"notLogin"});//跳转到登录界面
       // }
       // console.log(event);
       // console.log(toState);
       // console.log(toParams);
       // console.log(fromState);
       // console.log(fromParams);
-      if(toState.name==="login"||toState.name==="logon"){
+      if (toState.name === "login" || toState.name === "logon") {
         //记录需登录前的url，登录成功后需跳转到该地址
-        $rootScope.loginRebackUrl=fromState.name||"main";
+        $rootScope.loginRebackUrl = fromState.name || "main";
       }
-      $rootScope.menuActive=toState.data.menu;
+      $rootScope.menuActive = toState.data.menu;
       $rootScope.endMenuActive1 = toState.data.endMenu1;
       $rootScope.endMenuActive2 = toState.data.endMenu2;
-      $rootScope.isLoginPage=toState.data.isLoginPage;
+      $rootScope.isLoginPage = toState.data.isLoginPage;
     });
 
-    $rootScope.$on("$stateChangeSuccess",function (event,viewConfig) {
-      $window.scrollTo(0,0);//到顶部
+    $rootScope.$on("$stateChangeSuccess", function (event, viewConfig) {
+      $window.scrollTo(0, 0);//到顶部
     })
   }]);
 
-  app.config(["$controllerProvider", "$provide", "$stateProvider", "$urlRouterProvider", "$httpProvider", "$compileProvider", "$filterProvider","MENUS",
-    function ($controllerProvider, $provide, $stateProvider, $urlRouterProvider, $httpProvider, $compileProvider, $filterProvider,MENUS) {
+  app.config(["$controllerProvider", "$provide", "$stateProvider", "$urlRouterProvider", "$httpProvider", "$compileProvider", "$filterProvider", "MENUS",
+    function ($controllerProvider, $provide, $stateProvider, $urlRouterProvider, $httpProvider, $compileProvider, $filterProvider, MENUS) {
       //$provide属性constant decorator factory provider service value
       app.ctrl = $controllerProvider.register;//注册控制器
       app.directive = $compileProvider.directive;//注册指令
@@ -131,8 +129,8 @@ define(["require", "angular"], function (require, angular) {
           templateUrl: app.fileUrlHash("./src/pages/main.html"),
           controller: "mainCtrl",
           resolve: app.loadJs("./src/controllers/mainCtrl.js"),
-          data:{
-            menu:MENUS["main"].id
+          data: {
+            menu: MENUS["main"].id
           }
         })
         .state("findland", {
@@ -140,47 +138,62 @@ define(["require", "angular"], function (require, angular) {
           templateUrl: app.fileUrlHash("./src/pages/findland.html"),
           controller: "findLandCtrl",
           resolve: app.loadJs("./src/controllers/findLandCtrl.js"),
-          data:{
-            menu:MENUS["findland"].id
+          data: {
+            menu: MENUS["findland"].id
           }
         })
       //todo 404页面
       // 默认页
       $urlRouterProvider.otherwise("/main");
-      $urlRouterProvider.when("","/main");
+      $urlRouterProvider.when("", "/main");
     }]);
 
+  app.controller("pageHeaderCtrl", ["$scope", "$rootScope", "queryClassify", "publicVal", function ($scope, $rootScope, queryClassify, publicVal) {
 
-  app.run(["$rootScope", "publicVal","MENUS","ENDMENUS", function ($rootScope, publicVal,MENUS,ENDMENUS) {
-
-    $rootScope.serverTel = publicVal.serverTel;
-    $rootScope.menuList = publicVal.menus;
-    $rootScope.endMenus = publicVal.endMenus;
-    $rootScope.MENUS=MENUS;
-    $rootScope.ENDMENUS=ENDMENUS;
-
-    $rootScope.menuActive = 0;//
-    $rootScope.endMenuActive1 = 0;//发布平台激活菜单一标识
-    $rootScope.endMenuActive2 = 0;//发布平台激活菜单二标识
-    $rootScope.loginRebackUrl = "main";
-
-    $rootScope.loginMsg={
-      name:"18022224312",
-      msgTotal:3,//个人新消息数（单位数），多于两位显示".."
-      account:"3D4H853262EA1",
-      headIcon:"/static/images/head_icon.jpg",
-      login:false
-    }
-
-  }]);
-
-  app.controller("pageHeaderCtrl", ["$scope", "$rootScope", function ($scope, $rootScope) {
-    $scope.menuClick = function (index) {
-      $rootScope.menuActive = index;
+    var selectCity = {
+      placeholder: "地区选择",
+      show: false,//显示对话框
+      level: 2,
+      reBackTip: {"2": "其它省份", "3": "其它城市"},
+      data: [],
+      itemClick: function (data, cb) {
+        queryClassify.getArea(data.id)
+          .then(function (res) {
+            var list = [];
+            angular.forEach(res, function (_d) {
+              list.push({id: _d.id, name: _d.name});
+            });
+            data.children = list;
+            typeof cb === "function" && cb(data);
+          }, function (err) {
+            console.log(err)
+          });
+      },
+      setResult: function (data) {
+        $rootScope.loginMsg.city = data;
+      }
     };
+
+    $scope.getCityList = function () {
+      var list = [];
+      angular.forEach(publicVal.provinceArea, function (_d) {
+        list.push({id: _d.id, name: _d.name});
+      });
+      selectCity.data=list;
+    };
+
     $scope.exitClick = function () {
       //todo
     };
+
+    $scope.showSelect = function (e) {
+      selectCity.target = e.target || e.srcElement;
+      selectCity.show = true;
+      if(selectCity.data.length===0){
+        $scope.getCityList();
+      }
+      $rootScope.selectDialogData = selectCity;
+    }
   }]);
 
   return app;

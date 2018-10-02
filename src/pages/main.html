@@ -12,32 +12,50 @@
 
             <!--提交需求form-->
             <div class="mc-xqxx-form se-bg-main">
-                <form class="se-bg-main">
+                <form class="se-bg-main" novalidate name="nlf">
                     <p class="caption">
                         <span class="dis-ib tr se-thinner bb-bar">热线：{{serverTel}}</span>
                     </p>
                     <div class="input-row">
-                        <div njw-selector placeholder="目标地区" options="typeList"
-                             option-name="typeName" option-value="type"
-                             result="supplierType"></div>
+                        <div njw-input-select placeholder="目标地区"
+                             ng-click="selectCity($event)"
+                             input-text="addrsText"></div>
                         <label class="njw-input height-line-40 border-radius-20 se-border thinner mlr-3">
-                            <input placeholder="需求规模" ng-model="as"/><span class="word-tips">亩</span>
+                            <input placeholder="需求规模"
+                                   ng-model="needLandForm.acreage"
+                                   sn-number="5"
+                                   name="acreage"
+                                   ng-required="{{true}}"
+                            /><span class="word-tips">亩</span>
                         </label>
-                        <div njw-selector placeholder="经营类型" options="typeList"
-                             option-name="typeName" option-value="type"
-                             result="supplierType"></div>
+                        <div njw-input-select placeholder="经营类型"
+                             ng-click="selectType($event)"
+                             input-text="landTypeName"></div>
+
                     </div>
                     <div class="input-row">
                         <label class="njw-textarea se-bg-shallow">
-                            <textarea placeholder="更多需求" ng-model="some"></textarea>
+                            <textarea placeholder="更多需求"
+                                      ng-model="needLandForm.describe"
+                                      ng-required="{{true}}"
+                                      name="describe"
+                                      maxlength="140"></textarea>
                         </label>
                     </div>
                     <div class="input-row">
                         <label class="njw-input height-line-40 border-radius-20 se-border thinner se-bg-shallow" style="width:368px">
-                            <input placeholder="您的手机号" ng-model="s1ome"/>
+                            <input placeholder="您的手机号"
+                                   ng-model="needLandForm.phone"
+                                   ng-required="{{true}}"
+                                   name="phone"
+                                   ng-minlength="11"
+                                   sn-number="11" />
                         </label>
 
-                        <a class="btn btn-deeper btn-submit fs-14 height-line-40">提交需求</a>
+                        <a class="btn btn-deeper btn-submit fs-14 height-line-40"
+                           ng-class="{'disabled':nlf.$invalid||!(needLandForm.areaId&&needLandForm.managementTypesId)}"
+                           ng-click="addNeedLand()"
+                        >提交需求</a>
                     </div>
                 </form>
             </div>
@@ -45,22 +63,22 @@
 
         <!--优质土地资源-->
         <div class="module-list-wrap w1200 se-bg-shallow mt-40">
-            <div module-caption mc-title="优质土地资源" mc-more-url="#some"></div>
+            <div module-caption mc-title="优质土地资源" mc-more-url="/#/findland"></div>
             <div module-list ml-list="landRentList" ml-row-size="4"></div>
         </div>
 
         <!--找地案例-->
         <div class="module-list-wrap w1200 se-bg-shallow">
-            <div module-caption mc-title="找地案例" mc-more-url="#some"></div>
+            <div module-caption mc-title="找地案例" mc-more-url="left"></div>
             <div module-list ml-list="landLookList" ml-row-size="4" ml-type="look"></div>
         </div>
 
         <!--土地服务-->
-        <div land-service mc-title="土地服务" mc-more-url="#some"></div>
+        <div land-service mc-title="土地服务" mc-more-url="/#/agro-service"></div>
 
         <!--土地资讯-->
         <div class="module-list-wrap w1200 se-bg-shallow mt-40">
-            <div module-caption mc-title="土地资讯" mc-more-url="#some"></div>
+            <div module-caption mc-title="土地资讯" mc-more-url="/#/news"></div>
             <div class="land-news se-bg-main">
                 <div class="w370" ng-repeat="item in landNews" ng-class="{'fl':$first,'fr':$last}">
                     <div news-img class="mb-14" ni-img="item.img"></div>
@@ -76,5 +94,8 @@
             </div>
         </div>
 
+
+
     </div>
+
 </div>

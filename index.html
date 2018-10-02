@@ -19,7 +19,7 @@
 </head>
 <body ng-cloak>
 <div class="page-container fs-14">
-    <div class="page-header" ng-hide="isLoginPage">
+    <div class="page-header" ng-hide="isLoginPage" ng-controller="pageHeaderCtrl">
         <div class="ph-login-msg se-bg-shallow">
             <div class="w1200 se-shallow fs-12">
                 <p class="fr" ng-if="!loginMsg.login"><a class="dis-ib mr-10" ui-sref="login">登录</a>|<a class="dis-ib ml-10" ui-sref="logon">注册</a></p>
@@ -31,7 +31,7 @@
             <div class="dis-ib ph-logo">
                 <img class="dis-ib" src="static/images/logo.png"/>
                 <span class="bar dis-ib"></span>
-                <a class="dis-ib city-select">广州<span class="arrow-d"></span></a>
+                <a class="dis-ib city-select" ng-click="showSelect($event)">{{loginMsg.city.name}}<span class="arrow-d"></span></a>
             </div>
             <div class="dis-ib ph-nav">
                 <a ng-repeat="menu in menuList"
@@ -44,6 +44,11 @@
     </div>
     <div ui-view></div>
     <div class="placeholder-footer" ng-hide="isLoginPage"></div><!--占页脚的高度-->
+
+    <div select-dialog sd-data="selectDialogData"></div>
+
+    <div alert-dialog ad-data="alertDialogData"></div>
+
 </div>
 <div class="page-footer" ng-hide="isLoginPage">
     <div class="w1200 se-contrast fs-14">

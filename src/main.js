@@ -75,7 +75,7 @@ var REQUIRE_CONFIG = {
     'angular': {
       //指定要加载的一个依赖数组。当将require设置为一个config object在加载require.js之前使用时很有用。一旦require.js被定义，这些依赖就已加载。
       //使用deps就像调用require([])，但它在loader处理配置完毕之后就立即生效。它并不阻塞其他的require()调用，它仅是指定某些模块作为config块的一部分而异步加载的手段而已。
-      deps: ['jquery', 'modernizr', 'es5-shim', 'css','ie8-ajax'],
+      deps: ['jquery', 'modernizr', 'es5-shim', 'css'],
       exports: 'angular'
     },
     'ui-router': {
@@ -96,21 +96,33 @@ var REQUIRE_CONFIG = {
 require.config(REQUIRE_CONFIG);
 
 // 有返回值的写在前面，方便填写注入的参数
-require(['app', 'angular','masterRouter','css!normalize', 'jquery', 'jquery-form', 'ui-router', 'css!common','css!/src/css/theme', 'utils', 'services','directives.html.tpl', 'directives', 'filters'],
-  function (app,angular,masterRouter) {
-    var isIE = function(ver){
-      var b = document.createElement('b')
-      b.innerHTML = '<!--[if IE ' + ver + ']><i></i><![endif]-->'
-      return b.getElementsByTagName('i').length === 1
-    }
-    if(isIE(8)){
-      require(['css!ie8']);
-    }
-    app.config(masterRouter);
-    angular.bootstrap(document, ['App']);
-    console.log('系统已启动...');
+require(['angular','jquery', 'jquery-form','css!normalize', 'css!common'],function (angular) {
+  var isIE = function(ver){
+    var b = document.createElement('b');
+    b.innerHTML = '<!--[if IE ' + ver + ']><i></i><![endif]-->';
+    return b.getElementsByTagName('i').length === 1
+  };
+  var begin=function(){
+    require(['app','masterRouter', 'ui-router','css!/src/css/theme', 'utils', 'services','directives.html.tpl', 'directives', 'filters'],
+      function (app,masterRouter) {
+        app.config(masterRouter);
+        angular.bootstrap(document, ['App']);
+        console.log('系统已启动...');
+      }
+    );
+  };
+  window.jQuery && (jQuery.noConflict(), jQuery.support.cors = true);
+  if(isIE(8)){
+    require(['ie8-ajax','css!ie8'],function () {
+      begin();
+    });
+  }else{
+    begin();
   }
-);
+
+});
+
+
 
 /*
 require.config({

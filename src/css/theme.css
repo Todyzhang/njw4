@@ -44,6 +44,7 @@ input:-moz-placeholder {
 .se-border{
     border:1px solid #ccc;
 }
+.bl-bar.deeper,
 .se-border.deeper{
     border-color:#393;
 }
@@ -66,6 +67,7 @@ input:-moz-placeholder {
     border-color:#666;
 }
 .bb-bar.b-w2,
+.bl-bar.b-w2,
 .br-bar.b-w2{
     border-width:2px;
 }
@@ -295,4 +297,10 @@ a.active>.se-contrast,
 }
 .emn-level-2:before{
     border-top:1px dotted #393;
+}
+
+/*弹窗下拉选择框*/
+.sd-list a.active,
+.sd-list a:hover{
+    border-color:#3d3;
 }

@@ -1,0 +1,15 @@
+<div class="pos-fix full-mask se-bg-mask" ng-if="adData.show">
+    <div class="w282 alert-dialog pos-ab se-bg-main p-20" style="height:132px">
+        <div class="dis-t fs-16 pl-14">
+            <div class="dis-tc va-m dialog-icon {{'d-'+adData.icon}}"></div>
+            <div class="dis-tc va-m pl-14">{{adData.txt}}</div>
+        </div>
+        <div class="dialog-btns plr-20 tc pt-20 fs-12">
+            <a class="btn col-2 height-line-30 border-radius-20"
+               ng-repeat="btn in adData.btns"
+               ng-class="{'btn-main':$first&&$first!==$last,'btn-deeper':$last}"
+               ng-click="btnClick($index)"
+            >{{btn.name}}</a>
+        </div>
+    </div>
+</div>

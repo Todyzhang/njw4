@@ -200,3 +200,27 @@ function provider(name, provider_) {
 2. 便于模块化
 3. 便于单元测试
 
+
+========================================
+angular.forEach
+1.针对对象循环(key,value)
+
+var values = {name: 'misko', gender: 'male'};
+var log = [];
+angular.forEach(values, function(value, key) {
+  this.push(key + ': ' + value);
+}, log);
+
+
+
+
+2.针对对象数组(key,value)
+var objs =[{a:1},{a:2}];
+angular.forEach(objs, function(data,index,array){
+//data等价于array[index]
+console.log(data.a+'='+array[index].a);
+});
+
+---------------------
+
+

@@ -228,28 +228,28 @@ define(['app', "angular"], function (app, angular) {
         replace: true,
         templateUrl: app.fileUrlHash('/src/tpl/slider.longitudinal.tpl.html'),
         link: function ($scope, iElm, iAttrs) {
-          var descSlider={
-            current:0,
-            id:'slider' + (+new Date),
-            list:$scope.sList,
-            size : $scope.sList.length,
-            firstItem:$scope.sList[0]
+          var descSlider = {
+            current: 0,
+            id: 'slider' + (+new Date),
+            list: $scope.sList,
+            size: $scope.sList.length,
+            firstItem: $scope.sList[0]
           };
-          descSlider.lastIndex=descSlider.size-1;
-          descSlider.lastItem=$scope.sList[descSlider.lastIndex];
+          descSlider.lastIndex = descSlider.size - 1;
+          descSlider.lastItem = $scope.sList[descSlider.lastIndex];
           if (iAttrs.sAuto === undefined || iAttrs.sAuto !== "false") {
-            descSlider.auto=true;
-          }else{
-            descSlider.auto=false;
+            descSlider.auto = true;
+          } else {
+            descSlider.auto = false;
           }
-          if(/\d+/.test(iAttrs.sDelay)){
-            descSlider.sDelay=+iAttrs.sDelay;
-          }else{
-            descSlider.sDelay=5;
+          if (/\d+/.test(iAttrs.sDelay)) {
+            descSlider.sDelay = +iAttrs.sDelay;
+          } else {
+            descSlider.sDelay = 5;
           }
-          descSlider.direct="upDown";
+          descSlider.direct = "upDown";
 
-          $scope.descSlider=descSlider;
+          $scope.descSlider = descSlider;
           if (descSlider.size > 1) {
 
             $timeout(function () {
@@ -287,24 +287,24 @@ define(['app', "angular"], function (app, angular) {
         replace: true,
         templateUrl: app.fileUrlHash('/src/tpl/slider.landscape.tpl.html'),
         link: function ($scope, iElm, iAttrs) {
-          var descSlider={
+          var descSlider = {
             id: 'slider' + (+new Date),
             list: $scope.sList,
             width: 570,
-            direct:"leftRight",
-            current:0
+            direct: "leftRight",
+            current: 0
           };
-          descSlider.size=$scope.sList.length;
-          descSlider.firstItem=$scope.sList[0];
+          descSlider.size = $scope.sList.length;
+          descSlider.firstItem = $scope.sList[0];
           if (iAttrs.sAuto === undefined || iAttrs.sAuto !== "true") {
-            descSlider.auto=false;
-          }else{
-            descSlider.auto=true;
+            descSlider.auto = false;
+          } else {
+            descSlider.auto = true;
           }
-          if(/\d+/.test(iAttrs.sDelay)){
-            descSlider.sDelay=+iAttrs.sDelay;
-          }else{
-            descSlider.sDelay=5;
+          if (/\d+/.test(iAttrs.sDelay)) {
+            descSlider.sDelay = +iAttrs.sDelay;
+          } else {
+            descSlider.sDelay = 5;
           }
           descSlider.lastIndex = descSlider.size - 1;
           descSlider.lastItem = descSlider.list[descSlider.lastIndex];
@@ -340,22 +340,56 @@ define(['app', "angular"], function (app, angular) {
       return {
         restrict: "EA",
         scope: {
-          field:"=niData",
-          niTitle:"@",
-          result:"="
+          field: "=niData",
+          niTitle: "@",
+          result: "="
         },
-        templateUrl:app.fileUrlHash('/src/tpl/input.tpl.html'),
+        templateUrl: app.fileUrlHash('/src/tpl/input.tpl.html'),
         // template: '',
         replace: true,
         link: function ($scope, iElm, iAttrs) {
-          $scope.someModel=$scope.field.value;
+          $scope.someModel = $scope.field.value;
 
-          $scope.$watch("someModel",function () {
-            $scope.result=$scope.someModel;
+          $scope.$watch("someModel", function () {
+            $scope.result = $scope.someModel;
           })
           // $scope.btnClick=function () {
           // $scope.emcBtnClick();
           // }
+        }
+      }
+    })
+    .directive("njwInputSelect", function () {
+      return {
+        restrict: "EA",
+        scope: {
+          field: "=nisData",
+          placeholder: "@",
+          clickEvent: "&",
+          inputText: "="
+        },
+        templateUrl: app.fileUrlHash('/src/tpl/input.select.tpl.html'),
+        // template: '',
+        replace: true,
+        link: function ($scope, iElm, iAttrs) {
+
+          var init = function () {
+            if ($scope.placeholder) {
+              $scope.inputValue = $scope.placeholder;
+            }
+          };
+
+          $scope.isPlaceholder = true;
+
+          init();
+
+          $scope.$watch("inputText", function (n) {
+            if (n) {
+              $scope.inputValue = n;
+              $scope.isPlaceholder = false;
+            }
+          });
+
         }
       }
     })
@@ -401,6 +435,7 @@ define(['app', "angular"], function (app, angular) {
           var setActiveOption = function (i) {
             $scope.activeOption = activeOption = i;
           };
+          $scope.list = [1, 2, 3];
           var setOption = function (i, option) {
             var re = option[$scope.loopValue];
             $scope.inputValue = option[$scope.loopName] || option;
@@ -430,7 +465,9 @@ define(['app', "angular"], function (app, angular) {
             }
           };
           ul.addClass(id);
+
           initFn();
+
           $scope.inputClick = function (e) {
             e.stopPropagation();
             $scope.activeOption = activeOption;
@@ -448,8 +485,8 @@ define(['app', "angular"], function (app, angular) {
             setOption(i, option);
           };
 
-          $scope.$watch("result", function () {
-            $scope.changeEvent({_name: $scope.inputValue,_value:$scope.result});
+          $scope.$watch("result", function (n) {
+            n && $scope.changeEvent({_name: $scope.inputValue, _value: $scope.result});
           });
 
           $scope.$watch("selectInit", function () {
@@ -480,21 +517,22 @@ define(['app', "angular"], function (app, angular) {
         restrict: "EA",
         scope: {
           selectorData: "=",
-          nsgTitle:"@",
-          result:"="
+          nsgTitle: "@",
+          result: "="
         },
-        templateUrl:app.fileUrlHash('/src/tpl/selector.group.tpl.html'),
+        templateUrl: app.fileUrlHash('/src/tpl/selector.group.tpl.html'),
         // template: '',
         replace: true,
         link: function ($scope, iElm, iAttrs) {
-          for(var i=0,len=$scope.selectorData.selectors.length;i<len;i++){
-            var refreshIndex=i;
-            $scope.$watch("selectorData.selectors["+i+"].list",function(){
-              $scope.selectorData.selectors[refreshIndex]["refresh"]=+new Date;
-            },true);
-            if(i==len-1){
-              $scope.$watch("selectorData.selectors["+i+"].value",function (newValue,oldValue) {
-                $scope.result=newValue;
+          $scope.selectors = $scope.selectorData.selectors;
+          for (var i = 0, len = $scope.selectorData.selectors.length; i < len; i++) {
+            var refreshIndex = i;
+            $scope.$watch("selectorData.selectors[" + i + "].list", function () {
+              $scope.selectorData.selectors[refreshIndex]["refresh"] = +new Date;
+            }, true);
+            if (i == len - 1) {
+              $scope.$watch("selectorData.selectors[" + i + "].value", function (newValue, oldValue) {
+                $scope.result = newValue;
               })
             }
           }
@@ -518,37 +556,37 @@ define(['app', "angular"], function (app, angular) {
      * result="supplierType" change-event="changeFn(_name)"
      * is-disable="isDisable"></div>
      */
-    .directive("njwSelectorInput", ["$document","$timeout",function ($document,$timeout) {
+    .directive("njwSelectorInput", ["$document", "$timeout", function ($document, $timeout) {
       return {
         restrict: "EA",
         templateUrl: app.fileUrlHash("/src/tpl/selector.input.tpl.html"),
         replace: true,
         scope: {
-          selectorData:"=",
-          nsiTitle:"@",
-          result1:"=",
-          result2:"="
+          selectorData: "=",
+          nsiTitle: "@",
+          result1: "=",
+          result2: "="
         },
         link: function ($scope, iElm, iAttrs) {
           var selecter = angular.element(iElm);
           var ul = selecter.find(".njw-selector-list");
-          var rightTips=selecter.find(".right-tips");
+          var rightTips = selecter.find(".right-tips");
           var activeOption,
-            selectorName=$scope.selectorData.optionName,
-            selectorValue=$scope.selectorData.optionValue;
+            selectorName = $scope.selectorData.optionName,
+            selectorValue = $scope.selectorData.optionValue;
 
           var setActiveOption = function (i) {
             $scope.activeOption = activeOption = i;
           };
-          var setTipsWidth=function () {
+          var setTipsWidth = function () {
             $timeout(function () {
-              $scope.rightTips=rightTips.width()+'px';
-            },0);
+              $scope.rightTips = rightTips.width() + 'px';
+            }, 0);
           };
           var setOption = function (i, option) {
             $scope.selectorName = option[selectorName];
-            $scope.selectorData.selectorValue=option[selectorValue];
-            $scope.result2=option[selectorValue];
+            $scope.selectorData.selectorValue = option[selectorValue];
+            $scope.result2 = option[selectorValue];
             setActiveOption(i);
             setTipsWidth();
           };
@@ -556,9 +594,9 @@ define(['app', "angular"], function (app, angular) {
           $scope.selectorClick = function (e) {
             e.stopPropagation();
             $scope.activeOption = activeOption;
-            var isShow=ul.css("display")==="block";
+            var isShow = ul.css("display") === "block";
             angular.element(".njw-selector-list").hide();
-            if(!isShow) ul.show();
+            if (!isShow) ul.show();
           };
 
           $scope.optionClick = function (i, option) {
@@ -566,24 +604,24 @@ define(['app', "angular"], function (app, angular) {
           };
 
           $scope.$watch("selectorData.refresh", function () {
-            setOption(0,$scope.selectorData.list[0]);
+            setOption(0, $scope.selectorData.list[0]);
           });
-          $scope.$watch("inputValue", function (newValue,oldValue) {
-            $scope.result1=newValue;
+          $scope.$watch("inputValue", function (newValue, oldValue) {
+            $scope.result1 = newValue;
           });
           //初始值更新
-          $scope.$watch("selectorData.initSelectorValue", function (newValue,oldValue) {
-            var index=0,option=null;
-            if(!newValue) return;
-            angular.forEach($scope.selectorData.list,function (v,i) {
-              if(newValue==v.name||newValue==i){
-                index=i;
-                option=v;
+          $scope.$watch("selectorData.initSelectorValue", function (newValue, oldValue) {
+            var index = 0, option = null;
+            if (!newValue) return;
+            angular.forEach($scope.selectorData.list, function (v, i) {
+              if (newValue == v.name || newValue == i) {
+                index = i;
+                option = v;
               }
             });
-            setOption(index,option);
+            setOption(index, option);
           });
-          $document.on("click",function () {
+          $document.on("click", function () {
             ul.hide();//点其它关闭select
           })
         }
@@ -606,31 +644,31 @@ define(['app', "angular"], function (app, angular) {
      * result="supplierType" change-event="changeFn(_name)"
      * is-disable="isDisable"></div>
      */
-    .directive("njwSelectorMulti", ["$document","$timeout",function ($document,$timeout) {
+    .directive("njwSelectorMulti", ["$document", "$timeout", function ($document, $timeout) {
       return {
         restrict: "EA",
         templateUrl: app.fileUrlHash("/src/tpl/selector.multi.tpl.html"),
         replace: true,
         scope: {
-          nsmTitle:"@",//标题
-          nmsPlaceholder:"@",
-          nsmSize:"@",//最多可添加数量
-          nsmList:"=", //下拉框数据
-          optionName:"@",//下拉框显示名字字段
-          optionValue:"@",//下拉框选中的值字段
-          result:"="
+          nsmTitle: "@",//标题
+          nmsPlaceholder: "@",
+          nsmSize: "@",//最多可添加数量
+          nsmList: "=", //下拉框数据
+          optionName: "@",//下拉框显示名字字段
+          optionValue: "@",//下拉框选中的值字段
+          result: "="
         },
         link: function ($scope, iElm, iAttrs) {
           var selecter = angular.element(iElm);
           var ul = selecter.find(".njw-selector-list");
           var activeOption;
-          $scope.result="";
+          $scope.result = "";
 
-          $scope.selectedList=[];
+          $scope.selectedList = [];
 
-          $scope.delectBtn=function (index,option) {
-            $scope.selectedList.splice(index,1);
-            $scope.result.replace(option[$scope.optionValue]+",","");
+          $scope.delectBtn = function (index, option) {
+            $scope.selectedList.splice(index, 1);
+            $scope.result.replace(option[$scope.optionValue] + ",", "");
           };
 
 
@@ -639,10 +677,10 @@ define(['app', "angular"], function (app, angular) {
           };
 
           var setOption = function (i, option) {
-            var id=option[$scope.optionValue]+",";
-            if($scope.result.indexOf(id)===-1){
+            var id = option[$scope.optionValue] + ",";
+            if ($scope.result.indexOf(id) === -1) {
               $scope.selectedList.push(option);
-              $scope.result+=id;
+              $scope.result += id;
               setActiveOption(i);
             }
 
@@ -652,9 +690,9 @@ define(['app', "angular"], function (app, angular) {
           $scope.selectorClick = function (e) {
             e.stopPropagation();
             $scope.activeOption = activeOption;
-            var isShow=ul.css("display")==="block";
+            var isShow = ul.css("display") === "block";
             angular.element(".njw-selector-list").hide();
-            if(!isShow) ul.show();
+            if (!isShow) ul.show();
           };
 
           $scope.optionClick = function (i, option) {
@@ -665,7 +703,7 @@ define(['app', "angular"], function (app, angular) {
           //   $scope.selectorName=$scope.selectorData.list[0][selectorName];
           // });
 
-          $document.on("click",function () {
+          $document.on("click", function () {
             ul.hide();//点其它关闭select
           })
         }
@@ -674,7 +712,7 @@ define(['app', "angular"], function (app, angular) {
     /**
      * 模块标题栏
      * mc-title:标题
-     * mc-more-url:更多按钮链接，不传则不显示“查看更多”，同时标题居中显示
+     * mc-more-url:更多按钮链接，不传则不显示“查看更多”，同时标题居中显示；传left表示让标题向左对齐
      * mc-type: look-查看更多(不传默认)；more-更多>>
      * mc-more-text:更多的文本
      * e.g.
@@ -687,17 +725,17 @@ define(['app', "angular"], function (app, angular) {
           mcTitle: "@",
           mcMoreUrl: "@"
         },
-        templateUrl:app.fileUrlHash('/src/tpl/module.caption.tpl.html'),
+        templateUrl: app.fileUrlHash('/src/tpl/module.caption.tpl.html'),
         // template: '',
         replace: true,
         link: function ($scope, iElm, iAttrs) {
           $scope.hasMore = !!$scope.mcMoreUrl;
           if (iAttrs.mcType === undefined || iAttrs.mcType !== "more") {
             $scope.mcType = "look";
-            $scope.moreText =iAttrs.mcMoreText||"查看更多";
+            $scope.moreText = iAttrs.mcMoreText || "查看更多";
           } else {
             $scope.mcType = "more";
-            $scope.moreText ="更多 >>";
+            $scope.moreText = "更多 >>";
           }
         }
       }
@@ -756,7 +794,7 @@ define(['app', "angular"], function (app, angular) {
      * e.g.
      * <div module-caption mc-title="找地案例" mc-more-url="#some" ></div>
      */
-    .directive("landService", ["publicVal",function (publicVal) {
+    .directive("landService", ["publicVal", function (publicVal) {
       return {
         restrict: "EA",
         scope: {
@@ -766,7 +804,7 @@ define(['app', "angular"], function (app, angular) {
         templateUrl: app.fileUrlHash('/src/tpl/land.service.tpl.html'),
         replace: true,
         link: function ($scope, iElm, iAttrs) {
-          $scope.landService=publicVal.landService;
+          $scope.landService = publicVal.landService;
         }
       }
     }])
@@ -791,8 +829,8 @@ define(['app', "angular"], function (app, angular) {
         // template:'',
         replace: true,
         link: function ($scope, iElm, iAttrs) {
-          if(!angular.isArray($scope.nlList)) throw new Error("place send the 'nlList' type to 'Array'");
-          $scope.hasDate=!!$scope.nlList[0].date;
+          if (!angular.isArray($scope.nlList)) throw new Error("place send the 'nlList' type to 'Array'");
+          $scope.hasDate = !!$scope.nlList[0].date;
         }
       }
     })
@@ -862,13 +900,13 @@ define(['app', "angular"], function (app, angular) {
           $scope.$watch("refresh", function (n, o) {
             $scope.currentPage = 1;
             $scope.pageNum = 1;
-            $scope.items =createItems($scope.currentPage,$scope.total);
+            $scope.items = createItems($scope.currentPage, $scope.total);
           });
-          $scope.$watch("total",function (n,o) {
-            $scope.items =createItems($scope.currentPage,$scope.total);
+          $scope.$watch("total", function (n, o) {
+            $scope.items = createItems($scope.currentPage, $scope.total);
           });
 
-          $scope.items =createItems($scope.currentPage,$scope.total);
+          $scope.items = createItems($scope.currentPage, $scope.total);
 
           $scope.itemClick = function (e) {
             var target = e.target || e.srcElement;
@@ -889,7 +927,7 @@ define(['app', "angular"], function (app, angular) {
               $scope.getList({
                 page: $scope.currentPage
               });
-              $scope.items =createItems($scope.currentPage,$scope.total);
+              $scope.items = createItems($scope.currentPage, $scope.total);
               //回滚到顶部
               // angular.element("html,body").animate({"scrollTop": 0})
             }
@@ -912,13 +950,13 @@ define(['app', "angular"], function (app, angular) {
       return {
         restrict: "EA",
         scope: {
-          pList:"="
+          pList: "="
         },
         templateUrl: app.fileUrlHash('/src/tpl/partners.tpl.html'),
         replace: true,
         link: function ($scope, iElm, iAttrs) {
-          if(!angular.isArray($scope.pList)) throw new Error("place send the 'nlList' type to 'Array'");
-          $scope.mcTitle=iAttrs.mcTitle;
+          if (!angular.isArray($scope.pList)) throw new Error("place send the 'nlList' type to 'Array'");
+          $scope.mcTitle = iAttrs.mcTitle;
         }
       }
     })
@@ -936,14 +974,14 @@ define(['app', "angular"], function (app, angular) {
         scope: {
           emcTitle: "@",
           emcBtnName: "@",
-          emcBtnClick:"&"
+          emcBtnClick: "&"
         },
-        templateUrl:app.fileUrlHash('/src/tpl/end.module.caption.tpl.html'),
+        templateUrl: app.fileUrlHash('/src/tpl/end.module.caption.tpl.html'),
         // template: '',
         replace: true,
         link: function ($scope, iElm, iAttrs) {
           // $scope.btnClick=function () {
-            // $scope.emcBtnClick();
+          // $scope.emcBtnClick();
           // }
         }
       }
@@ -956,29 +994,29 @@ define(['app', "angular"], function (app, angular) {
      * e.g.
      * <div end-module-caption emc-title="基本信息" emc-btn-name="+ 新增土地资源" emc-btn-click="btnClickFn" ></div>
      */
-    .directive("njwImgUpload", ["uploadImg","publicVal",function (uploadImg,publicVal) {
+    .directive("njwImgUpload", ["uploadImg", "publicVal", function (uploadImg, publicVal) {
       return {
         restrict: "EA",
         scope: {
-          niuImgs:"=",
-          niuSize:"@",//图片大小
-          niuLen:"@",//图片张数
-          subPath:"@",
-          result:"="
+          niuImgs: "=",
+          niuSize: "@",//图片大小
+          niuLen: "@",//图片张数
+          subPath: "@",
+          result: "="
         },
-        templateUrl:app.fileUrlHash('/src/tpl/img.upload.tpl.html'),
+        templateUrl: app.fileUrlHash('/src/tpl/img.upload.tpl.html'),
         // template: '',
         replace: true,
         link: function ($scope, iElm, iAttrs) {
-          var $dom=angular.element(iElm);
-          var $inputFile=$dom.find(".njwImgFile");
-          var _form=$dom.find(".imgUploadForm")[0];
+          var $dom = angular.element(iElm);
+          var $inputFile = $dom.find(".njwImgFile");
+          var _form = $dom.find(".imgUploadForm")[0];
           var limitSize;
-          $scope.imgHost=publicVal.imgHost;
-          $scope.len=+($scope.niuLen||1);
-          $scope.size=+($scope.niuSize||3);
-          limitSize=$scope.size*1024*1024;
-          $scope.deleteBtn=function (index) {
+          $scope.imgHost = publicVal.imgHost;
+          $scope.len = +($scope.niuLen || 1);
+          $scope.size = +($scope.niuSize || 3);
+          limitSize = $scope.size * 1024 * 1024;
+          $scope.deleteBtn = function (index) {
             // angular.isArray($scope.delId) && $scope.delId.push(imgId);
             $scope.niuImgs.splice(index, 1);
           };
@@ -1029,14 +1067,14 @@ define(['app', "angular"], function (app, angular) {
               _form.reset();
               return false;
             }
-            if(fileName.split(".")[0].length>80){
+            if (fileName.split(".")[0].length > 80) {
               alert("该文件名超过80字，请修改后重新上传。");
               _form.reset();
               return false;
             }
             //支持html5 file判断大小
             if (file && file.size && file.size > limitSize) {
-              alert("图片文件不能大于"+$scope.size+"MB，请修改后重新上传。");
+              alert("图片文件不能大于" + $scope.size + "MB，请修改后重新上传。");
               _form.reset();
               return false;
             }
@@ -1045,52 +1083,220 @@ define(['app', "angular"], function (app, angular) {
           });
 
 
-          $scope.$watch("niuImgs",function (n,o) {
-            for(var i=1;i<7;i++){
-              $scope.result["img"+i]="";
+          $scope.$watch("niuImgs", function (n, o) {
+            for (var i = 1; i < 7; i++) {
+              $scope.result["img" + i] = "";
             }
-            angular.forEach(n,function (v,i) {
-              $scope.result["img"+(i+1)]=v;
+            angular.forEach(n, function (v, i) {
+              $scope.result["img" + (i + 1)] = v;
             })
-          },true);
+          }, true);
         }
       }
     }])
-    .directive("checkbox",[function () {
+    .directive("checkbox", [function () {
       return {
         restrict: "EA",
         scope: {
-          cbTitle:"@",
-          value:"="
+          cbTitle: "@",
+          value: "="
         },
         template: '<a class="checkbox-icon dis-ib" ng-class="value?\'active\':\'\'" ng-click="value=!value">{{cbTitle}}</a>',
         // templateUrl:app.fileUrlHash('/src/tpl/checkbox.group.tpl.html'),
         replace: true,
         link: function ($scope, iElm, iAttrs) {
-          $scope.clickFn=function () {
-            $scope.value=!$scope.value;
+          $scope.clickFn = function () {
+            $scope.value = !$scope.value;
           }
         }
       }
     }])
-    .directive("checkboxGroup",[function () {
+    .directive("checkboxGroup", [function () {
       return {
         restrict: "EA",
         scope: {
-          cgList:"=",
-          result:"="
+          cgList: "=",
+          result: "="
         },
         // template: '<a class="checkbox-icon dis-ib" ng-class="{\'active\':value}" ng-click="value=!value">{{cbTitle}}</a>',
-        templateUrl:app.fileUrlHash('/src/tpl/checkbox.group.tpl.html'),
+        templateUrl: app.fileUrlHash('/src/tpl/checkbox.group.tpl.html'),
         replace: true,
         link: function ($scope, iElm, iAttrs) {
-          $scope.$watch("cgList",function (n, o) {
-            var val="";
-            angular.forEach(n,function (v) {
-              if(v.value) val+=v.id+",";
+          $scope.$watch("cgList", function (n, o) {
+            var val = "";
+            angular.forEach(n, function (v) {
+              if (v.value) val += v.id + ",";
             });
-            $scope.result=val;
-          },true)
+            $scope.result = val;
+          }, true)
+        }
+      }
+    }])
+    /**
+     * 下拉对话框组件
+     */
+    .directive("selectDialog", ["$timeout", function ($timeout) {
+      return {
+        restrict: "EA",
+        scope: {
+          sdData: "="
+        },
+        templateUrl: app.fileUrlHash('/src/tpl/select.dialog.tpl.html'),
+        replace: true,
+        link: function ($scope, iElm, iAttrs) {
+
+          var levelMsg = {},
+            conf = {
+              placeholder: "请选择",
+              show: false,//显示对话框
+              target: angular.element("body"),
+              level: 1,
+              reBackTip: {"2": "返回上一层"},
+              data: [
+                {id: 0, name: "信息"}
+              ],
+              itemClick: function (data) {
+                console.log(data);
+              },
+              result: null,
+              setResult: function () {
+              }
+            };
+          var winWidth=angular.element("body").width();
+          var dialogWidth=480;
+
+          //重置组件位置信息
+          var setWrapPos = function () {
+            var target = angular.element($scope.sdData.target),
+              offset, left, top,width,height,
+              arrowRight="auto";
+
+            if (target) {
+              offset = target.offset();
+              width=target.outerWidth();
+              height=target.height();
+              left = offset.left;
+              top = offset.top+height+20;
+
+              if(left+dialogWidth>winWidth){
+                left=left+width-dialogWidth;
+                arrowRight="20px"
+              }
+              $scope.wrapPos={
+                left:left,
+                top:top,
+                arrowRight:arrowRight,
+                height:angular.element(".page-container").height()
+              };
+
+            }
+
+          };
+
+          var reset = function () {
+            var list;
+            $scope.sdData = angular.extend(conf, $scope.sdData || {});
+            list = $scope.sdData.data;
+            $scope.currentItem = -1;
+            $scope.level = 1;
+            levelMsg = {"1": {index: 1, list: list}};
+            $scope.curList = list;
+            setWrapPos();
+          };
+
+          // var renew=function () {
+          //   reset();
+          // };
+
+
+          $scope.itemClick = function (data, index) {
+            var names = "";
+            $scope.currentItem = index;
+            levelMsg[$scope.level] = {index: index, list: $scope.curList};
+            $scope.level++;
+            if ($scope.level > $scope.sdData.level) {
+              $scope.sdData.show = false;
+              if (typeof $scope.sdData.setResult === "function") {
+                angular.forEach(levelMsg, function (value, key) {
+                  if (key <= $scope.sdData.level)
+                    names += (names ? " " : "") + value.list[value.index]["name"];
+                });
+
+                $scope.sdData.setResult(data, names);
+              }
+            } else {
+              $scope.currentItem = -1;
+              if (typeof $scope.sdData.itemClick === "function") {
+                data.children = [];
+                $scope.sdData.itemClick(data, function () {
+                  $scope.curList = data.children;
+                });
+              }
+
+            }
+
+            $scope.sdData.result = data;
+          };
+
+          //返回上一级
+          $scope.reBack = function () {
+            var msg;
+            $scope.level--;
+            msg = levelMsg[$scope.level];
+            $scope.curList = msg.list;
+            $scope.currentItem = msg.index;
+          };
+
+
+          //重置下拉对话框位置信息
+          $scope.$watch("sdData.show", function (n, o) {
+            if (n) {
+              reset();
+            }
+          });
+
+          //对结果函数进行处理(关闭对话框返回处理结果)
+          // $scope.$watch("sdData.result",function (n,o) {
+          //   if(!n){
+          //     renew();
+          //   }
+          // });
+
+        }
+      }
+    }])
+    .directive("alertDialog", [function () {
+      return {
+        restrict: "EA",
+        scope: {
+          adData: "="
+        },
+        // template: '<a class="checkbox-icon dis-ib" ng-class="{\'active\':value}" ng-click="value=!value">{{cbTitle}}</a>',
+        templateUrl: app.fileUrlHash('/src/tpl/alert.dialog.tpl.html'),
+        replace: true,
+        link: function ($scope, iElm, iAttrs) {
+          var conf = {
+            show: false,
+            type: 'alert',
+            icon: 'warn',//warn wrong right
+            txt: '提示信息',
+            btns:[
+              // {name:"返回",callback:function(){}},
+              {name:"确定",callback:function(){}}
+            ]
+          };
+          var reset = function () {
+            $scope.adData = angular.extend(conf, $scope.adData || {});
+          };
+
+          $scope.btnClick=function (i) {
+            var cb=$scope.adData.btns[i]["callback"];
+            $scope.adData.show=false;
+            typeof(cb)==="function" && cb();
+          };
+          $scope.$watch("adData.show",function (n) {
+            n&&reset();
+          });
         }
       }
     }])

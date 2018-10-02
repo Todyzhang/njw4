@@ -50,10 +50,30 @@ define(['app'], function (app) {
       .state("news", {
         url: "/news",//金融服务
         templateUrl: app.fileUrlHash("/src/pages/news.html"),
-        // controller: "financialCtrl",
         // resolve: app.loadJs("/src/controllers/financialCtrl.js"),
         data:{
           menu:MENUS["news"].id
+        }
+      })
+      .state("nzncp", {
+        url: "/nzncp",//农资农机
+        templateUrl: app.fileUrlHash("/src/pages/nzncp.html"),
+        data:{
+          menu:-1
+        }
+      })
+      .state("njfw", {
+        url: "/njfw",//农资农机
+        templateUrl: app.fileUrlHash("/src/pages/njfw.html"),
+        data:{
+          menu:-1
+        }
+      })
+      .state("nyjs", {
+        url: "/nyjs",//农业技术
+        templateUrl: app.fileUrlHash("/src/pages/nyjs.html"),
+        data:{
+          menu:-1
         }
       })
       .state("end", {

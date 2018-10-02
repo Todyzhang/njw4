@@ -3,8 +3,9 @@
         {{nsgTitle}}</p>
     <div njw-selector ng-repeat="selector in selectors"
          ng-class="{'ml-20':$index>0}"
-         placeholder="{{selector.placeholder}}"
-         options="selector.list"
+         placeholder="{{selectors[0].placeholder}}"
+         data-list="{{selectors[0].list}}"
+         options="selectors"
          option-name="{{selectorData.optionName}}"
          option-value="{{selectorData.optionValue}}"
          option-init="{{selector.value}}"

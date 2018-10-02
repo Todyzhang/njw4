@@ -1,38 +1,143 @@
 define(['app', 'css!/src/css/main'], function (app) {
   'use strict';
-  app.ctrl('mainCtrl', ["$scope", function ($scope) {
+  app.ctrl('mainCtrl', ["$scope","$rootScope","publicVal","queryClassify","$timeout","soilDemand","njwAlert",
+    function ($scope,$rootScope,publicVal,queryClassify,$timeout,soilDemand,njwAlert) {
     // console.log(require.pathFromUrl('../css/main.css'))
     //$state.transitionTo("main.index")
+
+    //====提交需求form=====
+    var selectAddr,selectLandType,getCityList,getTypeList,
+      isInSubmit=false;
+    /*
+      SoilDemandVo {
+      acreage (integer, optional): 土地面积(单位亩) ,
+      areaId (integer, optional): 城市区域id ,
+      describe (string, optional): 描述(不能为空,140个字符内.) ,
+      managementTypesId (integer, optional): 土地经营类型 ,
+      phone (string, optional): 手机号
+      }
+   */
+    $scope.needLandForm={
+      acreage:"",
+      areaId:"",
+      describe:"",
+      managementTypesId:"",
+      phone:""
+    };
+
+    $scope.landTypeName = "";
+    $scope.addrsText="";
+
+    selectAddr = {
+      placeholder: "地区选择",
+      show: false,
+      level: 3,
+      reBackTip: {"2": "其它省份","3":"其它城市"},
+      data: [],
+      itemClick: function (data, cb) {
+        queryClassify.getArea(data.id)
+          .then(function (res) {
+            var list = [];
+            angular.forEach(res, function (_d) {
+              list.push({id: _d.id, name: _d.name});
+            });
+            data.children = list;
+            typeof cb === "function" && cb(data);
+          }, function (err) {
+            console.log(err)
+          });
+      },
+      setResult: function (data,names) {
+        $scope.addrsText = names;
+        $scope.needLandForm.areaId=data.id;
+      }
+    };
+
+    getCityList=function() {
+      var list = [];
+      angular.forEach(publicVal.provinceArea, function (_d) {
+        list.push({id: _d.id, name: _d.name});
+      });
+      selectAddr.data=list;
+    };
+
+    $scope.selectCity=function (e) {
+      var target=e.target || e.srcElement;
+      selectAddr.target = angular.element(target).parent();
+      selectAddr.show = true;
+      if(selectAddr.data.length===0){
+        getCityList();
+      }
+      $rootScope.selectDialogData = selectAddr;
+    };
+
+    selectLandType = {
+      placeholder: "类型选择",
+      show: false,
+      level: 2,
+      reBackTip: {"2": "其它类型"},
+      data: [],
+      itemClick: function (data, cb) {
+        queryClassify.getLand(data.id)
+          .then(function (res) {
+            var list = [];
+            angular.forEach(res, function (_d) {
+              list.push({id: _d.id, name: _d.name});
+            });
+            data.children = list;
+            typeof cb === "function" && cb(data);
+          }, function (err) {
+            console.log(err)
+          });
+      },
+      setResult: function (data,names) {
+        $scope.landTypeName = names;
+        $scope.needLandForm.managementTypesId=data.id;
+      }
+    };
+
+    getTypeList=function() {
+      var list = [];
+      angular.forEach(publicVal.landType, function (_d) {
+        list.push({id: _d.id, name: _d.name});
+      });
+      selectLandType.data=list;
+    };
+
+    $scope.selectType=function (e) {
+      var target=e.target || e.srcElement;
+      selectLandType.target = angular.element(target).parent();
+      selectLandType.show = true;
+      if(selectLandType.data.length===0){
+        getTypeList();
+      }
+      $rootScope.selectDialogData = selectLandType;
+    };
+
+    $scope.addNeedLand=function () {
+      if(!isInSubmit){
+        isInSubmit=true;
+        $scope.needLandForm.acreage=+$scope.needLandForm.acreage;
+        soilDemand.addSoil($scope.needLandForm)
+          .then(function () {
+            njwAlert.right("提交成功，我们将安排专人和您对接！");
+            isInSubmit=false;
+          },function (err) {
+            njwAlert.wrong("提交失败，请稍后重试！");
+            isInSubmit=false;
+          })
+      }
+    };
+
+
+
+
     $scope.sliderList = [
       {img: "static/images/banner0.jpg", url: "#some"},
       {img: "static/images/banner1.jpg", url: "#some"},
       {img: "static/images/banner2.jpg", url: "#some"}
     ];
-    $scope.typeList = [
-      {"type": 0, "typeName": "合作社"},
-      {"type": 1, "typeName": "经纪人/代办"},
-      {"type": 2, "typeName": "家庭农场"},
-      {"type": 3, "typeName": "批发商/代卖"},
-      {"type": 4, "typeName": "种植户"},
-      {"type": 5, "typeName": "养殖户"},
-      {"type": 6, "typeName": "种植企业"},
-      {"type": 7, "typeName": "养殖企业"},
-      {"type": 8, "typeName": "苗木花卉"},
-      {"type": 9, "typeName": "出口企业商"},
-      {"type": 10, "typeName": "超市"},
-      {"type": 11, "typeName": "食堂"},
-      {"type": 12, "typeName": "酒店"},
-      {"type": 13, "typeName": "餐饮店"},
-      {"type": 14, "typeName": "农产品加工"},
-      {"type": 15, "typeName": "物流/仓储"},
-      {"type": 16, "typeName": "仓储/冷库"},
-      {"type": 17, "typeName": "其他"}
-    ];
-    $scope.supplierType = 0;
 
-    $scope.findLandBtn=function () {
-
-    };
     $scope.landRentList = [
       {
         title: "清新区石潭镇185亩超优质连片水田出租",
@@ -108,7 +213,7 @@ define(['app', 'css!/src/css/main'], function (app) {
         },
         caption:{
           title:"土地流转",
-          url:"#some"
+          url:"/#/news"
         }
 
       },
@@ -127,10 +232,12 @@ define(['app', 'css!/src/css/main'], function (app) {
         },
         caption:{
           title:"国家政策",
-          url:"#some"
+          url:"/#/news"
         }
       }
-    ]
+    ];
+
+
 
   }]);
 

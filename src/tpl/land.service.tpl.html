@@ -2,7 +2,7 @@
     <div class="w1200">
         <div module-caption mc-title="{{mcTitle}}" mc-more-url="{{mcMoreUrl}}" ></div>
         <div class="module-list tc clearfix">
-            <a class="module-list-item" ng-repeat="item in landService" ng-class="{'ml-0':$index===0}" ng-href="{{item.url}}">
+            <a class="module-list-item" ng-repeat="item in landService" ng-class="{'ml-0':$index===0}" ng-href="{{item.url}}" target="{{item.blank?'_blank':'_self'}}" ng-click="item.cb&&item.cb()">
                 <div class="module-img" ng-class="'item'+$index"></div>
                 <div class="module-info">
                     <p class="fs-18"><span class="module-title">{{item.title}}<i>&gt;</i></span></p>

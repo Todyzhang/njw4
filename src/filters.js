@@ -14,6 +14,12 @@ define(['app'], function (app) {
         return value.replace(/(\d{3})(\d{4})(\d{4})/,"$1***$3");
       }
     })
+    .filter('trustAsResourceUrl', ['$sce', function($sce) {
+      return function(value) {
+        return $sce.trustAsResourceUrl(value);
+      };
+    }])
+
 
 
 });
