@@ -413,6 +413,9 @@ define(['app', 'angular'], function (app, angular) {
       };
 
     })
+    .service("emptyFunction",function () {
+      return function(){}
+    })
     .factory("njwGetDateDiff", function () {
       return function (_dateTime) {
         if (!_dateTime) return "";
@@ -648,32 +651,66 @@ define(['app', 'angular'], function (app, angular) {
         return items;
       };
     })
-    .factory("njwAlert", ["$rootScope",function ($rootScope) {
+    .factory("njwAlert", ["$rootScope","emptyFunction",function ($rootScope,emptyFunction) {
+      /*
       var conf = {
         show: false,
-        type: 'alert',
-        icon: 'warn',//warn wrong right
-        txt: '提示信息',
-        btns:[
-          // {name:"返回",callback:function(){}},
-          {name:"确定",callback:function(){}}
-        ]
+        data:{
+          type: 'alert',
+          icon: 'warn',//warn wrong right
+          txt: '提示信息',
+          btns:[
+            // {name:"返回",callback:function(){}},
+            {name:"确定",cb:function(){}}
+          ]
+        }
+      };
+      */
+
+      var cbHandler=function (action) {
+        var btns=[{name:"确定",cb:emptyFunction}];
+        if(typeof(action)==="function"){
+          btns[0].cb=action;
+        }else if(Array.isArray(action)&&action[0].name&&action[0].cb){
+          angular.extend(btns,action);
+        }
+        return btns;
       };
 
-      function warn(txt,cb) {
-        $rootScope.alertDialogData.txt=txt;
-        $rootScope.alertDialogData.icon='warn';
-        $rootScope.alertDialogData.show=true;
+      /**
+       *
+       * @param txt 提示语
+       * @param action function|array 按钮，最多2个
+       */
+      function warn(txt,action) {
+        $rootScope.alertDialogData={
+          show:true,
+          data:{
+            txt:txt,
+            icon:'warn',
+            btns:cbHandler(action)
+          }
+        };
       }
-      function wrong(txt,cb) {
-        $rootScope.alertDialogData.txt=txt;
-        $rootScope.alertDialogData.icon='wrong';
-        $rootScope.alertDialogData.show=true;
+      function wrong(txt,action) {
+        $rootScope.alertDialogData={
+          show:true,
+          data:{
+            txt:txt,
+            icon:'wrong',
+            btns:cbHandler(action)
+          }
+        };
       }
-      function right(txt,cb) {
-        $rootScope.alertDialogData.txt=txt;
-        $rootScope.alertDialogData.icon='right';
-        $rootScope.alertDialogData.show=true;
+      function right(txt,action) {
+        $rootScope.alertDialogData={
+          show:true,
+          data:{
+            txt:txt,
+            icon:'right',
+            btns:cbHandler(action)
+          }
+        };
       }
 
       return {

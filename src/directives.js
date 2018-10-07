@@ -1275,28 +1275,13 @@ define(['app', "angular"], function (app, angular) {
         templateUrl: app.fileUrlHash('/src/tpl/alert.dialog.tpl.html'),
         replace: true,
         link: function ($scope, iElm, iAttrs) {
-          var conf = {
-            show: false,
-            type: 'alert',
-            icon: 'warn',//warn wrong right
-            txt: '提示信息',
-            btns:[
-              // {name:"返回",callback:function(){}},
-              {name:"确定",callback:function(){}}
-            ]
-          };
-          var reset = function () {
-            $scope.adData = angular.extend(conf, $scope.adData || {});
-          };
 
           $scope.btnClick=function (i) {
-            var cb=$scope.adData.btns[i]["callback"];
-            $scope.adData.show=false;
+            var cb=$scope.adData.data.btns[i]["cb"];
             typeof(cb)==="function" && cb();
+            $scope.adData.show=false;
           };
-          $scope.$watch("adData.show",function (n) {
-            n&&reset();
-          });
+
         }
       }
     }])
