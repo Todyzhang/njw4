@@ -6,6 +6,9 @@
     padding:40px;
     box-shadow:0 8px 18px -9px rgba(46,165,53,0.5);
 }
+.find-land-select a{
+    border:1px solid transparent;
+}
 .fls-item{
     margin-top:10px;
 }
@@ -15,6 +18,7 @@
 .fls-item-title{
     width:86px;
     letter-spacing: .5em;
+    padding-top: 4px;
 }
 .fls-item-list{
     padding-left:86px;

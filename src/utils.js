@@ -46,8 +46,21 @@ define(['app', 'angular'], function (app, angular) {
       "end.editLand": {id: 6, name: "end.editLand", title: "土地资源编辑", url: "/#/editLand", index: 1, pid: 1},
       "end.addLand": {id: 7, name: "end.addLand", title: "新增土地资源", url: "/#/addLand", index: 2, pid: 1}
     })
-    .factory("publicVal", ["MENUS", "ENDMENUS","njwAlert", function (MENUS, ENDMENUS,njwAlert) {
-      //api http://yfb-vip-vip.nongj.com/nonjia/swagger-ui.html
+    .factory("publicVal", ["MENUS", "ENDMENUS", "njwAlert", function (MENUS, ENDMENUS, njwAlert) {
+      /*
+        // 预发布环境配置
+        cookieDomain = "nongj.com";
+        severHost = "http://yfb-nonjiayi-end.nongj.com/nonjiayi/";
+        loginUrl = "http://yfb-nonjiayi-auth.nongj.com/";
+        frontHost = "http://yfb-nonjiayi.nongj.com/";
+        njwHost = "http://yfb-www.nongj.com/";
+        //发布生产环境配置
+        cookieDomain = "nongj.com";
+        severHost = "http://nonjiayi-end.nongj.com/nonjiayi/";
+        loginUrl = "http://nonjiayi-auth.nongj.com/";
+        frontHost = "http://nonjiayi.nongj.com/";
+        njwHost = "http://www.nongj.com/";
+       */
       var val = {
         serverTel: "020-87595266",
         //=========服务器host配置
@@ -57,7 +70,8 @@ define(['app', 'angular'], function (app, angular) {
         loginHost: "http://nonjiayi-auth.nongj.com/admin/toLogin",
         // oldNewsUrl:"http://192.168.100.16:3000/info",
         oldNewsUrl: "http://yfb-www.nongj.com/old/info",
-        njyHost: "http://yfb-nonjiayi.nongj.com/"
+        njyHost: "http://yfb-nonjiayi.nongj.com/",
+        njyEndHost: "http://yfb-nonjiayi-end.nongj.com/nonjiayi/"
       };
 
 
@@ -71,19 +85,34 @@ define(['app', 'angular'], function (app, angular) {
 
       val.endMenus = (function () {
         var ary = [];
-        angular.forEach(ENDMENUS, function (value, key) {
-          if (value.pid !== undefined) {
-            if (ary[value.pid] === undefined) ary[value.pid] = {};
-            if (ary[value.pid]["children"] === undefined) ary[value.pid]["children"] = [];
-            ary[value.pid]["children"][value.index] = value;
-          } else {
-            if (ary[value.index] !== undefined) {
-              angular.extend(ary[value.index], value);
-            } else {
-              ary[value.index] = value;
-            }
-          }
-        });
+        // angular.forEach(ENDMENUS, function (value, key) {
+        //   if (value.pid !== undefined) {
+        //     if (ary[value.pid] === undefined) ary[value.pid] = {};
+        //     if (ary[value.pid]["children"] === undefined) ary[value.pid]["children"] = [];
+        //     ary[value.pid]["children"][value.index] = value;
+        //   } else {
+        //     if (ary[value.index] !== undefined) {
+        //       angular.extend(ary[value.index], value);
+        //     } else {
+        //       ary[value.index] = value;
+        //     }
+        //   }
+        // });
+        ary = [{
+          "id": 1,
+          "title": "土地资源管理",
+          "index": 1,
+          "kls": "land-source-icon",
+          "children": [
+            {
+              "id": 7,
+              "name": "end.addLand",
+              "title": "新增土地资源",
+              "url": "/#/addLand",
+              "index": 2,
+              "pid": 1
+            }]
+        }];
         return ary;
       })();
 
@@ -119,7 +148,7 @@ define(['app', 'angular'], function (app, angular) {
         {
           title: "土地招商",
           info: "土地项目招商引资土地项目推介",
-          cb:function(){
+          cb: function () {
             njwAlert.warn("建设中，敬请期待！")
           }
         }
@@ -268,7 +297,7 @@ define(['app', 'angular'], function (app, angular) {
           msgTotal: 3,//个人新消息数（单位数），多于两位显示".."
           account: "3D4H853262EA1",
           headIcon: "/static/images/head_icon.jpg",
-          login: false,
+          login: true,
           city: {id: 19, name: "广东"}
         };
         //适合经营
@@ -412,9 +441,6 @@ define(['app', 'angular'], function (app, angular) {
         }
       };
 
-    })
-    .service("emptyFunction",function () {
-      return function(){}
     })
     .factory("njwGetDateDiff", function () {
       return function (_dateTime) {
@@ -651,7 +677,7 @@ define(['app', 'angular'], function (app, angular) {
         return items;
       };
     })
-    .factory("njwAlert", ["$rootScope","emptyFunction",function ($rootScope,emptyFunction) {
+    .factory("njwAlert", ["$rootScope", function ($rootScope, emptyFunction) {
       /*
       var conf = {
         show: false,
@@ -667,12 +693,12 @@ define(['app', 'angular'], function (app, angular) {
       };
       */
 
-      var cbHandler=function (action) {
-        var btns=[{name:"确定",cb:emptyFunction}];
-        if(typeof(action)==="function"){
-          btns[0].cb=action;
-        }else if(Array.isArray(action)&&action[0].name&&action[0].cb){
-          angular.extend(btns,action);
+      var cbHandler = function (action) {
+        var btns = [{name: "确定", cb: angular.noop}];
+        if (typeof(action) === "function") {
+          btns[0].cb = action;
+        } else if (Array.isArray(action) && action[0].name && action[0].cb) {
+          angular.extend(btns, action);
         }
         return btns;
       };
@@ -682,41 +708,43 @@ define(['app', 'angular'], function (app, angular) {
        * @param txt 提示语
        * @param action function|array 按钮，最多2个
        */
-      function warn(txt,action) {
-        $rootScope.alertDialogData={
-          show:true,
-          data:{
-            txt:txt,
-            icon:'warn',
-            btns:cbHandler(action)
+      function warn(txt, action) {
+        $rootScope.alertDialogData = {
+          show: true,
+          data: {
+            txt: txt,
+            icon: 'warn',
+            btns: cbHandler(action)
           }
         };
       }
-      function wrong(txt,action) {
-        $rootScope.alertDialogData={
-          show:true,
-          data:{
-            txt:txt,
-            icon:'wrong',
-            btns:cbHandler(action)
+
+      function wrong(txt, action) {
+        $rootScope.alertDialogData = {
+          show: true,
+          data: {
+            txt: txt,
+            icon: 'wrong',
+            btns: cbHandler(action)
           }
         };
       }
-      function right(txt,action) {
-        $rootScope.alertDialogData={
-          show:true,
-          data:{
-            txt:txt,
-            icon:'right',
-            btns:cbHandler(action)
+
+      function right(txt, action) {
+        $rootScope.alertDialogData = {
+          show: true,
+          data: {
+            txt: txt,
+            icon: 'right',
+            btns: cbHandler(action)
           }
         };
       }
 
       return {
         warn: warn,
-        wrong:wrong,
-        right:right
+        wrong: wrong,
+        right: right
       };
     }])
 

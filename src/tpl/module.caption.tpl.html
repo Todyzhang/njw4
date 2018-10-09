@@ -1,4 +1,4 @@
 <div class="module-caption" ng-class="{'tc':!hasMore&&mcMoreUrl!=='left'}">
     <p class="dis-ib fs-16 tl" ng-class="{'caption-bar':mcType==='look'}">{{mcTitle}}</p>
-    <a class="se-thinner fr" ng-if="hasMore&&mcMoreUrl!=='left'" ng-class="{'look-more':mcType==='look'}" ng-href="{{mcMoreUrl}}">{{moreText}}</a>
+    <a class="se-thinner fr" ng-if="hasMore&&mcMoreUrl!=='left'" ng-class="{'look-more':mcType==='look'}" ng-href="{{mcMoreUrl}}" target="{{mcTarget||'_self'}}">{{moreText}}</a>
 </div>

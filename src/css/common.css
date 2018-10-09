@@ -1126,7 +1126,6 @@ body {
 }
 
 .news-list > li {
-    margin-top: 20px;
     list-style-type: disc;
 }
 
@@ -1159,6 +1158,14 @@ body {
 
 .news-img > img {
     display: block;
+}
+.w370 .news-img > img{
+    width:370px;
+    height: 252px;
+}
+.w282 .news-img > img{
+    width:282px;
+    height: 190px;
 }
 
 .news-img > p {

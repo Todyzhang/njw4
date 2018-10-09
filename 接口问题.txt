@@ -1,0 +1,23 @@
+日期：2018.10.8
+一、首页 页面
+1.Banner图获得接口
+2.分页查询土地需求信息 /soilDemand/findAllByPage.action
+  请求参数多了一个openid
+
+二、我要找地 页面
+2./soil/find.action 土地查询分页接口
+ A.statuId (integer, optional): 土地状态---是否指 耕地、园地 等分类项？
+ B.最大土地、最小土地、最大可流转年限、最小可流转年限传值问题：不限传0？以上、以下 另一项是传0吗？
+ C.地址传值问题：默认 全国areaId0，areaId1传0？；全省areaId1传省的id?
+ D.其它不限是否都传0?
+ E.未知接口返回数据结构
+
+三、金额服务
+内容说明图及合作金额机购logo
+
+四、涉农服务
+1.Banner图获得接口
+2.合作机构logo
+
+五、其它问题
+1. /ManagementTypes/secondStair/list/{paraetId}.action 接口无数据

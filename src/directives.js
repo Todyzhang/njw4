@@ -715,6 +715,7 @@ define(['app', "angular"], function (app, angular) {
      * mc-more-url:更多按钮链接，不传则不显示“查看更多”，同时标题居中显示；传left表示让标题向左对齐
      * mc-type: look-查看更多(不传默认)；more-更多>>
      * mc-more-text:更多的文本
+     * mc-target:a标签打开方式
      * e.g.
      * <div module-caption mc-title="找地案例" mc-more-url="#some" ></div>
      */

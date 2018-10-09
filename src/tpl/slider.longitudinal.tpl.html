@@ -10,8 +10,8 @@
     </div>
 
     <div class="slider" id="{{descSlider.id}}" style="margin-top:-400px">
-        <a class="slider-item" ng-style="{'background-image':'url('+descSlider.lastItem.img+')'}" ng-href="{{descSlider.lastItem.url}}"></a>
-        <a class="slider-item" ng-repeat="img in descSlider.list" ng-style="{'background-image':'url('+img.img+')'}" ng-href="{{img.url}}"></a>
-        <a class="slider-item" ng-style="{'background-image':'url('+descSlider.firstItem.img+')'}" ng-href="{{descSlider.firstItem.url}}"></a>
+        <a class="slider-item" ng-style="{'background-image':'url('+descSlider.lastItem.img+')'}" ng-href="{{descSlider.lastItem.url}}" target="_blank"></a>
+        <a class="slider-item" ng-repeat="img in descSlider.list" ng-style="{'background-image':'url('+img.img+')'}" ng-href="{{img.url}}" target="_blank"></a>
+        <a class="slider-item" ng-style="{'background-image':'url('+descSlider.firstItem.img+')'}" ng-href="{{descSlider.firstItem.url}}" target="_blank"></a>
     </div>
 </div>

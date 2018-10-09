@@ -148,7 +148,8 @@ define(["require", "angular"], function (require, angular) {
       $urlRouterProvider.when("", "/main");
     }]);
 
-  app.controller("pageHeaderCtrl", ["$scope", "$rootScope", "queryClassify", "publicVal", function ($scope, $rootScope, queryClassify, publicVal) {
+  app.controller("pageHeaderCtrl", ["$scope", "$rootScope", "queryClassify", "publicVal", "njwUser",
+    function ($scope, $rootScope, queryClassify, publicVal,njwUser) {
 
     var selectCity = {
       placeholder: "地区选择",
@@ -182,8 +183,11 @@ define(["require", "angular"], function (require, angular) {
       selectCity.data=list;
     };
 
-    $scope.exitClick = function () {
-      //todo
+    $scope.exit = function () {
+      njwUser.logout()
+        .then(function () {
+          location.href="/";
+        })
     };
 
     $scope.showSelect = function (e) {

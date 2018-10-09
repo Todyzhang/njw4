@@ -25,7 +25,7 @@ define(['app'], function (app) {
 
               if (typeof(_data) === "string") _data = JSON.parse(_data);
               if (_data.success||(_data.status&&_data.status.toLowerCase()==="success")) {
-                dtd.resolve(_data.t || _data.data || _data);
+                dtd.resolve(_data.t || _data.data || _data.content || _data);
               } else {
 
                 dtd.reject(_data.errorMessage);
@@ -82,6 +82,40 @@ define(['app'], function (app) {
         upload: uploadImg
       };
     }])
+    .factory("njwUser", ["fetch","publicVal", function (fetch,publicVal) {
+      /*
+       {
+       "content":{
+       "invalidDate":"2016-09-01 11:03:52",
+       "openDate":"2016-08-13 11:03:47",
+       "userEmail":"284765987@qq.com",
+       "userName":"abc12312",
+       "userPhone":"18454245634",
+       "userType":4 //用户类别 1.个人 2.企业 3.站点服务员 4.业务管理员 7.担保公司
+       },
+       "errorMessage":"",
+       "sessionStatus":0,
+       "success":true
+       }
+       {
+       "content":"failed",
+       "errorMessage":"sessionId 失效",
+       "sessionStatus":-1,
+       "success":false
+       }
+       */
+      var host=publicVal.njyEndHost;
+      function getCurrentUser() {
+        return fetch.get(host+"api/user/user/find/getCurrentUser");
+      }
+      function logout() {
+        return fetch.get(host+"api/sys/login/logout");
+      }
+      return {
+        getCurrentUser: getCurrentUser,
+        logout: logout
+      };
+    }])
     //查找各分类接口
     .factory("queryClassify", ["fetch", function (fetch) {
       var _path = "ManagementTypes/";
@@ -125,11 +159,28 @@ define(['app'], function (app) {
     }])
     .factory("soil", ["fetch", function (fetch) {
       function addSoil(data) {
-        return fetch.post("soilDemand/addSoilDemand.action", data);
+        //新增土地转让
+        return fetch.post("/soil/add.action", data);
       }
 
+      function findSoil(data,page,pageSize) {
+        return fetch.post("/soil/find.action?page="+page+"&pageSize="+pageSize,data)
+      }
       return {
-        addSoil: addSoil
+        addSoil: addSoil,
+        findSoil:findSoil
+      }
+    }])
+    .factory("getNews", ["fetch", function (fetch) {
+      function mainPage() {
+        return fetch.post("http://vip.nongj.com/nonjia/news/findInfoTypeAccessToInformationMap.action", {"typeName":"政务动态,行政通知,产权流转","pageSize":6,"attribute":1,"typeCode":"zwdt,xztz,cqlz"});
+      }
+      function findLandPage() {
+        return fetch.post("http://vip.nongj.com/nonjia/news/findInfoTypeAccessToInformationMap.action", {"typeName":"金融资讯,机械化服务,农资农产品,政务动态,行政通知","pageSize":6,"attribute":1,"typeCode":"jyfw,nyds,nznq,zwdt,xztz"});
+      }
+      return {
+        mainPage: mainPage,
+        findLandPage:findLandPage
       }
     }])
 });

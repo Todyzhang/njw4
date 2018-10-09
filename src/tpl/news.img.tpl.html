@@ -1,4 +1,4 @@
-<a class="news-img" ng-class="{'bottom-title':niBottom}">
+<a class="news-img" ng-class="{'bottom-title':niBottom}" ng-href="{{niImg.url}}" target="_blank">
     <img ng-src="{{niImg.img}}" />
     <p class="se-bg-shallow ell fs-18" ni-if="!niBottom">
         <span class="br-bar">{{niImg.from}}</span><span class="fs-14">{{niImg.title}}</span>
