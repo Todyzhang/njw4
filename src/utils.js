@@ -63,12 +63,12 @@ define(['app', 'angular'], function (app, angular) {
        */
       var val = {
         serverTel: "020-87595266",
+        cookieDomain: "nongj.com",
         //=========服务器host配置
         frontHost: "http://192.168.100.16:8080/",
         imgHost: "http://192.168.1.84:8096/",
         severHost: "http://yfb-vip-vip.nongj.com/nonjia/",
         loginHost: "http://nonjiayi-auth.nongj.com/admin/toLogin",
-        // oldNewsUrl:"http://192.168.100.16:3000/info",
         oldNewsUrl: "http://yfb-www.nongj.com/old/info",
         njyHost: "http://yfb-nonjiayi.nongj.com/",
         njyEndHost: "http://yfb-nonjiayi-end.nongj.com/nonjiayi/"
@@ -245,6 +245,14 @@ define(['app', 'angular'], function (app, angular) {
         {id: '平米', name: '平米'}
       ];
 
+      val.serveAssort=[
+        {id: 1, name: '物流'},
+        {id: 2, name: '仓储'},
+        {id: 3, name: '批发市场'},
+        {id: 4, name: '超市'},
+        {id: 5, name: '农科站'}
+      ];
+
       //==========以下为angular run ajax中返回
       //适合经营
       val.managementTypesId = [
@@ -266,8 +274,8 @@ define(['app', 'angular'], function (app, angular) {
 
       return val;
     }])
-    .run(["$rootScope", "publicVal", "queryClassify", "MENUS", "ENDMENUS",
-      function ($rootScope, publicVal, queryClassify, MENUS, ENDMENUS) {
+    .run(["$rootScope", "publicVal", "queryClassify", "MENUS", "ENDMENUS","njwUser",
+      function ($rootScope, publicVal, queryClassify, MENUS, ENDMENUS,njwUser) {
 
         //下拉选择对话框
         $rootScope.selectDialogData = {
@@ -293,12 +301,12 @@ define(['app', 'angular'], function (app, angular) {
 
 
         $rootScope.loginMsg = {
-          name: "18022224312",
+          name: "",
           msgTotal: 3,//个人新消息数（单位数），多于两位显示".."
-          account: "3D4H853262EA1",
+          account: "",
           headIcon: "/static/images/head_icon.jpg",
-          login: true,
-          city: {id: 19, name: "广东"}
+          login: false,
+          city: {id: 1, name: "广东省"}
         };
         //适合经营
         queryClassify.getStair()
@@ -323,13 +331,15 @@ define(['app', 'angular'], function (app, angular) {
           }, function (reason) {
             publicVal.provinceArea = [];
           });
-
-        // queryClassify.findSysArea(0)
-        //   .then(function(result){
-        //     console.log("findSysArea:",result);
-        //   },function (reason) {
-        //     debugger
-        //   });
+        //得到登录用户信息
+        njwUser.getCurrentUser()
+          .then(function (data) {
+            $rootScope.loginMsg.name=data.userName;
+            $rootScope.loginMsg.account=data.userPhone;
+            $rootScope.loginMsg.login=true;
+          },function (err) {
+            $rootScope.loginMsg.login=false;
+          })
 
 
       }])
@@ -369,7 +379,6 @@ define(['app', 'angular'], function (app, angular) {
           }
           domain = _front + end;
         }
-        console.log(domain)
         return domain;
       }
 
@@ -746,6 +755,41 @@ define(['app', 'angular'], function (app, angular) {
         wrong: wrong,
         right: right
       };
+    }])
+    .service("parseLandInfo",["publicVal",function (publicVal) {
+
+      return function (landsInfo) {
+        var list = [];
+        var getFlags= function(land){
+          var ary=[];
+          land.type&&ary.push(land.type);
+          land.dealModeId&&ary.push(publicVal.dealModeId[land.dealModeId-1].name);
+          return ary;
+        };
+        angular.forEach(landsInfo, function (v) {
+          list.push({
+            title: v.title,
+            url: "/#/landInfo/" + v.number,
+            icon: v.img1 || "/static/images/282x210.jpg",
+            flags: getFlags(v),
+            area: v.acreage + v.acreageUnit,
+            price: v.dealPrice ? (v.dealPrice + publicVal.dealUnitId[v.dealUnitId - 1].name) : "面议",
+            address: v.area
+          });
+        });
+        return list;
+      }
+    }])
+    .service("ajaxErrorHandle",["njwAlert","$state",function (njwAlert,$state) {
+      return function (msg,defaultTips) {
+        if(/(未登录)|(session((I|i)d)?\s*失效)/.test(msg)){
+          njwAlert.wrong("未登录，“确定”将跳转到登录页",function () {
+            $state.transitionTo("login");
+          })
+        }else{
+          njwAlert.wrong(msg || defaultTips || "ajax出错");
+        }
+      }
     }])
 
 

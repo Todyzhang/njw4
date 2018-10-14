@@ -1,6 +1,7 @@
 define(['app', 'css!/src/css/end'], function (app) {
   'use strict';
-  app.ctrl('landAddCtrl', ["$scope", "queryClassify", "$q","soil", "publicVal",function ($scope, queryClassify, $q,soil,publicVal) {
+  app.ctrl('landAddCtrl', ["$scope", "queryClassify", "$timeout","soil", "publicVal","njwAlert","$state",
+    function ($scope, queryClassify, $timeout,soil,publicVal,njwAlert,$state) {
 
     /*
     SoilAddVo {
@@ -54,6 +55,84 @@ define(['app', 'css!/src/css/end'], function (app) {
     10	联系方式	为空	请输入联系方式！
     11	联系方式	格式有误	请输入正确的联系方式！
      */
+
+
+    // $timeout(function () {
+      $scope.selector_2 =
+        {
+          title: '土地类型',
+          required: true,
+          optionName: "name",
+          optionValue: "id",
+          selectors: [
+            {
+              list: publicVal.landType,
+              placeholder: '一级大类',
+              value: null,
+              optionChange: function (name,id) {
+                if(!name||!id) return ;
+
+                queryClassify.getLand(id)
+                  .then(function (value) {
+                    $scope.selector_2.selectors[1].list = value;
+                    $scope.selector_2.selectors[1].value = value[0].id;
+                  })
+              }
+            },
+            {
+              list: [],
+              placeholder: '二级大类',
+              value: null
+            }
+          ]
+        };
+
+      $scope.selector_3 =
+        {
+          title: '所在区域',
+          required: true,
+          optionName: "name",
+          optionValue: "id",
+          selectors: [
+            {
+              list: publicVal.provinceArea,
+              placeholder: '省份',
+              value: null,
+              optionChange: function (name,id) {
+                if(!name||!id) return ;
+
+                queryClassify.getArea(id)
+                  .then(function (value) {
+                    $scope.selector_3.selectors[1].list = value;
+                    $scope.selector_3.selectors[1].value = value[0].id;
+                  })
+              }
+            },
+            {
+              list: [],
+              placeholder: '城市',
+              value: null,
+              optionChange: function (name,id) {
+                if(!name||!id) return ;
+
+                queryClassify.getArea(id)
+                  .then(function (value) {
+                    $scope.selector_3.selectors[2].list = value;
+                    $scope.selector_3.selectors[2].value = value[0].id;
+                  })
+              }
+            },
+            {
+              list: [],
+              placeholder: '县/区',
+              value: null
+            }
+          ]
+        };
+
+      //适合经营
+      $scope.selector_multi=publicVal.managementTypesId;
+    // },0);
 
     $scope.soilAddVo={};
 
@@ -136,77 +215,7 @@ define(['app', 'css!/src/css/end'], function (app) {
       show:false
     };
 
-    $scope.selector_2 =
-      {
-        title: '土地类型',
-        required: true,
-        optionName: "name",
-        optionValue: "id",
-        selectors: [
-          {
-            list: publicVal.landType,
-            placeholder: '一级大类',
-            value: null,
-            optionChange: function (name,id) {
-              if(!name||!id) return ;
 
-              queryClassify.getLand(id)
-                .then(function (value) {
-                  $scope.selector_2.selectors[1].list = value;
-                  $scope.selector_2.selectors[1].value = value[0].id;
-                })
-            }
-          },
-          {
-            list: [],
-            placeholder: '二级大类',
-            value: null
-          }
-        ]
-      };
-
-    $scope.selector_3 =
-      {
-        title: '所在区域',
-        required: true,
-        optionName: "name",
-        optionValue: "id",
-        selectors: [
-          {
-            list: publicVal.provinceArea,
-            placeholder: '省份',
-            value: null,
-            optionChange: function (name,id) {
-              if(!name||!id) return ;
-
-              queryClassify.getArea(id)
-                .then(function (value) {
-                  $scope.selector_3.selectors[1].list = value;
-                  $scope.selector_3.selectors[1].value = value[0].id;
-                })
-            }
-          },
-          {
-            list: [],
-            placeholder: '城市',
-            value: null,
-            optionChange: function (name,id) {
-              if(!name||!id) return ;
-
-              queryClassify.getArea(id)
-                .then(function (value) {
-                  $scope.selector_3.selectors[2].list = value;
-                  $scope.selector_3.selectors[2].value = value[0].id;
-                })
-            }
-          },
-          {
-            list: [],
-            placeholder: '县/区',
-            value: null
-          }
-        ]
-      };
 
     //土地面积
     $scope.inputSelector_1={
@@ -349,16 +358,15 @@ define(['app', 'css!/src/css/end'], function (app) {
 
 
 
-    //适合经营
-    $scope.selector_multi=publicVal.managementTypesId;
-
     $scope.checkbox1=publicVal.facility;
     $scope.checkbox2=publicVal.serveAssort;
 
     $scope.submitBtn=function(){
       soil.addSoil($scope.soilAddVo)
         .then(function (value) {
-          alert("成功")
+          njwAlert.right("成功",function () {
+            $state.go("findland");
+          });
         })
     }
 
@@ -416,17 +424,17 @@ define(['app', 'css!/src/css/end'], function (app) {
 
     $scope.submitFn=function () {
       if($scope.addLand.$invalid){
-        alert("表单还有未完成")
+        njwAlert.worng("表单还有未完成项，请完成必填项");
       }
     };
 
     $scope.$parent.alternation["addLand"]=function () {
       $scope.submitFn();
-    }
+    };
 
     $scope.$watch('addLand.$invalid',function (n) {
       $scope.$parent.addLandFormOk=n;
-    })
+    });
 
 
   }]);

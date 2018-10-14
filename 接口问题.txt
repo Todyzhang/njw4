@@ -1,23 +1,127 @@
 日期：2018.10.8
 一、首页 页面
 1.Banner图获得接口
+（所有的banner图都不要用接口去 直接写死先banner图的问题 我还在想办法弄，先把设计的图片放上去再说）
 2.分页查询土地需求信息 /soilDemand/findAllByPage.action
   请求参数多了一个openid
+（已完成更改）
 
 二、我要找地 页面
 2./soil/find.action 土地查询分页接口
  A.statuId (integer, optional): 土地状态---是否指 耕地、园地 等分类项？
+（这个是土地状态  1--表示这个土地状态不可用  2表示可用 默认查询2这个状态的）
  B.最大土地、最小土地、最大可流转年限、最小可流转年限传值问题：不限传0？以上、以下 另一项是传0吗？
+（如果没有值就不传值就行 如果是添加数据 不能为0 如果为0就直接不填 不传值就行了）
  C.地址传值问题：默认 全国areaId0，areaId1传0？；全省areaId1传省的id?
+（全国的话 你就不传值就行 或者传0   省份就传省份的ID 广东省ID是1）
  D.其它不限是否都传0?
+（如果没有值就不传值就行 如果是添加数据 不能为0 如果为0就直接不填 不传值就行了）
  E.未知接口返回数据结构
 
 三、金额服务
 内容说明图及合作金额机购logo
+（说明图稍后我找申星弄完了给你 logo直接用设计图上面的就行 或者网上找）
 
 四、涉农服务
 1.Banner图获得接口
+（所有的banner图都不要用接口去 直接写死先banner图的问题 我还在想办法弄，先把设计的图片放上去再说）
 2.合作机构logo
-
+（ logo直接用设计图上面的就行 或者网上找）
 五、其它问题
 1. /ManagementTypes/secondStair/list/{paraetId}.action 接口无数据
+
+
+日期：2018.10.10
+一.土地详情页
+1./soil/findSoidByNumber.action 按照土地编号查询  接口无数据
+2.无“周边土地资源”接口
+3.无“免费咨询”及“预约看地”的储存号码的接口
+
+
+acreage (integer, optional): 土地面积 ,
+acreageUnit (string, optional): 土地面积单位 ,
+areaId (integer, optional): 所在区域 ,
+contact (string, optional): 土地联系人 ,
+contactMode (string, optional): 土地联系人联系方式 ,
+dealAge (integer, optional): 可流转年限 ,
+dealModeId (integer, optional): 可流转方式 ,
+dealPrice (integer, optional): 可流转价格 0或不填为“面议” ,
+dealUnitId (integer, optional): 流转价格单位 1,元/亩/年 2,元/平米/月 3,万元/年 4,万元 ,
+facility (string, optional): 地上设施 1,水井 2大棚 3、仓库 4、农机房 5、晾晒场 6、育种育苗场 7、生活生产用房'多选框 条件用逗号隔开 ,
+headWaters (integer, optional): 供水条件 1,已通水 2,未通水可通水 3,未通水 ,
+highway (string, optional): 交通要道 ,
+ifAccessId (integer, optional): 是否通路 1,'已通路' 2,'未通路' ,
+img1 (string, optional): 图片1 ,
+img2 (string, optional): 图片2 ,
+img3 (string, optional): 图片3 ,
+img4 (string, optional): 图片4 ,
+img5 (string, optional): 图片5 ,
+img6 (string, optional): 图片6 ,
+industryResource (string, optional): 产业资源 ,
+managementTypesId (string, optional): 适合经营 多选框 条件用逗号隔开 ,
+nature (string, optional): 土地性质 ,
+networkId (integer, optional): 网络条件 1,'已通网络' 2,'未通网络' 3,'未通可通网络' ,
+number (string, optional): 地块编号 ,
+ownershipType (integer, optional): 权属类型 1,'个人' 2,'集体' 3,'国有' ,
+powerSupplyId (integer, optional): 供电条件 1,已通电 2,未通电 3,未通可通电 ,
+promulgator (string, optional): 发布者 11位手机号 ,
+promulgatorType (string, optional): 用户类型 "个人" "企业" ,
+publicTime (string, optional): 发布日期 ,
+scenicSpots (string, optional): 旅游景点 ,
+serveAssort (string, optional): 服务配套 1,物流 2、仓储 3、批发市场 4、超市 5、农科站',多选框 条件用逗号隔开 ,
+smoothDegreeId (integer, optional): 平整程度 1,非常平整 2,程度一般 3,程度较差 ,
+submitTime (string, optional): 提交日期 ,
+title (string, optional): 发布标题 ,
+typeId (integer, optional): 土地类型 ,
+warrantType (string, optional): 政权类型 ,
+water (integer, optional): 水源条件 1,'水源充足' 2,'水源稀缺'
+
+acreage: 1
+acreageUnit: "亩"
+areaId: 1
+contact: "1"
+contactMode: "13632474510"
+dealAge: 1
+dealModeId: 1
+dealPrice: 1
+dealTiem: null
+dealUnitId: 1
+facility: null
+headWaters: 0
+highway: null
+id: 20
+ifAccessId: 0
+img1: null
+img2: null
+img3: null
+img4: null
+img5: null
+img6: null
+industryResource: null
+lastDealPrice: null
+lastLeadAge: null
+lastLeadModeId: null
+managementTypesId: null
+nature: null
+networkId: 0
+number: "td1808001911"
+ownershipType: 0
+powerSupplyId: 0
+promulgator: "13632474510"
+promulgatorType: "个人"
+publicTime: null
+scenicSpots: null
+serveAssort: null
+smoothDegreeId: 0
+statuId: 2
+submitTime: 1534348800000
+title: "测试标题"
+transferee: null
+transfereeContact: null
+transfereeContactWay: null
+typeId: 1
+warrantType: null
+water: 0
+
+
+

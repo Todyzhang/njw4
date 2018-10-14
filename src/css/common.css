@@ -737,7 +737,7 @@ body {
     background:url("/static/images/arrows.png");
     top:340px;
     left:520px;
-    z-index:100;
+    z-index:99;
 }
 .arrows-btn>.arrows-left,
 .arrows-btn>.arrows-right{
@@ -1356,6 +1356,7 @@ body {
     bottom:0;
     margin:auto;
     height:132px;
+    line-height: 1.5;
 }
 .dialog-icon{
     width:80px;
@@ -1371,4 +1372,39 @@ body {
 }
 .d-right{
     background-image:url("/static/images/dialog_right.png");
+}
+
+/*提交土地需求form*/
+.mc-xqxx-form {
+    background-image: url("/static/images/xqxx.png");
+    background-position: 5px 5px;
+    background-repeat: no-repeat;
+    padding-left: 430px;
+    border-radius: 8px;
+}
+
+.mc-xqxx-form > form {
+    height: 254px;
+    padding: 38px 52px 36px 40px;
+}
+
+.mc-xqxx-form .caption {
+    background: url("/static/images/doforyou.png") no-repeat left top;
+    padding-left: 220px;
+}
+
+.mc-xqxx-form .caption > span {
+    width: 100%;
+    line-height: 27px;
+}
+
+.mc-xqxx-form .input-row {
+    margin-top: 20px;
+}
+
+.mc-xqxx-form .btn-submit {
+    border-radius: 20px;
+    width: 228px;
+    margin-left: 20px;
+    position: relative;
 }

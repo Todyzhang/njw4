@@ -11,54 +11,7 @@
             </div>
 
             <!--提交需求form-->
-            <div class="mc-xqxx-form se-bg-main">
-                <form class="se-bg-main" novalidate name="nlf">
-                    <p class="caption">
-                        <span class="dis-ib tr se-thinner bb-bar">热线：{{serverTel}}</span>
-                    </p>
-                    <div class="input-row">
-                        <div njw-input-select placeholder="目标地区"
-                             ng-click="selectCity($event)"
-                             input-text="addrsText"></div>
-                        <label class="njw-input height-line-40 border-radius-20 se-border thinner mlr-3">
-                            <input placeholder="需求规模"
-                                   ng-model="needLandForm.acreage"
-                                   sn-number="5"
-                                   name="acreage"
-                                   ng-required="{{true}}"
-                            /><span class="word-tips">亩</span>
-                        </label>
-                        <div njw-input-select placeholder="经营类型"
-                             ng-click="selectType($event)"
-                             input-text="landTypeName"></div>
-
-                    </div>
-                    <div class="input-row">
-                        <label class="njw-textarea se-bg-shallow">
-                            <textarea placeholder="更多需求"
-                                      ng-model="needLandForm.describe"
-                                      ng-required="{{true}}"
-                                      name="describe"
-                                      maxlength="140"></textarea>
-                        </label>
-                    </div>
-                    <div class="input-row">
-                        <label class="njw-input height-line-40 border-radius-20 se-border thinner se-bg-shallow" style="width:368px">
-                            <input placeholder="您的手机号"
-                                   ng-model="needLandForm.phone"
-                                   ng-required="{{true}}"
-                                   name="phone"
-                                   ng-minlength="11"
-                                   sn-number="11" />
-                        </label>
-
-                        <a class="btn btn-deeper btn-submit fs-14 height-line-40"
-                           ng-class="{'disabled':nlf.$invalid||!(needLandForm.areaId&&needLandForm.managementTypesId)}"
-                           ng-click="addNeedLand()"
-                        >提交需求</a>
-                    </div>
-                </form>
-            </div>
+            <div find-land-form></div>
         </div>
 
         <!--优质土地资源-->

@@ -18,7 +18,7 @@ SoidfindVo {
     managementTypesId2 (integer, optional): 二级适合经营 ,
     order (integer, optional): 排序模式 1,时间(默认) 2,面积 3,年限 ,
     promulgator (string, optional): 发布人 ,
-    statuId (integer, optional): 土地状态 ,
+    statuId (integer, optional): 土地状态 1是正常的土地数据 2才是非正常的土地数据 ,
     typeId1 (integer, optional): 一级土地类型 ,
     typeId2 (integer, optional): 二级土地类型
 }

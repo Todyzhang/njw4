@@ -524,8 +524,8 @@ define(['app', "angular"], function (app, angular) {
         // template: '',
         replace: true,
         link: function ($scope, iElm, iAttrs) {
-          $scope.selectors = $scope.selectorData.selectors;
-          for (var i = 0, len = $scope.selectorData.selectors.length; i < len; i++) {
+          $scope.selectors = ($scope.selectorData&&$scope.selectorData.selectors)||[];
+          for (var i = 0, len = $scope.selectors.length; i < len; i++) {
             var refreshIndex = i;
             $scope.$watch("selectorData.selectors[" + i + "].list", function () {
               $scope.selectorData.selectors[refreshIndex]["refresh"] = +new Date;
@@ -995,7 +995,7 @@ define(['app', "angular"], function (app, angular) {
      * e.g.
      * <div end-module-caption emc-title="基本信息" emc-btn-name="+ 新增土地资源" emc-btn-click="btnClickFn" ></div>
      */
-    .directive("njwImgUpload", ["uploadImg", "publicVal", function (uploadImg, publicVal) {
+    .directive("njwImgUpload", ["uploadImg", "publicVal","ajaxErrorHandle","njwAlert", function (uploadImg, publicVal,ajaxErrorHandle,njwAlert) {
       return {
         restrict: "EA",
         scope: {
@@ -1040,11 +1040,11 @@ define(['app', "angular"], function (app, angular) {
                   $scope.niuImgs.push(data.t);
                 } else {
                   //上传失败
-                  alert(data.errorMessage || "上传图片失败！");
+                  ajaxErrorHandle(data.errorMessage,"上传图片失败！");
                 }
               }, function () {
                 //上传失败
-                alert(data.errorMessage || "上传图片失败！");
+                ajaxErrorHandle(data.errorMessage,"上传图片失败！");
               })
               .then(function () {
                 _form.reset();//清空file input中的文件
@@ -1059,23 +1059,23 @@ define(['app', "angular"], function (app, angular) {
             var pathAry = filePathName.split(/\\|\//);
             var fileName = pathAry[pathAry.length - 1];
             if (!/\.(png|jpeg|jpg|gif)$/.test(fileName.toLocaleLowerCase())) {
-              alert("请选择png|jpeg|jpg|gif格式的图片上传");
+              njwAlert.warn("请选择png|jpeg|jpg|gif格式的图片上传");
               _form.reset();
               return false;
             }
             if (!specialCharReg.test(fileName)) {
-              alert("文件名不能含有特殊字符，请修改后重新上传。");
+              njwAlert.warn("文件名不能含有特殊字符，请修改后重新上传。");
               _form.reset();
               return false;
             }
             if (fileName.split(".")[0].length > 80) {
-              alert("该文件名超过80字，请修改后重新上传。");
+              njwAlert.warn("该文件名超过80字，请修改后重新上传。");
               _form.reset();
               return false;
             }
             //支持html5 file判断大小
             if (file && file.size && file.size > limitSize) {
-              alert("图片文件不能大于" + $scope.size + "MB，请修改后重新上传。");
+              njwAlert.warn("图片文件不能大于" + $scope.size + "MB，请修改后重新上传。");
               _form.reset();
               return false;
             }
@@ -1163,31 +1163,31 @@ define(['app', "angular"], function (app, angular) {
               setResult: function () {
               }
             };
-          var winWidth=angular.element("body").width();
-          var dialogWidth=480;
+          var winWidth = angular.element("body").width();
+          var dialogWidth = 480;
 
           //重置组件位置信息
           var setWrapPos = function () {
             var target = angular.element($scope.sdData.target),
-              offset, left, top,width,height,
-              arrowRight="auto";
+              offset, left, top, width, height,
+              arrowRight = "auto";
 
             if (target) {
               offset = target.offset();
-              width=target.outerWidth();
-              height=target.height();
+              width = target.outerWidth();
+              height = target.height();
               left = offset.left;
-              top = offset.top+height+20;
+              top = offset.top + height + 20;
 
-              if(left+dialogWidth>winWidth){
-                left=left+width-dialogWidth;
-                arrowRight="20px"
+              if (left + dialogWidth > winWidth) {
+                left = left + width - dialogWidth;
+                arrowRight = "20px"
               }
-              $scope.wrapPos={
-                left:left,
-                top:top,
-                arrowRight:arrowRight,
-                height:angular.element(".page-container").height()
+              $scope.wrapPos = {
+                left: left,
+                top: top,
+                arrowRight: arrowRight,
+                height: angular.element(".page-container").height()
               };
 
             }
@@ -1277,12 +1277,150 @@ define(['app', "angular"], function (app, angular) {
         replace: true,
         link: function ($scope, iElm, iAttrs) {
 
-          $scope.btnClick=function (i) {
-            var cb=$scope.adData.data.btns[i]["cb"];
-            typeof(cb)==="function" && cb();
-            $scope.adData.show=false;
+          $scope.btnClick = function (i) {
+            var cb = $scope.adData.data.btns[i]["cb"];
+            typeof(cb) === "function" && cb();
+            $scope.adData.show = false;
           };
 
+        }
+      }
+    }])
+    /**
+     * 提交土地需求form
+     */
+    .directive("findLandForm", ["queryClassify","soilDemand","njwAlert","publicVal","$rootScope",
+      function (queryClassify,soilDemand,njwAlert,publicVal,$rootScope) {
+      return {
+        restrict: "EA",
+        scope: {
+          adData: "="
+        },
+        templateUrl: app.fileUrlHash('/src/tpl/find.land.form.tpl.html'),
+        replace: true,
+        link: function ($scope, iElm, iAttrs) {
+          var selectAddr, selectLandType, getCityList, getTypeList,
+            isInSubmit = false;
+          /*
+            SoilDemandVo {
+            acreage (integer, optional): 土地面积(单位亩) ,
+            areaId (integer, optional): 城市区域id ,
+            describe (string, optional): 描述(不能为空,140个字符内.) ,
+            managementTypesId (integer, optional): 土地经营类型 ,
+            phone (string, optional): 手机号
+            }
+         */
+          $scope.needLandForm = {
+            acreage: "",
+            areaId: "",
+            describe: "",
+            managementTypesId: "",
+            phone: ""
+          };
+
+          $scope.landTypeName = "";
+          $scope.addrsText = "";
+
+          selectAddr = {
+            placeholder: "地区选择",
+            show: false,
+            level: 3,
+            reBackTip: {"2": "其它省份", "3": "其它城市"},
+            data: [],
+            itemClick: function (data, cb) {
+              queryClassify.getArea(data.id)
+                .then(function (res) {
+                  var list = [];
+                  angular.forEach(res, function (_d) {
+                    list.push({id: _d.id, name: _d.name});
+                  });
+                  data.children = list;
+                  typeof cb === "function" && cb(data);
+                }, function (err) {
+                  console.log(err)
+                });
+            },
+            setResult: function (data, names) {
+              $scope.addrsText = names;
+              $scope.needLandForm.areaId = data.id;
+            }
+          };
+
+          getCityList = function () {
+            var list = [];
+            angular.forEach(publicVal.provinceArea, function (_d) {
+              list.push({id: _d.id, name: _d.name});
+            });
+            selectAddr.data = list;
+          };
+
+          $scope.selectCity = function (e) {
+            var target = e.target || e.srcElement;
+            selectAddr.target = angular.element(target).parent();
+            selectAddr.show = true;
+            if (selectAddr.data.length === 0) {
+              getCityList();
+            }
+            $rootScope.selectDialogData = selectAddr;
+          };
+
+          selectLandType = {
+            placeholder: "类型选择",
+            show: false,
+            level: 2,
+            reBackTip: {"2": "其它类型"},
+            data: [],
+            itemClick: function (data, cb) {
+              queryClassify.getLand(data.id)
+                .then(function (res) {
+                  var list = [];
+                  angular.forEach(res, function (_d) {
+                    list.push({id: _d.id, name: _d.name});
+                  });
+                  data.children = list;
+                  typeof cb === "function" && cb(data);
+                }, function (err) {
+                  console.log(err)
+                });
+            },
+            setResult: function (data, names) {
+              $scope.landTypeName = names;
+              $scope.needLandForm.managementTypesId = data.id;
+            }
+          };
+
+          getTypeList = function () {
+            var list = [];
+            angular.forEach(publicVal.landType, function (_d) {
+              list.push({id: _d.id, name: _d.name});
+            });
+            selectLandType.data = list;
+          };
+
+          $scope.selectType = function (e) {
+            var target = e.target || e.srcElement;
+            selectLandType.target = angular.element(target).parent();
+            selectLandType.show = true;
+            if (selectLandType.data.length === 0) {
+              getTypeList();
+            }
+            $rootScope.selectDialogData = selectLandType;
+          };
+
+          $scope.addNeedLand = function () {
+            if (!isInSubmit) {
+              isInSubmit = true;
+              $scope.needLandForm.acreage = +$scope.needLandForm.acreage;
+              soilDemand.addSoil($scope.needLandForm)
+                .then(function () {
+                  njwAlert.right("提交成功，我们将安排专人和您对接！");
+                  isInSubmit = false;
+                }, function (err) {
+                  njwAlert.wrong("提交失败，请稍后重试！");
+                  isInSubmit = false;
+                })
+            }
+          };
         }
       }
     }])

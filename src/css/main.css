@@ -11,39 +11,6 @@
     width: 100%;
 }
 
-.mc-xqxx-form {
-    background-image: url("/static/images/xqxx.png");
-    background-position: 5px 5px;
-    background-repeat: no-repeat;
-    padding-left: 430px;
-    border-radius: 8px;
-}
-
-.mc-xqxx-form > form {
-    height: 254px;
-    padding: 40px 54px 36px 40px;
-}
-
-.mc-xqxx-form .caption {
-    background: url("/static/images/doforyou.png") no-repeat left top;
-    padding-left: 220px;
-}
-
-.mc-xqxx-form .caption > span {
-    width: 100%;
-    line-height: 27px;
-}
-
-.mc-xqxx-form .input-row {
-    margin-top: 20px;
-}
-
-.mc-xqxx-form .btn-submit {
-    border-radius: 20px;
-    width: 228px;
-    margin-left: 20px;
-    position: relative;
-}
 
 .land-news{
     padding:40px 36px;

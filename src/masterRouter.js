@@ -87,7 +87,8 @@ define(['app'], function (app) {
         url: "^/addLand",//新增土地资源
         data:{
           endMenu1:ENDMENUS["end.addLand"].pid||ENDMENUS["end.addLand"].index,
-          endMenu2:ENDMENUS["end.addLand"].id
+          endMenu2:ENDMENUS["end.addLand"].id,
+          needLogin:true
         },
         views:{
           "end-main":{
@@ -111,7 +112,8 @@ define(['app'], function (app) {
         url: "^/msgCenter",//消息中心
         data:{
           endMenu1:ENDMENUS["end.msgCenter"].pid||ENDMENUS["end.msgCenter"].index,
-          endMenu2:ENDMENUS["end.msgCenter"].id
+          endMenu2:ENDMENUS["end.msgCenter"].id,
+          needLogin:true
         },
         views:{
           "end-main":{

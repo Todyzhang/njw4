@@ -1,7 +1,7 @@
 <div class="find-land-content main-bg se-bg-shallow">
 
     <div class="w1200 mt-40">
-        <a class="btn find-land-btn pos-fix"></a><!--我要找地按钮-->
+        <a class="btn find-land-btn pos-fix" ng-click="findLandClick()"></a><!--我要找地按钮-->
         <div class="find-land-select se-bg-main">
             <!--<div class="fls-item">-->
                 <!--<p class="fl fls-item-title bold fs-18">区域</p>-->
@@ -80,14 +80,23 @@
             <div class="find-land-list">
                 <!--<div class="bb-bar" module-caption mc-title="优质土地资源" mc-more-url="#some"></div>-->
                 <div class="module-tabs bb-bar">
-                    <a class="module-tab-item active">默认排序</a><span>/</span>
-                    <a class="module-tab-item">面积</a><span>/</span>
-                    <a class="module-tab-item">可流转年限</a>
+                    <a ng-repeat-start="tab in tabs.list"
+                       class="module-tab-item"
+                       ng-class="{'active':tabs.current===$index}"
+                       ng-click="tabClick(tab,$index)"
+                    >{{tab.name}}</a><span ng-repeat-end ng-if="!$last">/</span>
                 </div>
                 <div module-list ml-list="landRentList"></div>
 
-                <div njw-pager current-page="1" total-page="16" pager-renew="newPager" get-list="getListByPage(page)"></div>
+                <div njw-pager current-page="{{pager.page}}" total-page="{{pager.totalPage}}" pager-renew="pager.reNew" get-list="getListByPage(page)"></div>
             </div>
+
+        </div>
+    </div>
+    <div class="module-list-wrap mt-20 pt-30" id="findLandForm">
+        <div class="w1200 pb-40">
+            <!--提交需求form-->
+            <div find-land-form></div>
         </div>
     </div>
 </div>

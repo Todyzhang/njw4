@@ -32,36 +32,31 @@ define(["require", "angular"], function (require, angular) {
   //   });
   // });
 
-  app.run(["$rootScope", "$location", "$state", "$window", function ($rootScope, $location, $state, $window) {
-    $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
-      // if(toState.name=="login")return;// 如果是进入登录界面则允许
-      // 如果用户不存在
-      // if(ifLoginTrue==false){
-      //   console.log("没有登录")
-      //   event.preventDefault();// 取消默认跳转行为
-      //   $("#my-modal-loading").modal("open");//开启加载中loading
+  app.run(["$rootScope", "$location", "$state", "$window", "njwUser",
+    function ($rootScope, $location, $state, $window, njwUser) {
+      $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
+        //   event.preventDefault();// 取消默认跳转行为
+        if (toState.data.needLogin) {
+          //需要登录的URL则先验证登录有限信
+          njwUser.checkLogin()
+            .then(function (flag) {
+              if (!flag) {
+                //记录需登录前的url，登录成功后需跳转到该地址
+                $rootScope.loginRebackUrl = toState.name || "main";
+                $state.go("login");
+              }
+            });
+        }
+        $rootScope.menuActive = toState.data.menu;//页头菜单项
+        $rootScope.endMenuActive1 = toState.data.endMenu1;//后台第一项菜单
+        $rootScope.endMenuActive2 = toState.data.endMenu2;//后台第二项菜单
+        $rootScope.isLoginPage = toState.data.isLoginPage;//登录页时需把公共头尾隐藏
+      });
 
-      // $state.go("login",{from:fromState.name,w:"notLogin"});//跳转到登录界面
-      // }
-      // console.log(event);
-      // console.log(toState);
-      // console.log(toParams);
-      // console.log(fromState);
-      // console.log(fromParams);
-      if (toState.name === "login" || toState.name === "logon") {
-        //记录需登录前的url，登录成功后需跳转到该地址
-        $rootScope.loginRebackUrl = fromState.name || "main";
-      }
-      $rootScope.menuActive = toState.data.menu;
-      $rootScope.endMenuActive1 = toState.data.endMenu1;
-      $rootScope.endMenuActive2 = toState.data.endMenu2;
-      $rootScope.isLoginPage = toState.data.isLoginPage;
-    });
-
-    $rootScope.$on("$stateChangeSuccess", function (event, viewConfig) {
-      $window.scrollTo(0, 0);//到顶部
-    })
-  }]);
+      $rootScope.$on("$stateChangeSuccess", function (event, viewConfig) {
+        $window.scrollTo(0, 0);//到顶部
+      });
+    }]);
 
   app.config(["$controllerProvider", "$provide", "$stateProvider", "$urlRouterProvider", "$httpProvider", "$compileProvider", "$filterProvider", "MENUS",
     function ($controllerProvider, $provide, $stateProvider, $urlRouterProvider, $httpProvider, $compileProvider, $filterProvider, MENUS) {
@@ -149,56 +144,56 @@ define(["require", "angular"], function (require, angular) {
     }]);
 
   app.controller("pageHeaderCtrl", ["$scope", "$rootScope", "queryClassify", "publicVal", "njwUser",
-    function ($scope, $rootScope, queryClassify, publicVal,njwUser) {
+    function ($scope, $rootScope, queryClassify, publicVal, njwUser) {
 
-    var selectCity = {
-      placeholder: "地区选择",
-      show: false,//显示对话框
-      level: 2,
-      reBackTip: {"2": "其它省份", "3": "其它城市"},
-      data: [],
-      itemClick: function (data, cb) {
-        queryClassify.getArea(data.id)
-          .then(function (res) {
-            var list = [];
-            angular.forEach(res, function (_d) {
-              list.push({id: _d.id, name: _d.name});
+      var selectCity = {
+        placeholder: "地区选择",
+        show: false,//显示对话框
+        level: 2,
+        reBackTip: {"2": "其它省份", "3": "其它城市"},
+        data: [],
+        itemClick: function (data, cb) {
+          queryClassify.getArea(data.id)
+            .then(function (res) {
+              var list = [];
+              angular.forEach(res, function (_d) {
+                list.push({id: _d.id, name: _d.name});
+              });
+              data.children = list;
+              typeof cb === "function" && cb(data);
+            }, function (err) {
+              console.log(err)
             });
-            data.children = list;
-            typeof cb === "function" && cb(data);
-          }, function (err) {
-            console.log(err)
-          });
-      },
-      setResult: function (data) {
-        $rootScope.loginMsg.city = data;
+        },
+        setResult: function (data) {
+          $rootScope.loginMsg.city = data;
+        }
+      };
+
+      $scope.getCityList = function () {
+        var list = [];
+        angular.forEach(publicVal.provinceArea, function (_d) {
+          list.push({id: _d.id, name: _d.name});
+        });
+        selectCity.data = list;
+      };
+
+      $scope.exit = function () {
+        njwUser.logout()
+          .then(function () {
+            location.href = "/";
+          })
+      };
+
+      $scope.showSelect = function (e) {
+        selectCity.target = e.target || e.srcElement;
+        selectCity.show = true;
+        if (selectCity.data.length === 0) {
+          $scope.getCityList();
+        }
+        $rootScope.selectDialogData = selectCity;
       }
-    };
-
-    $scope.getCityList = function () {
-      var list = [];
-      angular.forEach(publicVal.provinceArea, function (_d) {
-        list.push({id: _d.id, name: _d.name});
-      });
-      selectCity.data=list;
-    };
-
-    $scope.exit = function () {
-      njwUser.logout()
-        .then(function () {
-          location.href="/";
-        })
-    };
-
-    $scope.showSelect = function (e) {
-      selectCity.target = e.target || e.srcElement;
-      selectCity.show = true;
-      if(selectCity.data.length===0){
-        $scope.getCityList();
-      }
-      $rootScope.selectDialogData = selectCity;
-    }
-  }]);
+    }]);
 
   return app;
 });

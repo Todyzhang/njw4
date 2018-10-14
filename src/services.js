@@ -47,7 +47,8 @@ define(['app'], function (app) {
           }
         };
       }])
-    .factory("uploadImg", ["$http", "$q", "publicVal", "njwCookie", function ($http, $q, publicVal, njwCookie) {
+    .factory("uploadImg", ["$http", "$q", "publicVal", "njwCookie",
+      function ($http, $q, publicVal, njwCookie) {
       //上传图片
       var uploadImg = function (form) {
         var dtd = $q.defer();
@@ -82,7 +83,8 @@ define(['app'], function (app) {
         upload: uploadImg
       };
     }])
-    .factory("njwUser", ["fetch","publicVal", function (fetch,publicVal) {
+    .factory("njwUser", ["fetch","njwCookie","publicVal","$q","$rootScope",
+      function (fetch,njwCookie,publicVal,$q,$rootScope) {
       /*
        {
        "content":{
@@ -111,9 +113,28 @@ define(['app'], function (app) {
       function logout() {
         return fetch.get(host+"api/sys/login/logout");
       }
+      function checkLogin() {
+        var dtd=$q.defer(),ssid=njwCookie.getCookie("ssid");
+        if(!ssid){
+          dtd.resolve(false);
+        }else{
+          getCurrentUser()
+            .then(function (data) {
+              $rootScope.loginMsg.name=data.userName;
+              $rootScope.loginMsg.account=data.userPhone;
+              $rootScope.loginMsg.login=true;
+              dtd.resolve(true);
+            },function (err) {
+              $rootScope.loginMsg.login=false;
+              dtd.resolve(false);
+            });
+        }
+        return dtd.promise;
+      }
       return {
         getCurrentUser: getCurrentUser,
-        logout: logout
+        logout: logout,
+        checkLogin:checkLogin
       };
     }])
     //查找各分类接口
@@ -160,15 +181,20 @@ define(['app'], function (app) {
     .factory("soil", ["fetch", function (fetch) {
       function addSoil(data) {
         //新增土地转让
-        return fetch.post("/soil/add.action", data);
+        return fetch.post("soil/add.action", data);
       }
 
       function findSoil(data,page,pageSize) {
-        return fetch.post("/soil/find.action?page="+page+"&pageSize="+pageSize,data)
+        return fetch.post("soil/find.action?page="+page+"&pageSize="+pageSize,data)
+      }
+
+      function findSoidByNumber(id) {
+        return fetch.get("soil/findSoidByNumber.action?number="+id);
       }
       return {
         addSoil: addSoil,
-        findSoil:findSoil
+        findSoil:findSoil,
+        findSoidByNumber:findSoidByNumber
       }
     }])
     .factory("getNews", ["fetch", function (fetch) {
