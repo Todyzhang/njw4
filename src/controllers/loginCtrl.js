@@ -19,6 +19,7 @@ define(['app','angular'], function (app,angular) {
     //登录成功后的跳转地址
     window.loginSuccessJump=function(){
       // location.href="#"+$rootScope.loginRebackUrl;
+      njwUser.getLoginUser();
       njwUser.setSession()
         .then(function (res) {
           $state.transitionTo($rootScope.loginRebackUrl);

@@ -113,6 +113,20 @@ define(['app'], function (app) {
       function getCurrentUser() {
         return fetch.get(host+"api/user/user/find/getCurrentUser");
       }
+      function getLoginUser() {
+        var dtd=$q.defer();
+        getCurrentUser()
+          .then(function (data) {
+            $rootScope.loginMsg.name=data.userName;
+            $rootScope.loginMsg.account=data.userPhone;
+            $rootScope.loginMsg.login=true;
+            dtd.resolve(true);
+          },function (err) {
+            $rootScope.loginMsg.login=false;
+            dtd.resolve(false);
+          });
+        return dtd.promise;
+      }
       function logout() {
         return fetch.get(host+"api/sys/login/logout");
       }
@@ -121,14 +135,10 @@ define(['app'], function (app) {
         if(!ssid){
           dtd.resolve(false);
         }else{
-          getCurrentUser()
+          getLoginUser()
             .then(function (data) {
-              $rootScope.loginMsg.name=data.userName;
-              $rootScope.loginMsg.account=data.userPhone;
-              $rootScope.loginMsg.login=true;
               dtd.resolve(true);
             },function (err) {
-              $rootScope.loginMsg.login=false;
               dtd.resolve(false);
             });
         }
@@ -141,7 +151,8 @@ define(['app'], function (app) {
         getCurrentUser: getCurrentUser,
         logout: logout,
         checkLogin:checkLogin,
-        setSession:setSession
+        setSession:setSession,
+        getLoginUser:getLoginUser
       };
     }])
     //查找各分类接口

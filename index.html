@@ -23,7 +23,7 @@
         <div class="ph-login-msg se-bg-shallow">
             <div class="w1200 se-shallow fs-12">
                 <p class="fr" ng-if="!loginMsg.login"><a class="dis-ib mr-10" ui-sref="login">登录</a>|<a class="dis-ib ml-10" ui-sref="logon">注册</a></p>
-                <p class="fr" ng-if="loginMsg.login"><!--<a class="btn login-msg-btn mr-10"><span class="badge" ng-if="loginMsg.msgTotal">{{loginMsg.msgTotal}}</span></a>|--><a class="btn person-btn">{{loginMsg.name | njwNumSer}}</a><a class="btn exit-btn" ng-click="exit()">退出</a></p>
+                <p class="fr" ng-if="loginMsg.login"><!--<a class="btn login-msg-btn mr-10"><span class="badge" ng-if="loginMsg.msgTotal">{{loginMsg.msgTotal}}</span></a>|--><a class="btn person-btn">{{loginMsg.account | njwNumSer}}</a><a class="btn exit-btn" ng-click="exit()">退出</a></p>
                 <p>欢迎来到农家网，服务热线：{{serverTel}}</p>
             </div>
         </div>

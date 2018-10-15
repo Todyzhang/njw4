@@ -73,7 +73,7 @@ define(['app', 'angular'], function (app, angular) {
         oldNewsUrl: "http://yfb-www.nongj.com/old/info",
         njyHost: "http://yfb-nonjiayi.nongj.com/",
         njyEndHost: "http://yfb-nonjiayi-end.nongj.com/nonjiayi/"
-        //------------预发布------------------
+        //------------发布------------------
         // frontHost: "http://www.nongj.com/",
         // imgHost: "http://static.nongj.com/",
         // severHost: "http://vip-vip.nongj.com/nonjia/",
@@ -341,14 +341,7 @@ define(['app', 'angular'], function (app, angular) {
             publicVal.provinceArea = [];
           });
         //得到登录用户信息
-        njwUser.getCurrentUser()
-          .then(function (data) {
-            $rootScope.loginMsg.name=data.userName;
-            $rootScope.loginMsg.account=data.userPhone;
-            $rootScope.loginMsg.login=true;
-          },function (err) {
-            $rootScope.loginMsg.login=false;
-          })
+        njwUser.getLoginUser();
 
 
       }])
