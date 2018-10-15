@@ -22,14 +22,17 @@ define(['app'], function (app) {
             }
           })
             .done(function (_data) {
-
-              if (typeof(_data) === "string") _data = JSON.parse(_data);
-              if (_data.success||(_data.status&&_data.status.toLowerCase()==="success")) {
-                dtd.resolve(_data.t || _data.data || _data.content || _data);
-              } else {
-
-                dtd.reject(_data.errorMessage);
+              try{
+                if (typeof(_data) === "string") _data = JSON.parse(_data);
+                if (_data.success||(_data.status&&_data.status.toLowerCase()==="success")) {
+                  dtd.resolve(_data.t || _data.data || _data.content || _data);
+                } else {
+                  dtd.reject(_data.errorMessage);
+                }
+              }catch(eor){
+                dtd.resolve(_data);
               }
+
             })
             .fail(function (err) {
               console.log(err);
@@ -54,7 +57,7 @@ define(['app'], function (app) {
         var dtd = $q.defer();
         var isIE89 = window.FormData ? "" : {"Ie8or9": publicVal.frontHost + "proxy.html"};
         jQuery(form).ajaxSubmit({
-          url: publicVal.severHost + "fileUpload/imgUpload.action" + njwCookie.getCookie("ssid"),
+          url: publicVal.severHost + "fileUpload/imgUpload.action?ssid=" + njwCookie.getCookie("ssid"),
           type: 'post',
           crossDomain: true,
           xhrFields: {
@@ -131,10 +134,14 @@ define(['app'], function (app) {
         }
         return dtd.promise;
       }
+      function setSession() {
+        return fetch.get("new/front/V4ConfigSsid.action");
+      }
       return {
         getCurrentUser: getCurrentUser,
         logout: logout,
-        checkLogin:checkLogin
+        checkLogin:checkLogin,
+        setSession:setSession
       };
     }])
     //查找各分类接口

@@ -30,8 +30,8 @@
             <p class="mt-20"><span class="icon ico_review_pass"></span><span class="icon ico_ident ml-20" ng-show="landMsg.promulgatorType==='个人'"></span></p>
             <p class="se-bg-shallow tr se-shallow mt-20 height-line-40 plr-20"><span class="dis-ib fl">地址编号：{{landMsg.number}}</span><span class="icon icon-time pl-20">{{landMsg.publicTime | date:"yyyy-MM-dd"}}</span><span class="icon icon-looked ml-20 pl-20">{{landMsg.seeNumber}}</span></p>
             <div class="fl-info-msg-list fs-0 mt-20 se-shallow">
-                <label class="fs-16 ell mb-20"><span class="se-thinner">所在区域：</span>{{landMsg.area}}</label>
-                <label class="fs-16 ell mb-20"><span class="se-thinner">土地类型：</span>{{landMsg.type}}</label>
+                <label class="fs-16 ell mb-20"><span class="se-thinner">所在区域：</span>{{landMsg.paraetArea}} {{landMsg.area}}</label>
+                <label class="fs-16 ell mb-20"><span class="se-thinner">土地类型：</span>{{landMsg.paraetType}}</label>
                 <label class="fs-16 ell mb-20"><span class="se-thinner">土地面积：</span>{{landMsg.acreage}}{{landMsg.acreageUnit}}</label>
                 <label class="fs-16 ell mb-20"><span class="se-thinner">流转方式：</span>{{landMsg.dealMode}}</label>
                 <label class="fs-16 ell mb-20"><span class="se-thinner">可流转年限：</span>{{landMsg.dealAge}}年</label>
@@ -73,7 +73,7 @@
                 <p class="height-line-30 tr icon-land-nature w128 pr-50"><span class="dis-ib se-main br-bar c-shallow b-w2 pr-10">土地性质与权属</span></p>
                 <div class="pl-50 mt-40 mb-40">
                     <label class="col-4 dis-ib"><span class="se-thinner">土地性质：</span>{{landMsg.nature||'未知'}}</label>
-                    <label class="col-4 dis-ib"><span class="se-thinner">权属类型：</span>{{landMsg.ownershipType}}</label>
+                    <label class="col-4 dis-ib"><span class="se-thinner">权属类型：</span>{{landMsg.ownership}}</label>
                     <label class="col-4 dis-ib"><span class="se-thinner">权证类型：</span>{{landMsg.warrantType||'未知'}}</label>
                 </div>
             </div>

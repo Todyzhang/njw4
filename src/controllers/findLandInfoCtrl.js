@@ -10,7 +10,8 @@ define(['app','angular', 'css!/src/css/findland'], function (app,angular) {
       var getManagementTypes=function (ids) {
         var names="",ary=ids.split(",");
         angular.forEach(ary,function (v) {
-          names+=publicVal.managementTypesId[v-1].name+","
+          if(v>1)
+            names+=publicVal.managementTypesId[v-1].name+","
         });
         return names.replace(/,$/,"");
       };
@@ -35,7 +36,8 @@ define(['app','angular', 'css!/src/css/findland'], function (app,angular) {
       var getServeAssort=function (ids) {
         var names="",ary=ids.split(",");
         angular.forEach(ary,function (v) {
-          names+=publicVal.serveAssort[v-1].name+","
+          if(v>1)
+            names+=publicVal.serveAssort[v-1].name+","
         });
         return names.replace(/,$/,"");
       };
@@ -51,10 +53,13 @@ define(['app','angular', 'css!/src/css/findland'], function (app,angular) {
       var createSlider=function (imgs) {
         var list=[];
         angular.forEach(imgs,function (v) {
-          if(v) list.push({
-            bImg: v,
-            sImg: v
-          });
+          if(v) {
+            v=publicVal.imgHost+v;
+            list.push({
+              bImg: v,
+              sImg: v
+            });
+          }
         });
         if(list.length===0){
           list.push({

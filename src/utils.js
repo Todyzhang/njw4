@@ -64,14 +64,23 @@ define(['app', 'angular'], function (app, angular) {
       var val = {
         serverTel: "020-87595266",
         cookieDomain: "nongj.com",
-        //=========服务器host配置
-        frontHost: "http://192.168.100.16:8080/",
-        imgHost: "http://192.168.1.84:8096/",
+        //=========服务器host配置==============
+        //------------预发布------------------
+        frontHost: "http://yfb-www.nongj.com/",
+        imgHost: "http://yfb-static.nongj.com/",
         severHost: "http://yfb-vip-vip.nongj.com/nonjia/",
-        loginHost: "http://nonjiayi-auth.nongj.com/admin/toLogin",
+        loginHost: "http://yfb-nonjiayi-auth.nongj.com/admin/toLogin",
         oldNewsUrl: "http://yfb-www.nongj.com/old/info",
         njyHost: "http://yfb-nonjiayi.nongj.com/",
         njyEndHost: "http://yfb-nonjiayi-end.nongj.com/nonjiayi/"
+        //------------预发布------------------
+        // frontHost: "http://www.nongj.com/",
+        // imgHost: "http://static.nongj.com/",
+        // severHost: "http://vip-vip.nongj.com/nonjia/",
+        // loginHost: "http://nonjiayi-auth.nongj.com/admin/toLogin",
+        // oldNewsUrl: "http://www.nongj.com/old/info",
+        // njyHost: "http://nonjiayi.nongj.com/",
+        // njyEndHost: "http://nonjiayi-end.nongj.com/nonjiayi/"
       };
 
 
@@ -770,7 +779,7 @@ define(['app', 'angular'], function (app, angular) {
           list.push({
             title: v.title,
             url: "/#/landInfo/" + v.number,
-            icon: v.img1 || "/static/images/282x210.jpg",
+            icon: v.img1?(publicVal.imgHost+v.img1):"/static/images/282x210.jpg",
             flags: getFlags(v),
             area: v.acreage + v.acreageUnit,
             price: v.dealPrice ? (v.dealPrice + publicVal.dealUnitId[v.dealUnitId - 1].name) : "面议",

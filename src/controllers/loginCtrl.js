@@ -1,6 +1,6 @@
 define(['app','angular'], function (app,angular) {
   'use strict';
-  app.ctrl('loginCtrl', ["$scope","$rootScope", "$state","publicVal","njwCookie",function ($scope,$rootScope, $state,publicVal,njwCookie) {
+  app.ctrl('loginCtrl', ["$scope","$rootScope", "$state","publicVal","njwCookie","njwUser",function ($scope,$rootScope, $state,publicVal,njwCookie,njwUser) {
     var ifmUrl=publicVal.loginHost,title="登录",height=332;
     if($state.current.name==="logon"){
       ifmUrl+="#logon";
@@ -19,7 +19,10 @@ define(['app','angular'], function (app,angular) {
     //登录成功后的跳转地址
     window.loginSuccessJump=function(){
       // location.href="#"+$rootScope.loginRebackUrl;
-      $state.transitionTo($rootScope.loginRebackUrl);
+      njwUser.setSession()
+        .then(function (res) {
+          $state.transitionTo($rootScope.loginRebackUrl);
+        });
     }
 
 

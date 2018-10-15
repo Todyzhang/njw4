@@ -162,8 +162,7 @@ define(['app', 'css!/src/css/end'], function (app) {
       title: '土地联系人',
       required: '联系人不能为空',
       check: {
-        // required:{value:true,errMsg:'土地标题不能为空'},
-        // maxlength:{value:3,errMsg:'土地标题不能多于20个字符'}
+        maxlength:{value:10,errMsg:'请输入10个字符以内有效联系人！'}
       },
       large: true
     };
@@ -172,8 +171,7 @@ define(['app', 'css!/src/css/end'], function (app) {
       title: '联系方式',
       required: '联系方式不能为空',
       check: {
-        // required:{value:true,errMsg:'土地标题不能为空'},
-        // maxlength:{value:3,errMsg:'土地标题不能多于20个字符'}
+        snNumber:{value:11,errMsg:"11位"}
       },
       large: true
     };
@@ -364,11 +362,11 @@ define(['app', 'css!/src/css/end'], function (app) {
     $scope.submitBtn=function(){
       soil.addSoil($scope.soilAddVo)
         .then(function (value) {
-          njwAlert.right("成功",function () {
+          njwAlert.right("添加土地信息成功！，点“确定”跳转到我要找地页。",function () {
             $state.go("findland");
           });
         })
-    }
+    };
 
     $scope.changeSelect=function () {
       var id=$scope.selector_4.selectors[0].value;
@@ -425,6 +423,8 @@ define(['app', 'css!/src/css/end'], function (app) {
     $scope.submitFn=function () {
       if($scope.addLand.$invalid){
         njwAlert.worng("表单还有未完成项，请完成必填项");
+      }else{
+        $scope.submitBtn();
       }
     };
 

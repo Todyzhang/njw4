@@ -20,7 +20,15 @@
                name="someInput"
                ng-required="!!field.required"
                maxlength="{{field.check.maxlength.value}}"
-        /><span class="word-tips" ng-if="field.unit">{{field.unit}}</span>
+               ng-if="!field.check.snNumber"
+        /><input placeholder="{{field.placeholder}}"
+                 ng-model="someModel"
+                 ng-disabled="{{field.idDisabled}}"
+                 name="someInput"
+                 ng-required="!!field.required"
+                 ng-if="field.check.snNumber"
+                 sn-number="{{field.check.snNumber.value}}"
+    /><span class="word-tips" ng-if="field.unit">{{field.unit}}</span>
     </label>
     <p class="se-thinner">{{field.tipsText}}</p>
 </div>

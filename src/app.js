@@ -1,6 +1,7 @@
-"use strict";
+
 //app.js模块就是angular定义的主模块（只负责定义，设置provider代理供其他辅助模块使用），设置必要的拦截器，例如请求中添加token令牌、返回后调用Service的预处理等。
 define(["require", "angular"], function (require, angular) {
+  "use strict";
   var app = angular.module("App", ["ui.router"]);
 
   app.factory("interceptor", ["$q", function ($q) {

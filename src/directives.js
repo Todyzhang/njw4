@@ -57,7 +57,7 @@ define(['app', "angular"], function (app, angular) {
       };
     })
     /**
-     * 限制input框输入，只能输入数字，属性值为限制的数字位数,负数限制不可输入；0表示不限制位数；正数为限制输入的位数
+     * 限制input框输入，只能输入数字，属性值为限制的数字位数,负数不限制；0表示不限制位数；正数为限制输入的位数
      * e.g. <input sn-number="7" />
      */
     .directive("snNumber", function () {
@@ -68,7 +68,7 @@ define(['app', "angular"], function (app, angular) {
         link: function ($scope, iElm, iAttrs, ngModel) {
           var size = +iAttrs.snNumber;
           var NUMBER_REG = /\D/g;
-          if (!ngModel) return;
+          if (!ngModel||size<0) return;
           ngModel.$viewChangeListeners.push(function () {
             var v = ngModel.$viewValue;
             var hasChange = false;
@@ -289,13 +289,10 @@ define(['app', "angular"], function (app, angular) {
         link: function ($scope, iElm, iAttrs) {
           var descSlider = {
             id: 'slider' + (+new Date),
-            list: $scope.sList,
             width: 570,
             direct: "leftRight",
             current: 0
           };
-          descSlider.size = $scope.sList.length;
-          descSlider.firstItem = $scope.sList[0];
           if (iAttrs.sAuto === undefined || iAttrs.sAuto !== "true") {
             descSlider.auto = false;
           } else {
@@ -306,14 +303,18 @@ define(['app', "angular"], function (app, angular) {
           } else {
             descSlider.sDelay = 5;
           }
-          descSlider.lastIndex = descSlider.size - 1;
-          descSlider.lastItem = descSlider.list[descSlider.lastIndex];
-          descSlider.totalDis = (descSlider.size + 2) * descSlider.width;
-          $scope.descSlider = descSlider;
+          var init=function () {
+            descSlider.list=$scope.sList;
+            descSlider.size = $scope.sList.length;
+            descSlider.firstItem = $scope.sList[0];
+            descSlider.lastIndex = descSlider.size - 1;
+            descSlider.lastItem = descSlider.list[descSlider.lastIndex];
+            descSlider.totalDis = (descSlider.size + 2) * descSlider.width;
+            $scope.descSlider = descSlider;
 
-          $timeout(function () {
             slider.init(descSlider);
-          }, 0);
+          };
+
 
           $scope.nextClick = function () {
             descSlider.current !== descSlider.lastIndex && slider.next();
@@ -324,6 +325,10 @@ define(['app', "angular"], function (app, angular) {
           $scope.descItemClick = function (index) {
             slider.moveTo(index);
           };
+
+          $scope.$watch("sList",function () {
+            init();
+          },true);
 
         }
       }
